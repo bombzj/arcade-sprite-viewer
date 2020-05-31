@@ -31,6 +31,10 @@ Click [here](https://bombzj.github.io/arcade-sprite-viewer/) to open viewer.
 * webgl & wasm?
 * more games
 
+## Reference
+[Capcom System 1](https://patpend.net/technical/arcade/cps1.html)
+[NeoGeo Sprite graphics format](https://wiki.neogeodev.org/index.php?title=Sprite_graphics_format)
+
 ## Thanks to
 Project [mamedev](https://github.com/mamedev/mame)<br/>
 Phil Bennett
