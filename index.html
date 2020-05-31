@@ -1,0 +1,92 @@
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Arcade Viewer</title>
+	<style>
+		div {
+			cursor: default;
+		}
+
+		img,
+		div,
+		canvas {
+			image-rendering: pixelated;
+		}
+	</style>
+	<script type="text/javascript" src="lib/bytebuffer.js"></script>
+	<script type="text/javascript" src="lib/jszip.js"></script>
+</head>
+
+<body style="overflow:hidden;overflow-y:hidden;margin:0;">
+	<canvas id="canvas" width="272" height="400" style="margin:0px;position:absolute;left:0px;top:0px;"></canvas>
+	<canvas id="canvasBack" width="800" height="600" style="margin:0px;position:absolute;left:0px;top:0px;"></canvas>
+	<div id="canvas2div"
+		style="position:absolute;top:0px;left:550px;border:1px solid black;width:700px;height:512px;overflow: hidden;">
+		<canvas id="canvas2" width="360" height="240"
+			style="margin:0px;position:absolute;left:0px;top:0px;width:720;height:480"></canvas>
+	</div>
+	<div id="seltile"
+		style="position:absolute;width:34px;height:34px;border:2px solid red;left:520px;top:0px;pointer-events: none;">
+	</div>
+
+	<div style="position:absolute;left:550px;top:600px;">
+		x=<span id="labelx"></span>,
+		y=<span id="labely"></span>,
+		tile=<input id="labeltn" size="4" onchange="movetoTile(parseInt(this.value,16))"></span>,
+		pal=<span id="labelpal"></span>,
+		maptile=<input size="5" onchange="setMapTileStart(parseInt(this.value, 16))">
+		anim=<input size="5" id="anim" onchange='drawAnimation(parseInt(this.value, 16))'>
+	</div>
+
+	<div id="moving"
+		style="position:absolute;margin:0px;border:0px;padding:0px;width:64;height:64;top:0px;left:550px;pointer-events:none;display:none;">
+		<canvas id="canvas3" width="64" height="64"
+			style="position:absolute;margin:0px;padding:0px;width:64;height:64;"></canvas>
+	</div>
+
+	<div id="pages" style="position:absolute;left:550px;top:550px;mouse:pointer;">
+		<div style="display:none;">
+			<div id="framePrev" style="border:1px solid black;padding:2px;float:left;"
+				onmouseover="this.style.background='yellow';" onmouseout="this.style.background='';">Prev</div>
+			<div style="padding:2px;float:left;margin-left:5px;">Frame = <span id="frameNumSpan"></span></div>
+			<div id="frameNext" style="border:1px solid black;padding:2px;float:left;margin-left:5px;"
+				onmouseover="this.style.background='yellow';" onmouseout="this.style.background='';">Next</div>
+			<a style="margin-left:10px;padding:2px;border:1px solid black;" id="downloadAnchorElem"
+				href="javascript:void(0)" onclick="downloadJson()">Download</a>
+		</div>
+		frame=<input id="nFrame" size="5" onchange="drawRomFrame(parseInt(this.value, 16))">
+		hex=<input id="hexFrame" size="5" onchange="setFramePos(parseInt(this.value, 16)/4)">
+	</div>
+
+	<div id="labelInfo" style="position:absolute;left:550px;top:520px;"></div>
+	<div id="labelInfo2" style="position:absolute;left:850px;top:520px;"></div>
+
+	<script src="viewer.js"></script>
+	<script id="machinejs"></script>
+	<script id="romjs"></script>
+	<script>
+		var name = window.location.search.substr(1);
+		if (!name || name.length == 0)
+			name = 'punisher';
+
+		romjs.onload = function () {
+			init(name);
+		};
+
+		var machineType = ['cps', 'psi', 'neo'];
+		var machines = new Map([
+			['punisher', {
+				type: 0,
+			}],
+		]);
+		var machine = machines.get(name);
+		var machineType = machineType[machine.type];
+
+
+		machinejs.src = machineType + '/' + machineType + '.js';
+		romjs.src = machineType + '/' + name + '.js';
+	</script>
+</body>
+
+</html>

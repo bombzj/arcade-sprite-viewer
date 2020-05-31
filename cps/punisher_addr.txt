@@ -1,0 +1,132 @@
+[background]
+ROM:000A8F50                 lea     bg_data(pc,d0.w),a1
+ROM:000A8F54                 move.l  (a1)+,$6E(a0)
+ROM:000A8F58                 move.l  (a1)+,$54(a0)
+
+
+[animation]
+ROM:00108D76                 dc.w $F86               ; frame
+ROM:00108D78                 dc.b   1
+ROM:00108D79                 dc.b $12
+ROM:00108D7A                 dc.w $F66               ; frame
+ROM:00108D7C                 dc.b   2
+ROM:00108D7D                 dc.b   8
+ROM:00108D7E                 dc.w $FD4               ; frame
+ROM:00108D80                 dc.b   3
+ROM:00108D81                 dc.b $11
+ROM:00108D82                 dc.w $F5E
+ROM:00108D84                 dc.b   4
+ROM:00108D85                 dc.b $88                ; &0x80 end
+ROM:00108D86                 dc.w $FFF0              ; link to first frame
+
+anim in $BC
+ROM:0007A36A                 movea.l $BC(a6),a0
+ROM:0007A36E                 jsr     (obj_load_anim_d0).l
+
+
+ROM:000011E8 sub_11E8:                               ; CODE XREF: ROM:0007FAA4¡ýp
+ROM:000011E8                                         ; ROM:0007FEA2¡ýp ...
+ROM:000011E8                 subq.b  #1,$10(a6)
+ROM:000011EC                 bne.w   locret_1210
+ROM:000011F0                 movea.l $16(a6),a0
+ROM:000011F4
+ROM:000011F4 loc_11F4:                               ; CODE XREF: sub_11E0+6¡üj
+ROM:000011F4                 move.w  (a0)+,d0
+ROM:000011F6                 move.b  (a0)+,$11(a6)
+ROM:000011FA                 move.b  (a0)+,d1
+ROM:000011FC                 bmi.w   loc_1212
+ROM:00001200                 move.b  d1,$10(a6)
+ROM:00001204                 move.l  a0,$16(a6)			; anim?
+ROM:00001208                 lea     -4(a0,d0.w),a0
+ROM:0000120C                 move.l  a0,$12(a6)
+
+
+a1 = 1069ac (tile) 
+a2 = 109d36 (sprite)
+
+
+[collision]
+ROM:00091980 loc_91980:                              ; CODE XREF: ROM:00091908¡üj
+ROM:00091980                                         ; ROM:00091910¡üj ...
+ROM:00091980                 movea.l $30(a4),a0
+ROM:00091984                 adda.w  $3C(a4),a0	// maybe collision box
+ROM:00091988                 move.w  $28(a6),d1
+ROM:0009198C                 sub.w   $28(a4),d1
+ROM:00091990                 sub.w   (a0)+,d1
+ROM:00091992                 cmp.w   (a0)+,d1
+ROM:00091994                 bhi.w   loc_9185C
+ROM:00091998                 move.w  (a0)+,d1
+ROM:0009199A                 move.w  (a0)+,d2
+
+ROM:00091A14                 movea.l $30(a6),a1	// colission box
+ROM:00091A18                 adda.w  $3E(a6),a1
+
+
+
+wp ffff8e7a,4,w
+	->
+
+ROM:00001180 obj_load_anim:                          ; CODE XREF: obj_load_anim_d0+6¡üj
+ROM:00001180                                         ; ROM:loc_75108¡ýp ...
+ROM:00001180                 move.w  (a0)+,d0
+ROM:00001182                 move.b  (a0)+,$11(a6)
+ROM:00001186                 move.b  (a0)+,d1
+ROM:00001188                 bmi.w   loc_11AE
+ROM:0000118C                 move.b  d1,$10(a6)
+ROM:00001190                 move.l  a0,$16(a6)
+ROM:00001194                 lea     -4(a0,d0.w),a0
+ROM:00001198                 move.l  a0,$12(a6)      ; set  sprite
+ROM:0000119C                 move.w  -(a0),$1C(a6)
+ROM:000011A0                 move.w  -(a0),$1A(a6)
+ROM:000011A4                 move.w  -(a0),$3C(a6)   ; set collision box
+ROM:000011A8                 move.w  -(a0),$3E(a6)   ; set collision box
+
+
+
+ROM:000754B8 loc_754B8:                              ; CODE XREF: ROM:000754A8¡üj
+ROM:000754B8                 move.b  #1,$7F(a6)
+ROM:000754BE                 move.l  #unk_75816,$30(a6)		; collision base, how to match??
+ROM:000754C6                 move.l  #unk_B5606,$8E(a6)
+ROM:000754CE                 movea.l #unk_CB668,a0
+ROM:000754D4                 moveq   #$13,d0
+ROM:000754D6                 jsr     (obj_load_anim_d0).l
+ROM:000754DC                 move.b  $11(a6),$B5(a6)
+
+a6 = obj = ffff8e68
+
+
+a1=106890
+
+a0 = ffff8b10
+a6=ffffbbe8
+
+
+ffffbca8 chair
+
+ffff8e68 man
+20=x
+28=y
+24=z
+
+
+map1 ram FFFF7a88
+map2 ram FFFF7b88
+
+ROM:0001922A                 move.l  (a1)+,$80(a0)
+ROM:0001922E                 move.l  (a1)+,$A4(a0)   ; map tile index
+ROM:00019232                 move.l  (a1)+,$84(a0)   ; map tile data
+
+
+
+
+
+level 1 scene 1 
+
+ffffbca8 chair
+
+ffff8e68 man  sprite = 109cfc
+20=x
+28=y
+24=z
+
+
