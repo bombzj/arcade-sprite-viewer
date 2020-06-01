@@ -708,65 +708,11 @@ function getRomFrame(addr, f){
 
 var curPlayerType;
 var curPlayerFrame;
-var playerSpriteAddress = [0x163E, 0x164E, 0x165E, 0x166E, 0x168E];
 
 var animPlayerAddr = [];
-//draw anim by player 0-3
+
 function drawRomFramePlayer() {
-	var bf = new bytebuffer(romFrameData);
-	for(let player = 0;player < 4;player++) {
-		let type = bf.getInt(player * 4 + playerSpriteAddress[curPlayerType]);
-		animPlayerAddr[player] = bf.getShort(type + curPlayerFrame * 2) + type;
-		if(animPlayerAddr[player] == 0) {
-			labelInfo.innerText = "EOF";
-			return;
-		}
-	}
 
-	loopDrawAnimationPlayer();
-//
-//	labelInfo.innerText = 'addr:' + addr.toString(16).toUpperCase() + "/" + startAddress.toString(16).toUpperCase() + " off:"
-//			+ offset.toString(16).toUpperCase() + ' act:' + curAnimAct
-//			+ ' ' + curAnim + '/' + curAnimAct + "/" + (bf.getShort(addr)/2-1);
-}
-
-function loopDrawAnimationPlayer() {return
-	animTimer = null;
-	
-	var bf = new bytebuffer(romFrameData);
-	ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
-	
-	for(let player = 0;player < 4;player++) {
-		let type = bf.getInt(player * 4 + playerSpriteAddress[curPlayerType]);
-		let offset = bf.getShort(type + curPlayerFrame * 2);
-//		let s = bf.getShort(type + offset);
-//		
-//		let frame = romFrames[s/4];
-//		
-//		drawRomFrameBase(frame, ctxBack, player * 100 + 100)
-
-//		drawAnimationFrame(type + offset, ctxBack, player * 100 + 100, undefined, playerCB[player])
-
-//		nFrame.value=curRomFrame
-//		hexFrame.value=curRomFrame.toString(16).toUpperCase();
-		
-		bf.position(animPlayerAddr[player]);
-		let fr = bf.getShort();
-
-		if(fr < 0) {
-			if(fr == -offset)
-				return;	// stop loop & timer
-//			animPlayerAddr[player] += fr;	// end with go back offset = fr, so loop
-			let type = bf.getInt(player * 4 + playerSpriteAddress[curPlayerType]);	// get begin address to loop
-			animPlayerAddr[player] = bf.getShort(type + curPlayerFrame * 2) + type;
-		} else {
-			drawAnimationFrame(animPlayerAddr[player], ctxBack, player * 100 + 100, undefined, playerCB[player]);
-			animPlayerAddr[player] += 0xC;
-		}
-	}
-
-	
-	animTimer = setTimeout("loopDrawAnimationPlayer()", 200);
 }
 
 
