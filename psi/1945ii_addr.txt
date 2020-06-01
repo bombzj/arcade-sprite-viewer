@@ -1,0 +1,182 @@
+when start, copy these rom to ram:
+
+0x7B0 -> 0x6080000, 0x24104 bytes
+
+0x248D4 ->  0x60A4104, 0x4600 bytes
+
+tracking:
+r14 = 7b6b0, 7AD48,  7A8C8
+@r14 = 58550, 5F910,  5c250
+
+r4 = r7 = A0, 
+r4 * 64 + r8(base) = 23042800
+
+
+58550 0 -> 23043c00
+58550 2 -> 23043c02
+
+r8=23040000
+
+-> 23042800		// why 2xxxxxxx = xxxxxxx???
+
+
+ROM:00034018                 .data.b    0
+ROM:00034019                 .data.b h'45 ; E
+ROM:0003401A                 .data.b h'2D ; -
+ROM:0003401B                 .data.b h'55 ; U
+ROM:0003401C                 .data.b h'14
+ROM:0003401D                 .data.b h'41 ; A
+ROM:0003401E                 .data.b    0
+ROM:0003401F                 .data.b    0
+ROM:00034020                 .data.l palette_data
+ROM:00034024                 .data.l bg_map_table
+ROM:00034028                 .data.l bg_map_data
+ROM:0003402C                 .data.l sequence_data
+ROM:00034030                 .data.l object_data
+ROM:00034034                 .data.l data_midi
+ROM:00034038                 .data.l rect_data
+ROM:0003403C                 .data.l palette_table
+
+
+[level sequence]
+ROM:0009F948                 .data.l off_9FB30
+ROM:0009F94C                 .data.l off_9F968
+ROM:0009F950                 .data.l off_9FA84       ; level 1
+ROM:0009F954                 .data.l off_9FA5C
+ROM:0009F958                 .data.l off_9FC3C
+
+
+[palette]
+
+ROM:000A4E74                 .data.l unk_A4A68
+//ROM:000A539C                 .data.l unk_A4A68
+ROM:000A547C                 .data.l unk_A5D48
+ROM:000A5F06                 .data.l unk_A5E58
+ROM:000A6B70                 .data.l unk_A6ACC
+ROM:000A7000                 .data.l unk_A6EDC
+ROM:000A8E66                 .data.l unk_A8DC8
+
+ROM:0009F988 level_palette:  .data.l unk_A2F30       ; level 1 palette
+ROM:0009F98C                 .data.l unk_A3E7C
+ROM:0009F990                 .data.l unk_A4A68
+ROM:0009F994                 .data.l unk_A5D48
+ROM:0009F998                 .data.l unk_A5E58
+ROM:0009F99C                 .data.l unk_A6ACC
+ROM:0009F9A0                 .data.l unk_A6EDC
+ROM:0009F9A4                 .data.l unk_A8DC8
+
+
+
+
+
+600bfb4 func list?
+
+[sprite]
+ aircraft
+ROM:00084EB8                 .data.b h'66 ; f        ; palette
+ROM:00084EB9                 .data.b    0
+ROM:00084EBA                 .data.b h'54 ; T
+ROM:00084EBB                 .data.b h'A9
+ROM:00084EBC                 .data.b    7            ; r7
+ROM:00084EBD                 .data.b h'F0
+ROM:00084EBE                 .data.b    7
+ROM:00084EBF                 .data.b h'F0
+ROM:00084EC0                 .data.b h'21 ; !        ; 1=height
+ROM:00084EC1                 .data.b    0
+ROM:00084EC2                 .data.b    1            ; width
+ROM:00084EC3                 .data.b    0
+ROM:00084EC4                 .data.b h'66 ; f        ; palette
+ROM:00084EC5                 .data.b    0
+ROM:00084EC6                 .data.w h'54AD          ; tile
+
+
+
+ROM:000843AC                 .data.b    3            ; tank
+ROM:000843AD                 .data.b h'F1
+ROM:000843AE                 .data.b    7
+
+
+ROM:0007E094                 .data.b    7            ; player1
+ROM:00084E08                 .data.b    7            ; aircraft
+ROM:000856C0                 .data.b    7            ; big aircraft
+ROM:000843AC                                         ; tank
+
+
+[gfx ram]
+0x3000000  sprite
+
+0x3003800  ascii table?
+0018 0019 001A 001B
+
+0x3005000
+030000012 030000012 020000014 ...
+
+0x3006000  bg layer
+D001B7B5 D001B79A ... (selecting)
+800185EE 800185E0... (level1)
+
+0x3007000  front layer like cloud
+800182CA 800182CA 800182CA ...
+
+0x3009000
+00000002 00000002 00000002 ...
+
+0x300A000
+D001B7B5 D001B79A ...
+
+
+	/*- Sprite Format 0x0000 - 0x37ff -**
+
+	0 ---- --yy yyyy yyyy | ---- --xx xxxx xxxx  1  F-?? hhhh ZZZZ ZZZZ | f-PP wwww zzzz zzzz
+	2 pppp pppp -aaa -nnn | nnnn nnnn nnnn nnnn  3  ---- ---- ---- ---- | ---- ---- ---- ----
+
+	y = ypos
+	x = xpos
+
+	h = height
+	w = width
+
+	F = flip (y)
+	f = flip (x)
+
+	Z = zoom (y)
+	z = zoom (x)
+
+	n = tile number
+
+	p = palette
+
+	a = alpha blending, selects which of the 8 alpha values in vid_regs[0-1] to use
+
+	P = priority
+	Points to a 4-bit entry in vid_regs[2] which provides a priority comparable with the bg layer's priorities.
+	However, sprite-sprite priority needs to be preserved.
+	daraku and soldivid only use the lsb
+
+	? = unknown
+	Could be a sprite-sprite priority, tests seem to back this up
+
+	**- End Sprite Format -*/
+	
+	
+	
+	// rom mapping
+	map(0x00000000, 0x000fffff).rom(); // program ROM (1 meg)
+	map(0x02000000, 0x020fffff).rom().region("maincpu", 0x100000); // data ROM
+// video chip
+	map(0x03000000, 0x0300ffff).ram().share("spriteram"); // sprite and backgrounds are share this area (video banks 0-1f)
+	map(0x03040000, 0x03044fff).ram().w(m_palette, FUNC(palette_device::write32)).share("palette"); // palette..
+	map(0x03050000, 0x030501ff).ram().share("zoomram"); // sprite zoom lookup table
+	map(0x0305ffdc, 0x0305ffdf).r("watchdog", FUNC(watchdog_timer_device::reset32_r)).w(FUNC(psikyosh_state::irqctrl_w)); // also writes to this address - might be vblank reads?
+	map(0x0305ffe0, 0x0305ffff).ram().w(FUNC(psikyosh_state::vidregs_w)).share("vidregs"); //  video registers
+	map(0x03060000, 0x0307ffff).bankr("gfxbank"); // data for rom tests (gfx), data is controlled by vidreg
+// rom mapping
+	map(0x04060000, 0x0407ffff).bankr("gfxbank"); // data for rom tests (gfx) (Mirrored?)
+// sound chip
+	map(0x05000000, 0x05000007).rw("ymf", FUNC(ymf278b_device::read), FUNC(ymf278b_device::write));
+// inputs/eeprom
+	map(0x05800000, 0x05800003).portr("INPUTS");
+	map(0x05800004, 0x05800007).portr("JP4");
+	map(0x05800004, 0x05800004).w(FUNC(psikyosh_state::eeprom_w));
+// ram
+	map(0x06000000, 0x060fffff).ram().share("ram"); // main RAM (1 meg)
