@@ -54,7 +54,7 @@ function init(name) {
 	  return;
   
 
-	palData = new Uint32Array(16 * 32 * 20);	// 4 pages of palettes if cps1
+	palData = new Uint32Array(16 * 32 * 20);	// 4 pages of palettes if cps1, 20 pages for psi
 	for(let i = 0;i < 16;i++) {
 		for(let c = 0;c < 256;c++) {	// copy a page with 16 palettes, each palette contains 16 colors
 				let dp = c + i * 16 * 16;
@@ -312,7 +312,10 @@ function drawTilesBase(image, startTile, w, h, pal, srcw, gridline = false, vfli
 		for(let ny = 0;ny < w;ny++) {
 			let rnx = vflip ? h - nx - 1 : nx;
 			let rny = hflip ? w - ny - 1 : ny;
-			baseIndex = (startTile + rnx * srcw + rny) * srcw * srcw;
+			if(machine.type == 1)	// psi
+				baseIndex = (startTile + rnx * w + rny) * srcw * srcw;
+			else		// cps1
+				baseIndex = (startTile + rnx * srcw + rny) * srcw * srcw;
 			if(color == 256)
 				baseIndex <<= 1;
 			if(srcw != 8)
