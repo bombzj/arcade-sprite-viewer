@@ -10,6 +10,43 @@ index array of sprites 0D0CF4 - 0D43D7
 index array of sprites position 0D43D8 - 0D6B27
 
 
+[obj animation set]
+ROM:00057650                 move.l  #enimy_sprite_57682,$40(a6)
+start with a list of offset.w end by 0, each offset is based
+ on address of enimy_sprite_57682 and points to an animation.
+ths structure is : animation set -> animation -> frame x 2 -> sprite -> tile(nx x ny)
+											  -> collision box
+
+
+[obj animation] sprite original data from
+5715E:	(move by 0xA length, by ROM:0000122A    lea     $A(a0),a0 )
+25 08 80 00 00 00 00 0A 00 00  
+25 04 80 00 00 00 00 0A 00 00
+25 00 80 00 00 00 00 8A 00 00
+1D B4 80 00 00 00 00 8A E0 00
+21 9C 80 00 00 00 00 87 00 00
+spr1  spr2? index       ?? = maybe colission index
+ROM:00001236                 move.l  a0,$28(a6)
+ROM:0000123A                 move.w  (a0)+,d0        ; spr1
+ROM:0000123C                 move.w  (a0)+,d1		; spr2
+ROM:0000123E                 move.l  (a0)+,d2
+ROM:00001240                 move.w  (a0)+,$48(a6)
+
+[player animation]
+17 30 80 00 00 00 08 8F 00 00 53 00
+spr1  spr2  index       ??    ??
+						00 00 = collission index
+17 2C 80 00 00 00 08 8F 00 00 52 00
+spr1  spr2 if not 80
+ROM:0000143E                 move.l  a0,$28(a6)      ; a0=tiles, a6=sprite
+ROM:00001442                 move.w  (a0)+,d0
+ROM:00001444                 move.w  (a0)+,d1
+ROM:00001446                 move.l  (a0)+,d2
+ROM:00001448                 move.w  (a0)+,$48(a6)
+ROM:0000144C                 move.w  (a0)+,$60(a6)
+
+9EB28 = leg + ? - 9eb28???
+
 
 
 loadsprites=00014294

@@ -34,8 +34,9 @@ An arcade game sprite / map viewer (cps1 neogeo ...)
 ## TODO
 * neogeo
 * webgl & wasm?
-* more games
+* more games, dino!
 * how to know which pen/color of background layer is in front of sprites?
+* JSZip is quite slow
 
 ## Reference
 * [Capcom System 1](https://patpend.net/technical/arcade/cps1.html)
