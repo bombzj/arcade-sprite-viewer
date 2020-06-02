@@ -95,12 +95,61 @@ function setMapTileStart(mapstart) {
 
 
 frameAddress = [
-	
+	//0xB6DFE, 0xB5B44, 0xBDBFE, 
+	0xB5A82, 0xB6B0A, 0xBDBEC, 0xBDF24, 0xBE25C, 0xBE26A
 ];
 
 // get frame from addr. return a frame obj
-function getRomFrame(addr, f){
+function getRomFrame(addr, f) {
+	var bf = new bytebuffer(romFrameData);
+	var bf2 = new bytebuffer(romFrameData);
+
+	if(f >= 0) {	// use frameAddress and has multiple frames
+		let offset = bf.getShort(addr + 2);
+
+		addr += offset + 2;
+	}
+
+	bf.position(addr);
+	let frame = {
+		sprites: [],
+	};
 	
+	bf.skip(2);
+	let cnt = bf.get() + 1;
+	let cnt2 = bf.get() + 1;
+	let offset = bf.getShort();
+	if(f) {
+		offset = offset * f;
+	} else {
+		offset = 0;
+	}
+
+
+	bf2.position(addr + offset + 0x6);
+
+	for(let i = 0;i < cnt;i++) {
+		for(let j = 0;j < cnt2;j++) {
+			let tile = bf2.getuShort();
+			let palette = bf2.get();
+			let flag = bf2.get();
+			let sprite = {
+				x: i * 0x10,
+				y: j * 0x10,
+				tile: tile,
+				nx: 1,
+				ny: 1,
+				vflip: flag & 0x2,	// this tile need flip
+				hflip: flag & 0x1,	// this tile need flip
+				pal: palette,
+			};
+			frame.sprites.push(sprite);
+		}
+	}
+
+
+
+	return frame;
 }
 
 
