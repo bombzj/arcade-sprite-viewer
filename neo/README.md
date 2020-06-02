@@ -9,4 +9,4 @@
 
 ## Reference
 * [NeoGeo Sprite graphics format](https://wiki.neogeodev.org/index.php?title=Sprite_graphics_format)
-
+* [Sprites defined by SNK](https://wiki.neogeodev.org/index.php?title=Sprites)

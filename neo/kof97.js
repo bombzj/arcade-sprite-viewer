@@ -133,6 +133,7 @@ function getRomFrame(addr, f) {
 			let tile = bf2.getuShort();
 			let palette = bf2.get();
 			let flag = bf2.get();
+			tile += (flag & 0xF0) << 12;	// more bits for tile number
 			let sprite = {
 				x: i * 0x10,
 				y: j * 0x10,
