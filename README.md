@@ -1,17 +1,22 @@
 # arcade-sprite-viewer
 An arcade game sprite / map viewer (cps1 neogeo ...)
 
+## CPS [view more](https://github.com/bombzj/arcade-sprite-viewer/tree/master/cps)
 ![punisher animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/punisheranim.gif)<br/>
-![punisher background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/punishermap.png)<br/>
+
 
 * Click [here](https://bombzj.github.io/arcade-sprite-viewer/) to view `punisher`.
 
+## PSIKYOSH [view more](https://github.com/bombzj/arcade-sprite-viewer/tree/master/psi)
 ![1945ii animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/anim1945ii.gif)<br/>
-![1945ii background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/map1945ii.png)<br/>
 
 * Click [here](https://bombzj.github.io/arcade-sprite-viewer/?1945ii) to view `strikers 1945ii`.
 
-## control
+## NEOGEO [view more](https://github.com/bombzj/arcade-sprite-viewer/tree/master/neo)
+
+* Click [here](https://bombzj.github.io/arcade-sprite-viewer/?kof97) to view `kof97`.
+
+## Control
 * m = change mode from 1 - 6 loop
 * ctrl + arrow keys = change palette set to level/scene
 * mode 1 (tiles)
