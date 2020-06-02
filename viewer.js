@@ -62,16 +62,18 @@ function init(name) {
 		}
 	}
 
-  statusStorage = "status_" + name;
+	statusStorage = "status_" + name;
+	labelInfo.innerHTML = '<font color="red">Downloading...</font>';
   loadData('rom/' + name, function (data2) {
 
 	JSZip.loadAsync(data2).then(function(zip) {
-		
+		labelInfo.innerHTML = '<font color="red">Extracting...</font>';
 		let a = zip.files.gfx.async('arraybuffer');
 		zip.files.gfx.async('arraybuffer').then(function(data){
 			gfxData = new Uint8ClampedArray(data);
 			return zip.files.main.async('arraybuffer');
 		}).then(function(data){
+			labelInfo.innerHTML = '';
 			romFrameData = new Uint8ClampedArray(data);
 			// initial frames info from local storage
 			loadStatus();
