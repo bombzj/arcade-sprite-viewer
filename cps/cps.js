@@ -7,6 +7,6 @@ function loadRomPalCps1(bf, to) {
 		let green = ((color>>4) & 0xf) * 0x11;
 		let red = ((color>>0) & 0xf) * 0x11;
 		
-		palData[c + to] = blue | green << 8 | red << 16 | 0xFF000000;;
+		palData[c + to] = blue | green << 8 | red << 16 | 0xFF000000;
 	}
 }
