@@ -3,7 +3,7 @@ An arcade game sprite / map viewer (cps1 neogeo ...)
 
 ## CPS [view more](https://github.com/bombzj/arcade-sprite-viewer/tree/master/cps)
 ![punisher animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/punisheranim.gif)<br/>
-
+![dino animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animdino.gif)<br/>
 
 * Click [here](https://bombzj.github.io/arcade-sprite-viewer/) to view `punisher`.
 

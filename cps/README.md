@@ -12,3 +12,4 @@
 
 ## TODO
 * more games
+* update palette set accordingly
