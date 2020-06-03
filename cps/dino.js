@@ -187,15 +187,114 @@ let mapGrid = 2;		// each map tile contains 4 raw tiles?
 
 // draw a background with tilemap
 function drawMap() {
+	var bf = new bytebuffer(romFrameData);
+	var bf2 = new bytebuffer(romFrameData);
+	var bf3 = new bytebuffer(romFrameData);
+	ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
+	let addr = mapAddress[curMap];
+	
+//	labelInfo.innerText = 'address:' + bf.position().toString(16).toUpperCase()
+//			+ ' 2x2tile address:' + mapTileAddress[curMap].toString(16).toUpperCase();
+	var imageData = ctxBack.createImageData(gridWidth, gridHeight);
+	
+	bf3.position(mapData[curMap] + mapScene * 10);
+	let width = bf3.get();
+	let height = bf3.get();
+	if(width > 20)
+		width = 20;
+	if(height > 10)
+		height = 10;
+	let v3 = bf3.getInt();
+	bf3.position(v3);
+	
+	let startscr=0;
+	for(let scr=0;scr<width * height;scr++) {
+		let scrTile = bf3.getShort();
+		if(scr<mapAddressSkip * height)
+			continue;
+
+		let scrx = Math.floor(startscr / height) * 256;
+		let scry = (height - startscr % height - 1) * 256;
+		
+		bf.position(addr + scrTile * 64 * 2);
+
+		for(let i=0;i<8;i++) {
+			for(let j=0;j<8;j++) {
+				let maptile=bf.getShort();
+				bf2.position(maptile*4*4 + mapTileAddress[curMap]);
+				for(let gi=0;gi<mapGrid;gi++)
+					for(let gj=0;gj<mapGrid;gj++) {
+						let tile = bf2.getShort();
+						let flag = bf2.get();
+						let pal = bf2.get();
+						if(hideBackground) {	// hide background based on flag and color, 0x10 maybe the switch
+							let hide = flag & 0xF;
+							if((pal & 0x80) == 0)
+								hide = 16;
+							drawTilesBase(imageData, tile, 1, 1, (pal & 0x1F) + 0x40, 16, false, (pal & 0x40), (pal & 0x20), hide);
+						} else 
+							drawTilesBase(imageData, tile, 1, 1, (pal & 0x1F) + 0x40, 16, false, (pal & 0x40), (pal & 0x20));
+						ctxBack.putImageData(imageData, scrx + (i*mapGrid+gi) * gridWidth, scry + (j*mapGrid+gj) * gridHeight);
+					}
+			}
+		}
+		startscr++;
+	}
+	
 
 }
 
 
-
+var map2Data = [
+	0x2313E,	0x2315C,	0x2317A,	0x23184,	0x231A2,	0x231B6,	0x231D4,	0x231FC
+];
 let map2Width = 16;
 let map2Height = 8;
 function drawMap2() {
+	var bf = new bytebuffer(romFrameData);
+	var bf3 = new bytebuffer(romFrameData);
+
+	bf3.position(map2Data[curMap] + mapScene * 10);
+	let width = bf3.get();
+	let height = bf3.get();
+	if(width > 20)
+		width = 20;
+	if(height > 10)
+		height = 10;
+	let v3 = bf3.getInt();
+	bf3.position(v3);
 	
+	ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
+	
+	labelInfo.innerText = 'width:' + width + ' height:' + height;
+	var imageData = ctxBack.createImageData(gridWidth*2, gridHeight*2);
+	
+	let startscr=0;
+	for(let scr=0;scr<width * height;scr++) {
+		let scrTile = bf3.getShort();
+		if(scr<mapAddressSkip * height)
+			continue;
+
+		let scrx = Math.floor(startscr / height) * 256;
+		let scry = (height - startscr % height - 1) * 256;
+		
+		bf.position(map2Address + scrTile *128 * 2);
+		
+		for(let i=0;i<8;i++) {
+			for(let j=0;j<8;j++) {
+
+				let tile = bf.getShort();
+				let flag = bf.get();
+				let pal = bf.get();
+				drawTilesBase(imageData, tile, 1, 1, (pal & 0x1F) + 0x60, 32, false, (pal & 0x40), (pal & 0x20));
+				//drawTilesBase2(imageData, tile, (pal & 0x1F)+0x60, 32);
+				ctxBack.putImageData(imageData, scrx + (i) * gridWidth*2, scry + (j) * gridHeight*2);
+
+			}
+		}
+		startscr++
+	}
+
 }
 
 function setMapTileStart(mapstart) {
@@ -203,25 +302,67 @@ function setMapTileStart(mapstart) {
 	refresh();
 }
 
-//// draw a frame contains several sprites
-//function drawRomFrame() {
-//	ctx.clearRect(0, 0, canvas.width, canvas.height);
-//	let frame = romFrames[curRomFrame];
-//	
-//	drawRomFrameBase(frame)
-//	
-//	nFrame.value=curRomFrame
-//	hexFrame.value=(curRomFrame*4).toString(16).toUpperCase();
-//	labelInfo.innerHTML = frame.info;
-//}
-
 var curPlayerType;
 var curPlayerFrame;
+var playerSpriteAddress = [0x163E, 0x164E, 0x165E, 0x166E, 0x168E];
 
 var animPlayerAddr = [];
 //draw anim by player 0-3
 function drawRomFramePlayer() {
+	var bf = new bytebuffer(romFrameData);
+	for(let player = 0;player < 4;player++) {
+		let type = bf.getInt(player * 4 + playerSpriteAddress[curPlayerType]);
+		animPlayerAddr[player] = bf.getShort(type + curPlayerFrame * 2) + type;
+		if(animPlayerAddr[player] == 0) {
+			labelInfo.innerText = "EOF";
+			return;
+		}
+	}
 
+	loopDrawAnimationPlayer();
+//
+//	labelInfo.innerText = 'addr:' + addr.toString(16).toUpperCase() + "/" + startAddress.toString(16).toUpperCase() + " off:"
+//			+ offset.toString(16).toUpperCase() + ' act:' + curAnimAct
+//			+ ' ' + curAnim + '/' + curAnimAct + "/" + (bf.getShort(addr)/2-1);
+}
+
+function loopDrawAnimationPlayer() {
+	animTimer = null;
+	
+	var bf = new bytebuffer(romFrameData);
+	ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
+	
+	for(let player = 0;player < 1;player++) {
+		let type = bf.getInt(player * 4 + playerSpriteAddress[curPlayerType]);
+		let offset = bf.getShort(type + curPlayerFrame * 2);
+//		let s = bf.getShort(type + offset);
+//		
+//		let frame = romFrames[s/4];
+//		
+//		drawRomFrameBase(frame, ctxBack, player * 100 + 100)
+
+//		drawAnimationFrame(type + offset, ctxBack, player * 100 + 100, undefined, playerCB[player])
+
+//		nFrame.value=curRomFrame
+//		hexFrame.value=curRomFrame.toString(16).toUpperCase();
+		
+		bf.position(animPlayerAddr[player]);
+		let fr = bf.getShort();
+
+		if(fr < 0) {
+			if(fr == -offset)
+				return;	// stop loop & timer
+//			animPlayerAddr[player] += fr;	// end with go back offset = fr, so loop
+			let type = bf.getInt(player * 4 + playerSpriteAddress[curPlayerType]);	// get begin address to loop
+			animPlayerAddr[player] = bf.getShort(type + curPlayerFrame * 2) + type;
+		} else {
+			drawAnimationFrame(animPlayerAddr[player], ctxBack, player * 100 + 100, undefined, playerCB[player]);
+			animPlayerAddr[player] += 0xC;
+		}
+	}
+
+	
+	animTimer = setTimeout("loopDrawAnimationPlayer()", 200);
 }
 
 //get frame from addr. return a frame obj
