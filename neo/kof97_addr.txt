@@ -1,6 +1,8 @@
 ROM code loaded into 0x0 - 0xFFFFF, 0x20000 - 0x2FFFFF, 
 
 [sprite]
+pointer at $3C(a4) of object data
+
 
 ROM:00006022 obj_draw:                               ; CODE XREF: obj_draw_loop+22↑p
 ROM:00006022                 move.w  $64BC(a5),d0
@@ -22,6 +24,19 @@ ROM:0000604C                 dc.l loc_62FA
 ROM:00006050                 dc.l loc_635E
 ROM:00006054                 dc.l loc_63CA
 ROM:00006058                 dc.l obj_draw_character_icon ; C2BA
+
+
+ROM:002D8B98                 dc.b $E0                ; palette
+ROM:002D8B99                 dc.b   1                ; flag
+ROM:002D8B9A                 dc.b   6                ; nx
+ROM:002D8B9B                 dc.b   8                ; ny
+ROM:002D8B9C                 dc.l $E12               ; tile
+ROM:002D8BA0                 dc.b $18                ; each column, fill or not
+ROM:002D8BA1                 dc.b $30 ; 0
+ROM:002D8BA2                 dc.b $30 ; 0
+ROM:002D8BA3                 dc.b $F6
+ROM:002D8BA4                 dc.b $FE
+ROM:002D8BA5                 dc.b $FE
 
 $3c0000        Read/Write location in VRAM. 
 $3c0002        Read/Write into VRAM

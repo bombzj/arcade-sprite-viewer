@@ -95,58 +95,103 @@ function setMapTileStart(mapstart) {
 
 
 frameAddress = [
-	//0xB6DFE, 0xB5B44, 0xBDBFE, 
+	0x2DC896, 0x25680E, 0x2536C6, 0x25966A, 0x27FBF6, 0x26B710,
 	0xB5A82, 0xB6B0A, 0xBDBEC, 0xBDF24, 0xBE25C, 0xBE26A
 ];
 
 // get frame from addr. return a frame obj
-function getRomFrame(addr, f) {
+function getRomFrame(addr, f = 0) {
 	var bf = new bytebuffer(romFrameData);
 	var bf2 = new bytebuffer(romFrameData);
-
-	if(f >= 0) {	// use frameAddress and has multiple frames
-		let offset = bf.getShort(addr + 2);
-
-		addr += offset + 2;
-	}
-
-	bf.position(addr);
 	let frame = {
 		sprites: [],
 	};
+
+	if(addr < 0x100000) {
+		// draw by $8544
+		if(f >= 0) {	// use frameAddress and has multiple frames
+			let offset = bf.getShort(addr + 2);
 	
-	bf.skip(2);
-	let cnt = bf.get() + 1;
-	let cnt2 = bf.get() + 1;
-	let offset = bf.getShort();
-	if(f) {
-		offset = offset * f;
-	} else {
-		offset = 0;
-	}
-
-
-	bf2.position(addr + offset + 0x6);
-
-	for(let i = 0;i < cnt;i++) {
-		for(let j = 0;j < cnt2;j++) {
-			let tile = bf2.getuShort();
-			let palette = bf2.get();
-			let flag = bf2.get();
-			tile += (flag & 0xF0) << 12;	// more bits for tile number
-			let sprite = {
-				x: i * 0x10,
-				y: j * 0x10,
-				tile: tile,
-				nx: 1,
-				ny: 1,
-				vflip: flag & 0x2,	// this tile need flip
-				hflip: flag & 0x1,	// this tile need flip
-				pal: palette,
-			};
-			frame.sprites.push(sprite);
+			addr += offset + 2;
 		}
+	
+		bf.position(addr);
+		
+		bf.skip(2);
+		let cnt = bf.get() + 1;
+		let cnt2 = bf.get() + 1;
+		let offset = bf.getShort();
+		if(f) {
+			offset = offset * f;
+		} else {
+			offset = 0;
+		}
+	
+	
+		bf2.position(addr + offset + 0x6);
+	
+		for(let i = 0;i < cnt;i++) {
+			for(let j = 0;j < cnt2;j++) {
+				let tile = bf2.getuShort();
+				let palette = bf2.get();
+				let flag = bf2.get();
+				tile += (flag & 0xF0) << 12;	// more bits for tile number
+				let sprite = {
+					x: i * 0x10,
+					y: j * 0x10,
+					tile: tile,
+					nx: 1,
+					ny: 1,
+					vflip: flag & 0x2,	// this tile need flip
+					hflip: flag & 0x1,	// this tile need flip
+					pal: palette,
+				};
+				frame.sprites.push(sprite);
+			}
+		}
+
+
+	} else {
+		// draw by 6022
+		if(f >= 0) {	// use frameAddress and has multiple frames
+			addr = bf.getInt(addr + f * 4);
+		}
+	
+		bf.position(addr);
+		
+		let flag = bf.get();
+		let palette = bf.get();
+		let nx = bf.get();
+		let ny = bf.get();
+		let tile = bf.getInt();
+
+	
+		for(let i = 0;i < nx;i++) {
+			let fill = bf.get();		// in this column, which row need fill (per bit), which means max 8
+			for(let j = 0;j < ny;j++) {debugger
+				if((fill & (0x80 >>> j)) == 0)		
+					continue;
+				// let tile = bf2.getuShort();
+				
+				// let flag = bf2.get();
+				// tile += (flag & 0xF0) << 12;	// more bits for tile number
+				let sprite = {
+					x: i << 4,
+					y: j << 4,
+					tile: tile++,
+					nx: 1,
+					ny: 1,
+					vflip: flag & 0x2,	// this tile need flip
+					hflip: flag & 0x1,	// this tile need flip
+					pal: palette,
+				};
+				frame.sprites.push(sprite);
+			}
+		}
+
 	}
+
+	
 
 
 
