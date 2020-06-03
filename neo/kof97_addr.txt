@@ -27,7 +27,7 @@ ROM:00006058                 dc.l obj_draw_character_icon ; C2BA
 
 
 ROM:002D8B98                 dc.b $E0                ; palette
-ROM:002D8B99                 dc.b   1                ; flag
+ROM:002D8B99                 dc.b   1                ; draw func
 ROM:002D8B9A                 dc.b   6                ; nx
 ROM:002D8B9B                 dc.b   8                ; ny
 ROM:002D8B9C                 dc.l $E12               ; tile

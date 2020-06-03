@@ -106,6 +106,7 @@ function getRomFrame(addr, f = 0) {
 	let frame = {
 		sprites: [],
 	};
+	frame.info = '0x'+addr.toString(16).toUpperCase();
 
 	if(addr < 0x100000) {
 		// draw by $8544
@@ -159,35 +160,78 @@ function getRomFrame(addr, f = 0) {
 	
 		bf.position(addr);
 		
-		let flag = bf.get();
 		let palette = bf.get();
-		let nx = bf.get();
-		let ny = bf.get();
-		let tile = bf.getInt();
+		let func = bf.get();
+		frame.info += ',func:' + func.toString(16).toUpperCase();
 
+		if(func == 0x1) {
+			// only provide first tile, all tiles are in order, 1 2 3 4 5
+			let flag = 0;
+			let nx = bf.get();
+			let ny = bf.get();
+			
+			let tile = bf.getInt();
 	
-		for(let i = 0;i < nx;i++) {
-			let fill = bf.get();		// in this column, which row need fill (per bit), which means max 8
-			for(let j = 0;j < ny;j++) {debugger
-				if((fill & (0x80 >>> j)) == 0)		
-					continue;
-				// let tile = bf2.getuShort();
-				
-				// let flag = bf2.get();
-				// tile += (flag & 0xF0) << 12;	// more bits for tile number
-				let sprite = {
-					x: i << 4,
-					y: j << 4,
-					tile: tile++,
-					nx: 1,
-					ny: 1,
-					vflip: flag & 0x2,	// this tile need flip
-					hflip: flag & 0x1,	// this tile need flip
-					pal: palette,
-				};
-				frame.sprites.push(sprite);
+		
+			for(let i = 0;i < nx;i++) {
+				let fill = bf.get();		// in this column, which row need fill (per bit), which means max 8
+				for(let j = 0;j < ny;j++) {
+					if((fill & (0x80 >>> j)) == 0)		
+						continue;
+					// let tile = bf2.getuShort();
+					
+					// let flag = bf2.get();
+					// tile += (flag & 0xF0) << 12;	// more bits for tile number
+					let sprite = {
+						x: i << 4,
+						y: j << 4,
+						tile: tile++,
+						nx: 1,
+						ny: 1,
+						vflip: flag & 0x2,	// this tile need flip
+						hflip: flag & 0x1,	// this tile need flip
+						pal: palette,
+					};
+					frame.sprites.push(sprite);
+				}
+			}
+		} else if(func == 0x8) {
+
+			let nx = bf.get();
+			let ny = bf.get();
+			
+			// let tile = bf.getInt();
+			let palette = bf.get();
+			let flag = bf.get();
+			let tileadd = (flag & 0xF0) << 12;
+
+			bf2.position(bf.position() + nx);
+		
+			for(let i = 0;i < nx;i++) {
+				let fill = bf.get();		// in this column, which row need fill (per bit), which means max 8
+				for(let j = 0;j < ny;j++) {debugger
+					if((fill & (0x80 >>> j)) == 0)		
+						continue;
+					let tile = bf2.getuShort() + tileadd;
+					
+					// let flag = bf2.get();
+					// tile += (flag & 0xF0) << 12;	// more bits for tile number
+					let sprite = {
+						x: i << 4,
+						y: j << 4,
+						tile: tile,
+						nx: 1,
+						ny: 1,
+						vflip: flag & 0x2,	// this tile need flip
+						hflip: flag & 0x1,	// this tile need flip
+						pal: palette,
+					};
+					frame.sprites.push(sprite);
+				}
 			}
 		}
+
+		
 
 	}
 
