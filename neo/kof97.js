@@ -208,7 +208,7 @@ function getRomFrame(addr, f = 0) {
 					frame.sprites.push(sprite);
 				}
 			}
-		} else if(func == 0x8) {
+		} else if(func == 0x8 || func == 0x7) {
 			// word per tile, upper bits from header
 			let nx = bf.get();
 			let ny = bf.get();
@@ -217,17 +217,35 @@ function getRomFrame(addr, f = 0) {
 			let palette = bf.get();
 			let flag = bf.get();
 			let tileadd = (flag & 0xF0) << 12;
-
-			bf2.position(bf.position() + nx);
+			if(func == 0x8) {
+				bf2.position(bf.position() + nx);
+			} else {
+				bf2.position(bf.position() + nx * 2);
+			}
+			
 			if(bf2.getr(0) == 0) {	// sometimes extra 0 is there
 				bf2.skip();
 			}
 		
 			for(let i = 0;i < nx;i++) {
-				let fill = bf.get();		// in this column, which row need fill (per bit), which means max 8
+				let fill;			// in this column, which row need fill (per bit), which means max 8
+				if(func == 0x8) {
+					fill = bf.get();
+				} else {
+					fill = bf.getuShort();
+				}
+
 				for(let j = 0;j < ny;j++) {
-					if((fill & (0x80 >>> j)) == 0)		
+					let mask;
+					if(func == 0x8) {
+						mask = 0x80 >>> j;
+					} else {
+						mask = 0x8000 >>> j;
+					}
+
+					if((fill & mask) == 0)		
 						continue;
+
 					let tile = bf2.getuShort() + tileadd;
 					
 					// let flag = bf2.get();
@@ -245,7 +263,7 @@ function getRomFrame(addr, f = 0) {
 					frame.sprites.push(sprite);
 				}
 			}
-		} else if(func == 0xA) {
+		} else if(func == 0xA || func == 0x9) {
 			// byte per tile, more upper bits from header
 			let nx = bf.get();
 			let ny = bf.get();
@@ -255,13 +273,31 @@ function getRomFrame(addr, f = 0) {
 			let flag = bf.getuShort();
 			let tileadd = ((flag & 0xF0) << 12) + (flag & 0xFF00);
 
-			bf2.position(bf.position() + nx);
+			if(func == 0xA) {
+				bf2.position(bf.position() + nx);
+			} else {
+				bf2.position(bf.position() + nx * 2);
+			}
 		
 			for(let i = 0;i < nx;i++) {
-				let fill = bf.get();		// in this column, which row need fill (per bit), which means max 8
+				let fill;			// in this column, which row need fill (per bit), which means max 8
+				if(func == 0xA) {
+					fill = bf.get();
+				} else {
+					fill = bf.getuShort();
+				}
+
 				for(let j = 0;j < ny;j++) {
-					if((fill & (0x80 >>> j)) == 0)		
+					let mask;
+					if(func == 0xA) {
+						mask = 0x80 >>> j;
+					} else {
+						mask = 0x8000 >>> j;
+					}
+
+					if((fill & mask) == 0)		
 						continue;
+						
 					let tile = bf2.get() + tileadd;
 					
 					// let flag = bf2.get();
