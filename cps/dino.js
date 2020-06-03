@@ -332,7 +332,7 @@ function loopDrawAnimationPlayer() {
 	var bf = new bytebuffer(romFrameData);
 	ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
 	
-	for(let player = 0;player < 1;player++) {
+	for(let player = 0;player < 4;player++) {
 		let type = bf.getInt(player * 4 + playerSpriteAddress[curPlayerType]);
 		let offset = bf.getShort(type + curPlayerFrame * 2);
 //		let s = bf.getShort(type + offset);
