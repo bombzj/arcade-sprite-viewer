@@ -1,6 +1,28 @@
 ROM code loaded into 0x0 - 0xFFFFF, 0x20000 - 0x2FFFFF, 
 
 [sprite]
+
+ROM:00006022 obj_draw:                               ; CODE XREF: obj_draw_loop+22â†‘p
+ROM:00006022                 move.w  $64BC(a5),d0
+ROM:00006026                 add.w   d0,d0
+ROM:00006028                 add.w   d0,d0
+ROM:0000602A                 movea.l off_6030(pc,d0.w),a1
+ROM:0000602E                 jmp     (a1)
+ROM:0000602E ; End of function obj_draw
+ROM:0000602E
+ROM:0000602E ; ---------------------------------------------------------------------------
+ROM:00006030 off_6030:       dc.l loc_605C
+ROM:00006034                 dc.l obj_draw_character ; 10057
+ROM:00006038                 dc.l obj_draw_ribbon    ; B2E, B2F
+ROM:0000603C                 dc.l loc_61AA
+ROM:00006040                 dc.l loc_605C
+ROM:00006044                 dc.l loc_61E8
+ROM:00006048                 dc.l loc_626E
+ROM:0000604C                 dc.l loc_62FA
+ROM:00006050                 dc.l loc_635E
+ROM:00006054                 dc.l loc_63CA
+ROM:00006058                 dc.l obj_draw_character_icon ; C2BA
+
 $3c0000        Read/Write location in VRAM. 
 $3c0002        Read/Write into VRAM
 $3c0004        Value to increment VRAM address by (based on words)
@@ -35,7 +57,7 @@ ROM:00004C48                 adda.l  d0,a0
 ROM:00004C4A                 movea.l $5924(a5),a1
 ROM:00004C4E                 move.w  #$1F,d0
 ROM:00004C52
-ROM:00004C52 loc_4C52:                               ; CODE XREF: sub_4C3A+28¡ýj
+ROM:00004C52 loc_4C52:                               ; CODE XREF: sub_4C3A+28ï¿½ï¿½j
 ROM:00004C52                 move.l  (a0)+,(a1)+     ; a1 = 10c024
 ROM:00004C54                 move.l  (a0)+,(a1)+
 ROM:00004C56                 move.l  (a0)+,(a1)+
