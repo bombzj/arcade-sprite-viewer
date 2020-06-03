@@ -49,9 +49,9 @@ var curMap;
 var romName;
 
 function init(name) {
-  romName = name;
-  if(!machine)
-	  return;
+	romName = name;
+	if(!machine)
+		return;
   
 
 	palData = new Uint32Array(16 * 32 * 20);	// 4 pages of palettes if cps1, 20 pages for psi
@@ -63,30 +63,32 @@ function init(name) {
 	}
 
 	statusStorage = "status_" + name;
-	labelInfo.innerHTML = '<font color="red">Downloading...</font>';
-  loadData('rom/' + name, function (data2) {
+	labelInfo.innerHTML = '<font color="red">Downloading gfx...</font>';
 
-	JSZip.loadAsync(data2).then(function(zip) {
-		labelInfo.innerHTML = '<font color="red">Extracting...</font>';
-		let a = zip.files.gfx.async('arraybuffer');
-		zip.files.gfx.async('arraybuffer').then(function(data){
-			gfxData = new Uint8ClampedArray(data);
-			return zip.files.main.async('arraybuffer');
-		}).then(function(data){
+	loadData('rom/' + name + '.gfx', function (data2) {
+		labelInfo.innerHTML = '<font color="red">Downloading rom...</font>';
+		loadData('rom/' + name, function (data3) {
+			labelInfo.innerHTML = '<font color="red">Extracting...</font>';
+
+			var inflator = pako.Inflate();
+			inflator.push(data3, true);
+			romFrameData = inflator.result;
+
 			labelInfo.innerHTML = '';
-			romFrameData = new Uint8ClampedArray(data);
+
 			// initial frames info from local storage
 			loadStatus();
 			loadFrame();
 			loadRomFrame();
-			
+
 			loadRomPal();
 			refresh();
-		})
-		
-	})
+		});
+		var inflator = pako.Inflate();
+		inflator.push(data2, true);
+		gfxData = inflator.result;
+	});
 
-  });
 }
 
 // empty function, needs to be replaced
