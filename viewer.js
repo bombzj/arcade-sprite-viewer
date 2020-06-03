@@ -316,8 +316,6 @@ function drawTilesBase(image, startTile, w, h, pal, srcw, gridline = false, vfli
 			let rny = hflip ? w - ny - 1 : ny;
 			if(machine.type == 1)	// psi
 				baseIndex = (startTile + rnx * w + rny) * srcw * srcw;
-			else if(machine.type == 2)	// neogeo
-				baseIndex = (startTile + rnx + rny * h) * srcw * srcw;
 			else		// cps1
 				baseIndex = (startTile + rnx * srcw + rny) * srcw * srcw;
 			if(color == 256)

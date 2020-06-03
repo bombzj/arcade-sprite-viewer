@@ -37,9 +37,8 @@ An arcade game sprite / map viewer (cps1 neogeo ...)
   * arrow left/right = change animation
 
 ## TODO
-* neogeo
 * webgl & wasm?
-* more games, dino!
+* more games, varth?
 * how to know which pen/color of background layer is in front of sprites?
 * JSZip is quite slow
 
