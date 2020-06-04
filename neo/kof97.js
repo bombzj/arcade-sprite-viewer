@@ -95,7 +95,7 @@ function setMapTileStart(mapstart) {
 
 
 frameAddress = [
-	0x2DC896, 0x25680E, 0x2536C6, 0x25966A, 0x27FBF6, 0x26B710,
+	// 0x2DC896, 0x25680E, 0x2536C6, 0x25966A, 0x27FBF6, 0x26B710,
 	0xB5A82, 0xB6B0A, 0xBDBEC, 0xBDF24, 0xBE25C, 0xBE26A
 ];
 
@@ -373,4 +373,14 @@ var animPlayerAddr = [];
 //draw anim by player 0-3
 function drawRomFramePlayer() {
 	
+}
+
+
+function loadRomFrame() {
+	var bf = new bytebuffer(romFrameData);
+	
+	for(let i = 0;i < 36;i++) {
+		frameAddress.push(bf.getInt(0x250000 + i * 4));
+	}
+
 }
