@@ -13,11 +13,12 @@ An arcade game sprite / map viewer (cps1 neogeo ...)
 * Click [here](https://bombzj.github.io/arcade-sprite-viewer/?1945ii) to view `strikers 1945ii`.
 
 ## NEOGEO [view more](https://github.com/bombzj/arcade-sprite-viewer/tree/master/neo)
+![image kof97](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/img2kof97.png)<br/>
 
 * Click [here](https://bombzj.github.io/arcade-sprite-viewer/?kof97) to view `kof97`.
 
-## Control
-* m = change mode from 1 - 6 loop
+## Usage
+* m key = change mode from 1 - 6 loop
 * ctrl + arrow keys = change palette set to level/scene
 * mode 1 (tiles)
   * arrow keys/page up/down = move tiles
