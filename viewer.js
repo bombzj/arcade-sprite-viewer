@@ -943,14 +943,14 @@ window.addEventListener("keydown", function (event) {
 			break;
 	}
 	
-}, false);
+}, true);
 
 
 
 window.addEventListener("keyup", function (event) {
 	console.log("key = " + event.key);
 	delete pressed[event.keyCode];
-}, false);
+}, true);
 
 var curframe=0;	// current frame
 var totalframe=1;
