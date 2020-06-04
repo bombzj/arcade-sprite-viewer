@@ -23,7 +23,7 @@
 	<canvas id="canvas" width="272" height="400" style="margin:0px;position:absolute;left:0px;top:0px;"></canvas>
 	<canvas id="canvasBack" width="800" height="600" style="margin:0px;position:absolute;left:0px;top:0px;"></canvas>
 	<div id="canvas2div"
-		style="position:absolute;top:0px;left:550px;border:1px solid black;width:700px;height:512px;overflow: hidden;">
+		style="position:absolute;top:0px;left:550px;width:700px;height:512px;overflow: hidden;">
 		<canvas id="canvas2" width="360" height="240"
 			style="margin:0px;position:absolute;left:0px;top:0px;width:720;height:480"></canvas>
 	</div>
@@ -74,21 +74,21 @@
 		romjs.onload = function () {
 			init(name);
 		};
+		romjs.onerror = function () {
+			labelInfo.innerHTML = '<font color="red">Unsupported</font>';
+		}
 
 		var machineType = ['cps', 'psi', 'neo'];
 		var machines = new Map([
-			['punisher', {
-				type: 0,
-			}],
-			['1945ii', {
-				type: 1,
-			}],
-			['kof97', {
-				type: 2,
-			}],
-			['dino', {
-				type: 0,
-			}],
+			['punisher',{	type: 0	}],
+			['1945ii',	{	type: 1	}],
+			['1945iii', {	type: 1	}],
+			['kof97',	{	type: 2	}],
+			['samsho2',	{	type: 2	}],
+			['mslug2',	{	type: 2	}],
+			['dino',	{	type: 0	}],
+			['varth',	{	type: 0	}],
+			['wof',		{	type: 0	}],
 		]);
 		var machine = machines.get(name);
 		var machineType = machineType[machine.type];
