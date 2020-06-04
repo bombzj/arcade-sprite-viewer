@@ -1,5 +1,5 @@
-ROM code loaded into 0x0 - 0xFFFFF, 0x20000 - 0x2FFFFF, 
-
+ROM code loaded into 0x0 - 0xFFFFF, 0x20000 - 0x2FFFFF
+0x20000 data are changing, controlled by 0x2FFFFE, write 0 1 2 for different pages
 
 [palette]
 PALETTES        equ $400000   ;Palette RAM
