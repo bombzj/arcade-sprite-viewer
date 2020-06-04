@@ -14,6 +14,13 @@ function loadRomPal() {
 			loadRomPalNeo(bf, (i << 4) + p * 16 * 32);
 		}
 	}
+
+	// load character palette
+
+		bf.position(paletteAddress + palset * 0x400);
+		for(let i = 0;i < 32;i++) {
+			loadRomPalNeo(bf, (i << 4));
+		}
 	
 	if(showPal)
 		drawPal();
@@ -153,6 +160,7 @@ function getRomFrame(addr, f) {
 
 
 	} else {
+
 		// draw by 6022
 		if(f >= 0) {	// use frameAddress and has multiple frames
 			addr = bf.getInt(addr + f * 4);
@@ -453,12 +461,20 @@ function drawRomFramePlayer() {
 	
 }
 
+var palmap = [
+	8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,
+	56,58,60,50,52,54,62,64,66,
+	68
+];
 
 function loadRomFrame() {
 	var bf = new bytebuffer(romFrameData);
 	
 	for(let i = 0;i < 36;i++) {
-		frameAddress.push(bf.getInt(0x250000 + i * 4));
+		let addr = bf.getInt(0x250000 + i * 4);
+		frameAddress.push(addr);
+		if(palmap[i])
+			spritePaletteMap.set(addr, palmap[i]);
 	}
-
+	maxPalSet = 500;
 }

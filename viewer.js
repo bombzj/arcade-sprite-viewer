@@ -120,6 +120,7 @@ xhr.send();
 
 var palset;	// current palette set with 32*16 colors, per level
 var palset2;	// per scene?
+var maxPalSet = 50;
 
 var showPal;
 var showCB;
@@ -194,7 +195,10 @@ function setMapTileStart(mapstart) {
 	refresh();
 }
 
+
+var spritePaletteMap = new Map();	// sprite addr -> palset
 var frameAddress = [];
+var preaddr = 0;	// don't auto switch pal if addr not changed
 
 // draw a frame contains several sprites
 function drawRomFrame(addr, offx = 128, offy = 160) {
@@ -212,6 +216,16 @@ function drawRomFrame(addr, offx = 128, offy = 160) {
 			return;
 		addr = frameAddress[curRomFrame];
 		frame = getRomFrame(addr, curRomFrame2);
+
+		if(addr != preaddr) {
+			let p = spritePaletteMap.get(addr);
+			if(p >= 0){
+				// switch to proper palset
+				palset = p;
+				loadRomPal();
+			}
+			preaddr = addr;
+		}
 
 	}
 
@@ -720,8 +734,8 @@ window.addEventListener("keydown", function (event) {
 		case 'ArrowDown':
 			if(event.ctrlKey) {	// change palette
 				palset++;
-				if(palset >= 50)
-					palset = 50;
+				if(palset >= maxPalSet)
+					palset = maxPalSet;
 				loadRomPal();
 			} else {
 				if(mode == 0) {

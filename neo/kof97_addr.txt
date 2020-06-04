@@ -1,5 +1,11 @@
 ROM code loaded into 0x0 - 0xFFFFF, 0x20000 - 0x2FFFFF, 
 
+
+[palette]
+PALETTES        equ $400000   ;Palette RAM
+palette = palatte base + palette in sprite
+palette data store together, loading process depends on selected characters & scene
+
 [sprite]
 pointer at $3C(a4) of object data
 
