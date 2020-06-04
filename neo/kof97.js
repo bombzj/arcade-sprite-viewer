@@ -100,7 +100,7 @@ frameAddress = [
 ];
 
 // get frame from addr. return a frame obj
-function getRomFrame(addr, f = 0) {
+function getRomFrame(addr, f) {
 	var bf = new bytebuffer(romFrameData);
 	var bf2 = new bytebuffer(romFrameData);
 	let frame = {
@@ -162,7 +162,8 @@ function getRomFrame(addr, f = 0) {
 		
 		let palette = bf.get();
 		let func = bf.get();
-		frame.info = '0x'+addr.toString(16).toUpperCase() + ',func:' + func.toString(16).toUpperCase();
+		frame.info = '0x'+addr.toString(16).toUpperCase() + ',func:' + func.toString(16).toUpperCase() + 
+					',pal:' + palette.toString(16).toUpperCase();
 
 		if(func == 0x1 || func == 0x0) {
 			// only provide first tile, all tiles are in order, 1 2 3 4 5
@@ -214,19 +215,18 @@ function getRomFrame(addr, f = 0) {
 			let ny = bf.get();
 			
 			// let tile = bf.getInt();
-			let palette = bf.get();
+			let tmp = bf.get();	// not used?
 			let flag = bf.get();
 			let tileadd = (flag & 0xF0) << 12;
 			if(func == 0x8) {
 				bf2.position(bf.position() + nx);
+				if(bf2.getr(0) == 0) {	// sometimes extra 0 is there, why?
+					bf2.skip();
+				}
 			} else {
 				bf2.position(bf.position() + nx * 2);
 			}
 			
-			if(bf2.getr(0) == 0) {	// sometimes extra 0 is there
-				bf2.skip();
-			}
-		
 			for(let i = 0;i < nx;i++) {
 				let fill;			// in this column, which row need fill (per bit), which means max 8
 				if(func == 0x8) {
@@ -321,21 +321,25 @@ function getRomFrame(addr, f = 0) {
 			let ny = bf.get();
 			
 			// let tile = bf.getInt();
-			let palette = bf.get();
-			let flag = bf.get();
-			let tileadd = (flag & 0xF0) << 12;
+			// let palette = bf.get();
+			// let flag = bf.get();
+			// let tileadd = (flag & 0xF0) << 12;
 
 			if(func == 0x6) {
 				bf2.position(bf.position() + nx);
+				if(bf2.getr(0) == 0) {	// sometimes extra 0 is there, why?
+					bf2.skip();
+				}
 			} else {
 				bf2.position(bf.position() + nx * 2);
 			}
 		
+			let cnt = 0;
 			for(let i = 0;i < nx;i++) {
 				let fill;			// in this column, which row need fill (per bit), which means max 8
 				if(func == 0x6) {
 					fill = bf.get();
-				} else {
+				} else {debugger
 					fill = bf.getuShort();
 				}
 
@@ -350,8 +354,18 @@ function getRomFrame(addr, f = 0) {
 					if((fill & mask) == 0)		
 						continue;
 
-					flag = bf2.get();
-					let tile = bf2.getuShort() + tileadd;
+					let flag, tile;
+					if(cnt++ & 0x1) {
+						flag = bf2.get();
+						tile = bf2.getuShort();
+					} else {
+						tile = bf2.getuShort();
+						flag = bf2.get();
+					}
+
+
+					let tileadd = (flag & 0xF0) << 12;
+					tile += tileadd;
 					
 					// let flag = bf2.get();
 					// tile += (flag & 0xF0) << 12;	// more bits for tile number
@@ -373,24 +387,36 @@ function getRomFrame(addr, f = 0) {
 			let nx = bf.get();
 			let ny = bf.get();
 			
-			let palette, flag;
+			let flag;
 			let tileadd;
 				
 			if(func == 0x3) {
-				palette  = bf.get();
+				let tmp  = bf.get();		// unused?
 				flag = bf.get();
 				tileadd = (flag & 0xF0) << 12;
 			}
 
+			let cnt = 0;
 			for(let i = 0;i < nx;i++) {
 
 				for(let j = 0;j < ny;j++) {
+					let tile;
 					if(func == 0x2) {
-						flag = bf.get();
+						if(cnt++ & 0x1) {
+							flag = bf.get();
+							tile = bf.getuShort();
+						} else {
+							tile = bf.getuShort();
+							flag = bf.get();
+						}
+
 						tileadd = (flag & 0xF0) << 12;
+					} else {
+						tile = bf.getuShort();
 					}
 
-					let tile = bf.getuShort() + tileadd;
+					
+					tile += tileadd;
 					
 					// let flag = bf2.get();
 					// tile += (flag & 0xF0) << 12;	// more bits for tile number

@@ -406,7 +406,7 @@ function drawTilesBase(image, startTile, w, h, pal, srcw, gridline = false, vfli
 }
 
 canvas.addEventListener("mousemove", function(event) {
-	return;	// deprecated, used to drag&drop tiles
+
 	var x = event.offsetX/scale;
 	var y = event.offsetY/scale;
 	
