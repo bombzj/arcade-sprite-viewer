@@ -315,7 +315,7 @@ function getRomFrame(addr, f = 0) {
 					frame.sprites.push(sprite);
 				}
 			}
-		} else if(func == 0x6) {
+		} else if(func == 0x6 || func == 0x5) {
 	// word per tile, upper bits from header, with different flags
 			let nx = bf.get();
 			let ny = bf.get();
@@ -325,14 +325,30 @@ function getRomFrame(addr, f = 0) {
 			let flag = bf.get();
 			let tileadd = (flag & 0xF0) << 12;
 
-			bf2.position(bf.position() + nx);
+			if(func == 0x6) {
+				bf2.position(bf.position() + nx);
+			} else {
+				bf2.position(bf.position() + nx * 2);
+			}
 		
 			for(let i = 0;i < nx;i++) {
-				let fill = bf.get();		// in this column, which row need fill (per bit), which means max 8
+				let fill;			// in this column, which row need fill (per bit), which means max 8
+				if(func == 0x6) {
+					fill = bf.get();
+				} else {
+					fill = bf.getuShort();
+				}
+
 				for(let j = 0;j < ny;j++) {
-					if((fill & (0x80 >>> j)) == 0) {
-						continue;
+					let mask;
+					if(func == 0x6) {
+						mask = 0x80 >>> j;
+					} else {
+						mask = 0x8000 >>> j;
 					}
+
+					if((fill & mask) == 0)		
+						continue;
 
 					flag = bf2.get();
 					let tile = bf2.getuShort() + tileadd;
@@ -352,13 +368,49 @@ function getRomFrame(addr, f = 0) {
 					frame.sprites.push(sprite);
 				}
 			}
-		}
+		} else if(func == 0x2 || func == 0x3) {
+			// word per tile without fill mask
+			let nx = bf.get();
+			let ny = bf.get();
+			
+			let palette, flag;
+			let tileadd;
+				
+			if(func == 0x3) {
+				palette  = bf.get();
+				flag = bf.get();
+				tileadd = (flag & 0xF0) << 12;
+			}
 
-		
+			for(let i = 0;i < nx;i++) {
+
+				for(let j = 0;j < ny;j++) {
+					if(func == 0x2) {
+						flag = bf.get();
+						tileadd = (flag & 0xF0) << 12;
+					}
+
+					let tile = bf.getuShort() + tileadd;
+					
+					// let flag = bf2.get();
+					// tile += (flag & 0xF0) << 12;	// more bits for tile number
+					let sprite = {
+						x: i << 4,
+						y: j << 4,
+						tile: tile,
+						nx: 1,
+						ny: 1,
+						vflip: flag & 0x2,	// this tile need flip
+						hflip: flag & 0x1,	// this tile need flip
+						pal: palette,
+					};
+					frame.sprites.push(sprite);
+				}
+			}
+
+		}		
 
 	}
-
-	
 
 
 

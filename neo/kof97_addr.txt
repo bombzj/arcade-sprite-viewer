@@ -13,17 +13,17 @@ ROM:0000602E                 jmp     (a1)
 ROM:0000602E ; End of function obj_draw
 ROM:0000602E
 ROM:0000602E ; ---------------------------------------------------------------------------
-ROM:00006030 off_6030:       dc.l loc_605C
-ROM:00006034                 dc.l obj_draw_character ; 10057
-ROM:00006038                 dc.l obj_draw_ribbon    ; B2E, B2F
-ROM:0000603C                 dc.l loc_61AA
-ROM:00006040                 dc.l loc_605C
-ROM:00006044                 dc.l loc_61E8
-ROM:00006048                 dc.l loc_626E
-ROM:0000604C                 dc.l loc_62FA
-ROM:00006050                 dc.l loc_635E
-ROM:00006054                 dc.l loc_63CA
-ROM:00006058                 dc.l obj_draw_character_icon ; C2BA
+ROM:00006030 off_6030:       dc.l obj_draw_0x0       ; head tile & mask by word
+ROM:00006034                 dc.l obj_draw_0x1       ; head tile & mask by byte
+ROM:00006038                 dc.l obj_draw_0x2       ; word+byte(flag) per tile
+ROM:0000603C                 dc.l obj_draw_0x3       ; word per tile
+ROM:00006040                 dc.l obj_draw_0x0       ; head tile & mask by word
+ROM:00006044                 dc.l obj_draw_0x5       ; word+byte(flag) per tile & mask by word
+ROM:00006048                 dc.l obj_draw_0x6       ; word+byte(flag) per tile & mask by byte
+ROM:0000604C                 dc.l obj_draw_0x7       ; word per tile & mask by word
+ROM:00006050                 dc.l obj_draw_0x8       ; word per tile & mask by byte
+ROM:00006054                 dc.l obj_draw_0x9       ; byte per tile & mask by word
+ROM:00006058                 dc.l obj_draw_0xA       ; byte per tile & mask by byte
 
 
 ROM:002D8B98                 dc.b $E0                ; palette
