@@ -673,11 +673,14 @@ function createNewImg(spr) {
 }
 
 window.addEventListener("keydown", function (event) {
+	if(event.srcElement.tagName.toUpperCase() != 'BODY') {
+		return;
+	}
     pressed[event.keyCode] = true;
     
 	switch(event.key) {
 		case 'ArrowUp':
-			if(pressed[17]) {	// change palette
+			if(event.ctrlKey) {	// change palette
 				palset-=1;
 				if(palset < 0)
 					palset = 0;
@@ -715,7 +718,7 @@ window.addEventListener("keydown", function (event) {
 		break;
 			
 		case 'ArrowDown':
-			if(pressed[17]) {	// change palette
+			if(event.ctrlKey) {	// change palette
 				palset++;
 				if(palset >= 50)
 					palset = 50;
@@ -781,7 +784,7 @@ window.addEventListener("keydown", function (event) {
 		break;
 		
 		case 'ArrowLeft':
-			if(pressed[17]) {	// change palette
+			if(event.ctrlKey) {	// change palette
 				palset2--;
 				if(palset2<0)
 					palset2=0;
@@ -815,7 +818,7 @@ window.addEventListener("keydown", function (event) {
 		break;
 			
 		case 'ArrowRight':
-			if(pressed[17]) {	// change palette
+			if(event.ctrlKey) {	// change palette
 				palset2++;
 				loadRomPal();
 			} else {
@@ -933,9 +936,11 @@ window.addEventListener("keydown", function (event) {
 			saveStatus();
 			break;
 		case 'c':
-			showCB = !showCB;
-			refresh();
-			saveStatus();
+			if(!event.ctrlKey) {
+				showCB = !showCB;
+				refresh();
+				saveStatus();
+			}
 			break;
 		case 'h':
 			hideBackground = !hideBackground;
@@ -943,14 +948,14 @@ window.addEventListener("keydown", function (event) {
 			break;
 	}
 	
-}, true);
+}, false);
 
 
 
 window.addEventListener("keyup", function (event) {
 	console.log("key = " + event.key);
 	delete pressed[event.keyCode];
-}, true);
+}, false);
 
 var curframe=0;	// current frame
 var totalframe=1;
