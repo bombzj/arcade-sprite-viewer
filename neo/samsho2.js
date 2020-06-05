@@ -376,18 +376,23 @@ function getRomFrame(addr, f = 0) {
 				frame.sprites.push(sprite);
 			}
 		}
-	} else if(func == 0x2 || func == 0x3) {
-		// word per tile without fill mask
-		let nx = bf.get();
-		let ny = bf.get();
+	} else if(func == 0x14 || func == 0x4 || func == 0x8 || func == 0xC) {
+		// word(+byte) per tile without fill mask
 		
 		let flag;
 		let tileadd;
-			
-		if(func == 0x3) {
-			let tmp  = bf.get();		// unused?
+		let palette;
+		if(func == 0x4) {
+			palette = bf.get();		// unused?
 			flag = bf.get();
 			tileadd = (flag & 0xF0) << 12;
+		} else if(func == 0x8) {
+			palette = bf.get();
+			tileadd = bf.get() << 8;
+		} else if(func == 0xC) {
+			palette = bf.get();
+			flag = bf.get();
+			tileadd = (bf.get() << 8) + ((flag & 0xF0) << 12);
 		}
 
 		let cnt = 0;
@@ -395,7 +400,7 @@ function getRomFrame(addr, f = 0) {
 
 			for(let j = 0;j < ny;j++) {
 				let tile;
-				if(func == 0x2) {
+				if(func == 0x14) {
 					if(cnt++ & 0x1) {
 						flag = bf.get();
 						tile = bf.getuShort();
@@ -405,6 +410,8 @@ function getRomFrame(addr, f = 0) {
 					}
 
 					tileadd = (flag & 0xF0) << 12;
+				} else if(func == 0x8 || func == 0xC) {
+					tile = bf.get();
 				} else {
 					tile = bf.getuShort();
 				}
