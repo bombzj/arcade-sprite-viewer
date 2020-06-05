@@ -155,13 +155,13 @@ function getRomFrame(addr, f = 0) {
 	frame.info = '0x'+addr2.toString(16).toUpperCase() + ',func:' + func.toString(16).toUpperCase();
 
 	d0 &= 0x3FE;
-	let nx = bf.get(0x4164 + d0);
-	let ny = bf.get(0x4165 + d0);
+	let ny = bf.get(0x4164 + d0);
+	let nx = bf.get(0x4165 + d0);
 
 	bf.position(addr2);
 
 	if(func == 0x18 || func == 0x3C) {
-		// only provide first tile, all tiles are in order, 1 2 3 4 5
+		// only provide first tile, with fill mask
 		let palette = bf.get();
 		let flag = bf.get();
 		
