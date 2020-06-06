@@ -1,0 +1,94 @@
+when start, copy these rom to ram:
+
+0x780 -> 0x6000000, 0x2DCDC bytes
+
+0x2E47C ->  0x602DCDC, 0x4A64 bytes
+
+loading data (0x100000) from rom to segment 0x0 offset 0x5000000 (physical address = segment * 0x10 + offset)
+
+0x5000000 -> 0x26080000, 0x80000 bytes
+
+
+seg003:26080020 data_entry:     .data.l palette_data
+seg003:26080024                 .data.l bg_map_table
+seg003:26080028                 .data.l bg_map_data
+seg003:2608002C                 .data.l sequence_data
+seg003:26080030                 .data.l object_data
+seg003:26080034                 .data.l unk_40000
+seg003:26080038                 .data.l rect_data
+seg003:2608003C                 .data.l palette_table
+seg003:26080040                 .data.l checksum
+
+[level sequence]
+
+
+
+[palette]
+
+
+
+
+600bfb4 func list?
+
+[sprite]
+
+
+
+[gfx ram]
+
+
+	/*- Sprite Format 0x0000 - 0x37ff -**
+
+	0 ---- --yy yyyy yyyy | ---- --xx xxxx xxxx  1  F-?? hhhh ZZZZ ZZZZ | f-PP wwww zzzz zzzz
+	2 pppp pppp -aaa -nnn | nnnn nnnn nnnn nnnn  3  ---- ---- ---- ---- | ---- ---- ---- ----
+
+	y = ypos
+	x = xpos
+
+	h = height
+	w = width
+
+	F = flip (y)
+	f = flip (x)
+
+	Z = zoom (y)
+	z = zoom (x)
+
+	n = tile number
+
+	p = palette
+
+	a = alpha blending, selects which of the 8 alpha values in vid_regs[0-1] to use
+
+	P = priority
+	Points to a 4-bit entry in vid_regs[2] which provides a priority comparable with the bg layer's priorities.
+	However, sprite-sprite priority needs to be preserved.
+	daraku and soldivid only use the lsb
+
+	? = unknown
+	Could be a sprite-sprite priority, tests seem to back this up
+
+	**- End Sprite Format -*/
+	
+	
+	
+	// rom mapping
+	map(0x00000000, 0x000fffff).rom(); // program ROM (1 meg)
+	map(0x02000000, 0x020fffff).rom().region("maincpu", 0x100000); // data ROM
+// video chip
+	map(0x03000000, 0x0300ffff).ram().share("spriteram"); // sprite and backgrounds are share this area (video banks 0-1f)
+	map(0x03040000, 0x03044fff).ram().w(m_palette, FUNC(palette_device::write32)).share("palette"); // palette..
+	map(0x03050000, 0x030501ff).ram().share("zoomram"); // sprite zoom lookup table
+	map(0x0305ffdc, 0x0305ffdf).r("watchdog", FUNC(watchdog_timer_device::reset32_r)).w(FUNC(psikyosh_state::irqctrl_w)); // also writes to this address - might be vblank reads?
+	map(0x0305ffe0, 0x0305ffff).ram().w(FUNC(psikyosh_state::vidregs_w)).share("vidregs"); //  video registers
+	map(0x03060000, 0x0307ffff).bankr("gfxbank"); // data for rom tests (gfx), data is controlled by vidreg
+// rom mapping
+	map(0x04060000, 0x0407ffff).bankr("gfxbank"); // data for rom tests (gfx) (Mirrored?)
+// sound chip
+	map(0x05000000, 0x05000007).rw("ymf", FUNC(ymf278b_device::read), FUNC(ymf278b_device::write));
+// inputs/eeprom
+	map(0x05800000, 0x05800003).portr("INPUTS");
+	map(0x05800004, 0x05800007).portr("JP4");
+	map(0x05800004, 0x05800004).w(FUNC(psikyosh_state::eeprom_w));
+// ram
+	map(0x06000000, 0x060fffff).ram().share("ram"); // main RAM (1 meg)
