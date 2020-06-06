@@ -5,7 +5,7 @@ An arcade game sprite / map viewer (cps1 neogeo ...)
 ![punisher animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/punisheranim.gif)<br/>
 ![dino animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animdino.gif)<br/>
 
-* Click [here](https://bombzj.github.io/arcade-sprite-viewer/) to view `punisher`.
+* Click [here](https://bombzj.github.io/arcade-sprite-viewer/?punisher) to view `punisher`.
 
 ## PSIKYOSH [view more](https://github.com/bombzj/arcade-sprite-viewer/tree/master/psi)
 ![1945ii animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/anim1945ii.gif)<br/>

@@ -83,10 +83,14 @@ function init(name) {
 
 			loadRomPal();
 			refresh();
+		}, function() {
+			labelInfo.innerHTML = '<font color="red">Rom not found</font>';
 		});
 		var inflator = pako.Inflate();
 		inflator.push(data2, true);
 		gfxData = inflator.result;
+	}, function() {
+		labelInfo.innerHTML = '<font color="red">Gfx not found</font>';
 	});
 
 }
@@ -101,8 +105,7 @@ function loadData(path, success, error)
 {
 var xhr = new XMLHttpRequest();
 xhr.responseType = "arraybuffer";
-xhr.onreadystatechange = function()
-{
+xhr.onreadystatechange = function() {
   if (xhr.readyState === XMLHttpRequest.DONE) {
       if (xhr.status === 200) {
           if (success)
@@ -1226,6 +1229,11 @@ function getpalsets(){
 	return sets;
 }
 
+var curPlayerType;
+var curPlayerFrame;
 
-
-
+// default to prevent exception
+function drawMap() {}
+function drawMap2() {}
+function drawRomFramePlayer() {}
+function drawAnimation() {}
