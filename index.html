@@ -68,14 +68,12 @@
 	<script id="romjs"></script>
 	<script>
 		var name = window.location.search.substr(1);
-		if (!name || name.length == 0)
-			name = 'punisher';
 
 		romjs.onload = function () {
 			init(name);
 		};
 		romjs.onerror = function () {
-			labelInfo.innerHTML = '<font color="red">Unsupported</font>';
+			labelInfo.innerHTML = '<font color="red">Unsupported yet</font>';
 		}
 
 		var machineType = ['cps', 'psi', 'neo'];
@@ -83,6 +81,7 @@
 			['punisher',{	type: 0	}],
 			['1945ii',	{	type: 1	}],
 			['1945iii', {	type: 1	}],
+			['gunbird2',{	type: 1	}],
 			['kof97',	{	type: 2	}],
 			['samsho2',	{	type: 2	}],
 			['mslug2',	{	type: 2	}],
@@ -91,11 +90,15 @@
 			['wof',		{	type: 0	}],
 		]);
 		var machine = machines.get(name);
-		var machineType = machineType[machine.type];
+		if(machine) {
+			var machineType = machineType[machine.type];
 
+			machinejs.src = machineType + '/' + machineType + '.js';
+			romjs.src = machineType + '/' + name + '.js';
+		} else {
+			labelInfo.innerHTML = '<font color="red">Unsupported</font>';
+		}
 
-		machinejs.src = machineType + '/' + machineType + '.js';
-		romjs.src = machineType + '/' + name + '.js';
 	</script>
 </body>
 
