@@ -705,15 +705,7 @@ function getRomFrame(addr, f){
 	return frame;
 }
 
-
-var curPlayerType;
-var curPlayerFrame;
-
 var animPlayerAddr = [];
-
-function drawRomFramePlayer() {
-
-}
 
 
 function loadRomFrame() {

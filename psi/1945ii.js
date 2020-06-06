@@ -153,12 +153,6 @@ function getRomFrame(addr, f){
 	return frame;
 }
 
-
-var curPlayerType;
-var curPlayerFrame;
 var playerSpriteAddress = [0x163E, 0x164E, 0x165E, 0x166E, 0x168E];
 
 var animPlayerAddr = [];
-//draw anim by player 0-3
-function drawRomFramePlayer() {return;
-}

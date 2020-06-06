@@ -1229,6 +1229,11 @@ function getpalsets(){
 	return sets;
 }
 
+var curPlayerType;
+var curPlayerFrame;
 
-
-
+// default to prevent exception
+function drawMap() {}
+function drawMap2() {}
+function drawRomFramePlayer() {}
+function drawAnimation() {}

@@ -302,8 +302,6 @@ function setMapTileStart(mapstart) {
 	refresh();
 }
 
-var curPlayerType;
-var curPlayerFrame;
 var playerSpriteAddress = [0x163E, 0x164E, 0x165E, 0x166E, 0x168E];
 
 var animPlayerAddr = [];
