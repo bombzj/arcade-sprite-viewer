@@ -64,11 +64,53 @@ function setMapTileStart(mapstart) {
 
 
 frameAddress = [
-	
+	0x137EC0, 0x13A62C, 0x13DA4C, 0x145BE8, 0x149A58
 ];
 
 // get frame from addr. return a frame obj
 function getRomFrame(addr, f){
+	var bf = new bytebuffer(romFrameData);
+	if(f >= 0)
+		addr = addr + f * 0xC;
+	bf.position(addr);
+
+	
+	let frame = {
+			sprites : []
+	};
+
+	let zoomy = bf.get();
+	let y = bf.gets();
+	let zoomx = bf.get();
+	let x = bf.gets();
+
+	let ny = bf.get() & 0xF;
+	bf.skip();
+	let nx = bf.get() & 0xF;
+	bf.skip();
+	
+	let palette = bf.get();
+	let flag = bf.get();
+	let tile = bf.getShort();
+	let sprite = {
+			x : x,
+			y : y,
+			tile : tile,
+			nx : nx + 1,
+			ny : ny + 1,
+			vflip : zoomy == 0,	// this tile need flip
+			hflip : 0,	// this tile need flip
+			pal : palette,
+			color : flag & 0x80	// if 256 color
+		};
+//	frame.cb2 = {
+//			x	: -cbx,
+//			x2	: cbx << 1,
+//			y	: -cby,
+//			y2	: cby << 1
+//	}
+	frame.info = 'addr:0x' + addr.toString(16).toUpperCase() + ' pal:' + palette.toString(16).toUpperCase();
+	frame.sprites.push(sprite);
 
 	return frame;
 }
