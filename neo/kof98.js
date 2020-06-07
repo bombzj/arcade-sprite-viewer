@@ -1,6 +1,6 @@
 "use strict"
 
-var paletteAddress = 0x4D77F0;
+var paletteAddress = 0x3D77F0;
 
 // load pal from rom and oveewrite old
 function loadRomPal() {
@@ -103,7 +103,7 @@ function setMapTileStart(mapstart) {
 
 frameAddress = [
 	// 0x2DC896, 0x25680E, 0x2536C6, 0x25966A, 0x27FBF6, 0x26B710,
-	0xB5A82, 0xB6B0A, 0xBDBEC, 0xBDF24, 0xBE25C, 0xBE26A
+	// 0xB5A82, 0xB6B0A, 0xBDBEC, 0xBDF24, 0xBE25C, 0xBE26A
 ];
 
 // get frame from addr. return a frame obj
@@ -462,11 +462,11 @@ var palmap = [
 function loadRomFrame() {
 	var bf = new bytebuffer(romFrameData);
 	
-	for(let i = 0;i < 36;i++) {
+	for(let i = 0;i < 44;i++) {
 		let addr = bf.getInt(0x240000 + i * 4);
 		frameAddress.push(addr);
-		if(palmap[i])
-			spritePaletteMap.set(addr, palmap[i]);
+		// if(palmap[i])
+		// 	spritePaletteMap.set(addr, palmap[i]);
 	}
 	maxPalSet = 500;
 }
