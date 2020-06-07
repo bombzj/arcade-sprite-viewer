@@ -446,8 +446,6 @@ function getRomFrame(addr, f) {
 
 	}
 
-
-
 	return frame;
 }
 
@@ -455,8 +453,8 @@ var animPlayerAddr = [];
 
 var palmap = [
 	8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,
-	56,58,60,50,52,54,62,64,66,
-	68
+	50,52,54,56,58,60,62,64,66,
+	68,70,72,74,76,78,80
 ];
 
 function loadRomFrame() {
@@ -465,8 +463,8 @@ function loadRomFrame() {
 	for(let i = 0;i < 44;i++) {
 		let addr = bf.getInt(0x240000 + i * 4);
 		frameAddress.push(addr);
-		// if(palmap[i])
-		// 	spritePaletteMap.set(addr, palmap[i]);
+		if(palmap[i])
+			spritePaletteMap.set(addr, palmap[i]);
 	}
 	maxPalSet = 500;
 }
