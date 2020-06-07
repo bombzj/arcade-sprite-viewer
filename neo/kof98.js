@@ -1,6 +1,6 @@
 "use strict"
 
-var paletteAddress = 0x3CFFF0;
+var paletteAddress = 0x4D77F0;
 
 // load pal from rom and oveewrite old
 function loadRomPal() {
@@ -463,7 +463,7 @@ function loadRomFrame() {
 	var bf = new bytebuffer(romFrameData);
 	
 	for(let i = 0;i < 36;i++) {
-		let addr = bf.getInt(0x250000 + i * 4);
+		let addr = bf.getInt(0x240000 + i * 4);
 		frameAddress.push(addr);
 		if(palmap[i])
 			spritePaletteMap.set(addr, palmap[i]);
