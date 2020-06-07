@@ -1,0 +1,52 @@
+ROM code loaded into 0x0 - 0xFFFFF, 0x20000 - 0x3FFFFF
+0x20000 data are changing, controlled by 0x2FFFFE, write 0 1 2 for different pages
+initially, 0x0 -> 0x0, 0x400000 -> 0x200000
+the code is encrypted each 0x100 byte chunks by simply switching dword with next chunk(first dword remains)
+
+[palette]
+PALETTES        equ $400000   ;Palette RAM
+palette = palatte base + palette in sprite
+palette data store together, loading process depends on selected characters & scene
+
+[sprite]
+pointer at $3C(a4) of object data
+
+
+[palatte]
+
+RAMSTART        equ $100000   ;68k work RAM
+PALETTES        equ $400000   ;Palette RAM
+BACKDROP        equ PALETTES+(16*2*256)-2
+MEMCARD         equ $800000   ;Memory card
+SYSROM          equ $C00000   ;System ROM
+0x500000 & 0x60000 & 0x70000 seem like the same as 0x400000, all repeating 0x2000 bytes of data
+
+ROM:00004C3A                 lea     ($2CFFF0).l,a0
+ROM:00004C40                 andi.w  #$FF,d0
+ROM:00004C44                 swap    d0
+ROM:00004C46                 lsr.l   #6,d0
+ROM:00004C48                 adda.l  d0,a0
+ROM:00004C4A                 movea.l $5924(a5),a1
+ROM:00004C4E                 move.w  #$1F,d0
+ROM:00004C52
+ROM:00004C52 loc_4C52:                               ; CODE XREF: sub_4C3A+28��j
+ROM:00004C52                 move.l  (a0)+,(a1)+     ; a1 = 10c024
+ROM:00004C54                 move.l  (a0)+,(a1)+
+ROM:00004C56                 move.l  (a0)+,(a1)+
+ROM:00004C58                 move.l  (a0)+,(a1)+
+ROM:00004C5A                 move.l  (a0)+,(a1)+
+ROM:00004C5C                 move.l  (a0)+,(a1)+
+ROM:00004C5E                 move.l  (a0)+,(a1)+
+ROM:00004C60                 move.l  (a0)+,(a1)+
+
+
+ROM:0000A2D0                 move.w  (a0)+,(a1)+     ; a0 = 10c024
+ROM:0000A2D2                 move.l  (a0)+,(a1)+
+ROM:0000A2D4                 move.l  (a0)+,(a1)+
+ROM:0000A2D6                 move.l  (a0)+,(a1)+
+ROM:0000A2D8                 move.l  (a0)+,(a1)+
+ROM:0000A2DA                 move.l  (a0)+,(a1)+
+ROM:0000A2DC                 move.l  (a0)+,(a1)+
+ROM:0000A2DE                 move.l  (a0)+,(a1)+
+
+
