@@ -20,20 +20,6 @@ function movetoTile(tile) {
 	refresh()
 }
 
-var animAddress = [
-	0x6F75A, 0x74C04
-];
-var curAnim;	// current animation index
-var curAnimAct;	// current animation index
-// show object animation from rom address
-var animTimer;
-function drawAnimation(addr) {
-	
-}
-function loopDrawAnimation(addr, offset) {
-
-}
-
 
 var mapAddress = 0x115F50;
 var map2Address = 0x1923A;	// layer 2 background
@@ -43,17 +29,70 @@ let mapHeight;	// default 8
 let mapGrid = 2;		// each map tile contains 4 raw tiles?
 // draw a background with tilemap
 function drawMap() {
+	var bf = new bytebuffer(romFrameData);
+	var bf2 = new bytebuffer(romFrameData);
+	var bf3 = new bytebuffer(romFrameData);
+	ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
 	
+	let tileindex = bf.getInt(mapAddress + curMap * 16 + 4);
+	let tileaddr = bf.getInt(mapAddress + curMap * 16 + 8);
+	let bigindex = bf.getInt(mapAddress + curMap * 16);
+	
+	let addr = bf.getInt(mapAddress + curMap * 4);
+	
+	addr = addr - 0x26080000 | 0x100000;
+	bf.position(addr);
+	
+	let pal = bf.get() & 0xF0;
+	let flag = bf.get();
+	
+	let addtile = (flag & 0x7) << 16;
+	let mode4 = flag & 0x10;	// 4 bytes mode
+	let color16 = flag & 0x20;	// 16 color
+	
+	bf.skip(2);
+	
+	let w = bf.getShort();
+	let h = bf.getShort();
+	labelInfo.innerHTML += ' size:' + w + ',' + h + ' addr:0x' + addr.toString(16).toUpperCase()
+	if(w > 30 || h > 50)
+		debugger;
+	
+//	labelInfo.innerText = 'address:' + bf.position().toString(16).toUpperCase()
+//			+ ' 2x2tile address:' + mapTileAddress[curMap].toString(16).toUpperCase();
+	var imageData = ctxBack.createImageData(gridWidth, gridHeight);
+
+	for(let i=0;i<h;i++) {
+		for(let j=0;j<w;j++) {
+
+			let tile;
+			if(mode4) {
+				let tmp = bf.getInt();
+				tile = tmp & 0x7FFFF;
+				pal = tmp >> 24 & 0xF0;
+			} else {
+				tile = bf.getuShort();
+				tile = tile | addtile;
+			}
+
+			if(color16)
+				drawTilesBase(imageData, tile, 1, 1, (pal), 16, false, false, false);
+			else
+				drawTilesBase(imageData, tile, 1, 1, (pal), 16, false, false, false, 0, 256);
+			ctxBack.putImageData(imageData, (i-mapAddressSkip * 4) * gridWidth, j * gridHeight);
+
+		}
+	}
+
 }
 
 
 var map2Data = [
-	0x2313E,	0x2315C,	0x2317A,	0x23184,	0x231A2,	0x231B6,	0x231D4,	0x231FC
+	
 ];
 let map2Width = 16;
 let map2Height = 8;
 function drawMap2() {
-
 
 }
 
