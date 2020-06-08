@@ -778,6 +778,13 @@ window.addEventListener("keydown", function (event) {
 			curStartTile=Math.floor(gfxData.length/128/16)-24;
 			refresh();
 		break;
+
+		case '=':
+			canvas.style = `width:544px;height:800px;`;
+		break;
+		case '-':
+			canvas.style = `width:272px;height:400px;`;
+		break;
 		
 		case ',':
 			if(mode == 2 || mode == 3) {
