@@ -9,6 +9,7 @@ An arcade game sprite / map viewer (cps1 neogeo ...)
 
 ## PSIKYOSH [view more](https://github.com/bombzj/arcade-sprite-viewer/tree/master/psi)
 ![1945ii animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/anim1945ii.gif)<br/>
+![gunbird2 background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/mapgunbird2.gif)<br/>
 
 * Click [here](https://bombzj.github.io/arcade-sprite-viewer/?1945ii) to view `strikers 1945ii`.
 
