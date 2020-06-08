@@ -5,6 +5,11 @@
 
 * Click [here](https://bombzj.github.io/arcade-sprite-viewer/?kof97) to view `kof97`.
 
+![image kof98](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/imgkof98.png)<br/>
+![image kof98](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/img2kof98.png)<br/>
+
+* Click [here](https://bombzj.github.io/arcade-sprite-viewer/?kof98) to view `kof98`.
+
 ## TODO
 * kof97 background
 * fix palette problem
