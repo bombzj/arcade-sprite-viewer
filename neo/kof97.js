@@ -38,40 +38,80 @@ var curAnim;	// current animation index
 var curAnimAct;	// current animation index
 // show object animation from rom address
 var animTimer;
-function drawAnimation(addr) {return;
+function drawAnimation() {
 //	let addr = animAddress[curAnim];
 	var bf = new bytebuffer(romFrameData);
-	if(!addr)
-		addr = animAddress[curAnim];
 
-	if(animTimer) {
-		clearTimeout(animTimer)
-		animTimer = null;
+	let aaddr = bf.getInt(0x300002 + curAnim * 4) + 0x100000;	// animation address
+	aaddr = bf.getInt(aaddr + curAnimAct * 4);
+
+
+	palset = palmap[curAnim];
+	if(palset) {
+		loadRomPal();
 	}
+
+	loopDrawAnimation(aaddr + 0x100000, 0, 0x6);
+
+	// if(animTimer) {
+	// 	clearTimeout(animTimer)
+	// 	animTimer = null;
+	// }
 	
 
-	loopDrawAnimation(addr, 0xA);
+	// loopDrawAnimation(addr, 0xA);
 }
-function loopDrawAnimation(addr, offset) {
+function loopDrawAnimation(base, addr, offset) {
 	animTimer = null;
 
 	var bf = new bytebuffer(romFrameData, addr);
-	let fr = bf.getInt();
-	let link = bf.getInt();
-	let flag = bf.getShort();
 
+	for(let i = 0;i < 5;i++) {
+		let flag = bf.gets(base + addr);debugger
+		if(flag >= 0) {
+			break;
+		}
+		flag = -flag - 1;
+		if(flag == 0) {
+			addr = 0;
+			continue;
+		} else if(flag == 1) {
+			addr -= 6;
+			continue;
+		} else if(flag == 2) {
+
+		} else if(flag == 3) {
+	
+		} else {
+
+		}
+		addr += 6;
+	}
+	let stepframe = bf.getuShort(base + addr + 2);
+
+	let paddr = bf.getInt(0x200002 + curAnim * 4);	// position info & pointer to image
+	bf.position(paddr + stepframe * 6);
+
+	let x = bf.getShort();
+	let y = bf.getShort();
+	let af = bf.getShort();		// sprite offset
+
+	let addr2 = bf.getInt(0x250000 + curAnim * 4);
+
+	let frame = getRomFrame(addr2, af);
+	if(!frame) {
+		return;
+	}
+	
+	labelInfo.innerText = 'anim:' + (base + addr).toString(16).toUpperCase();
 
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	drawRomFrame(fr);
+	drawRomFrameBase(frame, undefined, 128 + x, 160 + y);
+
+
 	addr += offset;
 
-	if(flag < 0)
-		return;
-	animTimer = setTimeout("loopDrawAnimation("+ addr +"," + offset+")", 200);
-}
-
-function drawAnimationFrame(addr, c = ctx, offx = 128, offy = 160, cbbase = 0x103000) {
-
+	animTimer = setTimeout("loopDrawAnimation("+ base +"," + addr +"," + offset+")", 200);
 }
 
 
@@ -103,7 +143,7 @@ function setMapTileStart(mapstart) {
 
 frameAddress = [
 	// 0x2DC896, 0x25680E, 0x2536C6, 0x25966A, 0x27FBF6, 0x26B710,
-	0xB5A82, 0xB6B0A, 0xBDBEC, 0xBDF24, 0xBE25C, 0xBE26A
+	// 0xB5A82, 0xB6B0A, 0xBDBEC, 0xBDF24, 0xBE25C, 0xBE26A
 ];
 
 // get frame from addr. return a frame obj
@@ -462,9 +502,10 @@ var palmap = [
 function loadRomFrame() {
 	var bf = new bytebuffer(romFrameData);
 	
-	for(let i = 0;i < 36;i++) {
+	for(let i = 0;i < 36;i++) {		//36 characters
 		let addr = bf.getInt(0x250000 + i * 4);
 		frameAddress.push(addr);
+
 		if(palmap[i])
 			spritePaletteMap.set(addr, palmap[i]);
 	}

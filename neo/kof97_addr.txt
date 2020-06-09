@@ -6,6 +6,52 @@ PALETTES        equ $400000   ;Palette RAM
 palette = palatte base + palette in sprite
 palette data store together, loading process depends on selected characters & scene
 
+
+
+[animation]
+ROM:00005A3E obj_update_sprite:                      ; CODE XREF: obj_update↑p
+ROM:00005A3E                 move.w  $70(a4),d1
+ROM:00005A42                 move.w  $72(a4),d2
+ROM:00005A46                 lea     (off_AFBCA).l,a0
+ROM:00005A4C                 add.w   d1,d1
+ROM:00005A4E                 add.w   d1,d1
+ROM:00005A50                 movea.l (a0,d1.w),a0
+ROM:00005A54                 add.w   d2,d2
+ROM:00005A56                 move.w  (a0,d2.w),d2
+ROM:00005A5A                 move.w  #1,d0           ; memory page1 for sprite table
+ROM:00005A5E
+ROM:00005A5E loc_5A5E:                               ; CODE XREF: obj_update_sprite+2C↓j
+ROM:00005A5E                 move.w  d0,(unk_2FFFFE).l
+ROM:00005A64                 cmp.w   (unk_200000).l,d0
+ROM:00005A6A                 bne.s   loc_5A5E
+ROM:00005A6C                 lea     (sprite_table).l,a0 ; character table
+ROM:00005A72                 move.l  (a0,d1.w),$3C(a4) ; set sprite set
+ROM:00005A78                 move.w  #2,d0           ; memory page2 for animation table
+ROM:00005A7C
+ROM:00005A7C loc_5A7C:                               ; CODE XREF: obj_update_sprite+4A↓j
+ROM:00005A7C                 move.w  d0,(unk_2FFFFE).l
+ROM:00005A82                 cmp.w   (unk_200000).l,d0
+ROM:00005A88                 bne.s   loc_5A7C
+ROM:00005A8A                 lea     ($200002).l,a0
+ROM:00005A90                 movea.l (a0,d1.w),a0
+ROM:00005A94                 add.w   d2,d2
+ROM:00005A96                 add.w   d2,d2
+ROM:00005A98                 movea.l (a0,d2.w),a0
+ROM:00005A9C                 adda.w  $74(a4),a0      ; +frame step = frame data
+
+
+
+ROM:00005D74                 movea.l $28(a4),a0      ; sprite data 224982
+ROM:00005DAC                 move.w  (a0)+,d6        ; sprite index
+
+ROM:00005DCA                 movea.l $3C(a4),a6      ; sprite set
+ROM:000058FA                 move.w  $70(a4),d2      ; frame index
+ROM:00005924                 move.l  a0,$28(a4)      ; update frame
+
+ROM:000058A6                 addq.w  #6,$74(a4)      ; step frame
+
+
+
 [sprite]
 pointer at $3C(a4) of object data
 
