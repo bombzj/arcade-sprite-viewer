@@ -52,15 +52,9 @@ function drawAnimation() {
 	}
 
 	loopDrawAnimation(aaddr + 0x100000, 0, 0x6);
-
-	// if(animTimer) {
-	// 	clearTimeout(animTimer)
-	// 	animTimer = null;
-	// }
-	
-
-	// loopDrawAnimation(addr, 0xA);
 }
+
+
 function loopDrawAnimation(base, addr, offset) {
 	animTimer = null;
 
