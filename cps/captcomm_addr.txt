@@ -1,0 +1,6 @@
+
+
+[address]
+ROM:00000AF8                 move.w  #$90C0,($80010A).l ; palette base
+ROM:00000AB6                 move.w  $281A(a5),($800100).l ; 9140, obj ram
+ROM:00000ABE                 move.w  $281C(a5),($800102).l ; 9000, bg layer
