@@ -181,6 +181,11 @@ function refresh() {
 	}
 }
 
+function switchmode(m) {
+	mode = m;
+	refresh();
+	saveStatus();
+}
 
 var curAnim;	// current animation index
 var curAnimAct;	// current animation index
@@ -928,6 +933,7 @@ window.addEventListener("keydown", function (event) {
 				mode = 0;
 			refresh();
 			saveStatus();
+			comboMode.selectedIndex = mode;
 			break;
 		case 'M':
 			mode--;
@@ -935,6 +941,18 @@ window.addEventListener("keydown", function (event) {
 				mode = 5;
 			refresh();
 			saveStatus();
+			comboMode.selectedIndex = mode;
+			break;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+			mode = parseInt(event.key);
+			refresh();
+			saveStatus();
+			comboMode.selectedIndex = mode;
 			break;
 		case '[':
 			if(mode == 0) {
@@ -1114,7 +1132,7 @@ function loadStatus() {
 	for(let i=0;i<totalframe;i++) {
 		frames[i] = JSON.parse(localStorage.getItem("frame"+i));
 	}
-	
+	comboMode.selectedIndex = mode;
 }
 
 function saveStatus() {

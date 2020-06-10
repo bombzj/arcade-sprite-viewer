@@ -56,6 +56,14 @@
 			<a style="margin-left:10px;padding:2px;border:1px solid black;" id="downloadAnchorElem"
 				href="javascript:void(0)" onclick="downloadJson()">Download</a>
 		</div>
+		<select id="comboMode" onchange="switchmode(this.selectedIndex);">
+			<option value ="0">tiles</option>
+			<option value ="1">sprite</option>
+			<option value="2">bg layer</option>
+			<option value="3">bg2</option>
+			<option value="4">player</option>
+			<option value="5">animation</option>
+		</select>
 		frame=<input id="nFrame" size="5" onchange="drawRomFrame(parseInt(this.value, 16))">
 		hex=<input id="hexFrame" size="5" onchange="setFramePos(parseInt(this.value, 16)/4)">
 	</div>
@@ -84,11 +92,14 @@
 			['gunbird2',{	type: 1	}],
 			['kof97',	{	type: 2	}],
 			['kof98',	{	type: 2	}],
+			['kof2000',	{	type: 2	}],
 			['samsho2',	{	type: 2	}],
 			['mslug2',	{	type: 2	}],
 			['dino',	{	type: 0	}],
 			['varth',	{	type: 0	}],
 			['wof',		{	type: 0	}],
+			['captcomm',{	type: 0	}],
+			['sf2ce',	{	type: 0	}],
 		]);
 		var machine = machines.get(name);
 		if(machine) {
