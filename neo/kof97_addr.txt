@@ -9,6 +9,14 @@ palette data store together, loading process depends on selected characters & sc
 
 
 [animation]
+ROM:000058C4 off_58C4:       dc.l obj_anim_restart
+ROM:000058C8                 dc.l obj_anim_stop
+ROM:000058CC                 dc.l obj_anim_def       ; attack & defense data
+ROM:000058D0                 dc.l obj_anim_sound
+ROM:000058D4                 dc.l obj_anim_move
+ROM:000058D8                 dc.l obj_anim_extra     ; create new objects
+
+
 ROM:00005A3E obj_update_sprite:                      ; CODE XREF: obj_update↑p
 ROM:00005A3E                 move.w  $70(a4),d1
 ROM:00005A42                 move.w  $72(a4),d2
