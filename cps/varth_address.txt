@@ -1,0 +1,101 @@
+[background]
+layer1 = 0x91c000 (16x16) x 2x2	 rotate90 + reversed order
+layer2 = 0x914000 (32x32)
+
+[object]
+$12.w 	frame counter
+$14.l	anim pointer
+
+
+[anim]
+ROM:00002C2E obj_update_anim:                        ; CODE XREF: sub_2C24+4¡üj
+ROM:00002C2E                 movea.l $14(a6),a0
+ROM:00002C32                 moveq   #0,d0
+ROM:00002C34                 move.b  (a0),d0
+ROM:00002C36                 add.w   d0,d0
+ROM:00002C38                 movea.l off_2C3E(pc,d0.w),a1
+ROM:00002C3C                 jmp     (a1)
+
+move forward animation frame, if end then link back. different draw func with different update func
+
+ROM:000281F0                 dc.b   2                ; func 0x2
+ROM:000281F1                 dc.b   1                ; tile number
+ROM:000281F2                 dc.w 1                  ; set to $12(a6), 1 fps to  change animation (&#$1FFF)
+ROM:000281F4                 dc.b   0
+ROM:000281F5                 dc.b   1
+ROM:000281F6                 dc.b   0                ; tile 1x1
+ROM:000281F7                 dc.b $44 ; D            ; palette
+ROM:000281F8                 dc.b   0
+ROM:000281F9                 dc.b   0
+ROM:000281FA                 dc.w $175D              ; tile
+ROM:000281FC                 dc.b   2                ; func 0x2
+ROM:000281FD                 dc.b   1
+ROM:000281FE                 dc.w $8001              ; <0 then link back to frame 0
+ROM:00028200                 dc.b   0
+ROM:00028201                 dc.b   1
+ROM:00028202                 dc.b   0
+ROM:00028203                 dc.b $44 ; D
+ROM:00028204                 dc.b   0
+ROM:00028205                 dc.b   0
+ROM:00028206                 dc.w $175E              ; tile
+ROM:00028208                 dc.l off_28130          ; link back
+
+
+[sprite]
+0x 2B224 + 32c = 2B550
+
+ROM:0002B550                 dc.b   8	 function
+ROM:0002B551                 dc.b $12	 count
+ROM:0002B552                 dc.b   0		
+ROM:0002B553                 dc.b   3		
+ROM:0002B554                 dc.b 0			
+ROM:0002B555                 dc.b $8E		
+ROM:0002B556                 dc.b   0		nxy
+ROM:0002B557                 dc.b $13		palette
+ROM:0002B558                 dc.b 0
+ROM:0002B559                 dc.b $60 ; `
+ROM:0002B55A                 dc.w $880
+ROM:0002B55C                 dc.w $880
+
+
+
+
+ROM:0008A860 get_tile_pos:                           ; CODE XREF: obj_draw+52¡üp
+ROM:0008A860                                         ; obj_draw+A6¡üp ...
+ROM:0008A860                 moveq   #0,d4
+ROM:0008A862                 move.b  (a2)+,d4
+ROM:0008A864                 movea.l off_8A870(pc,d4.w),a3
+ROM:0008A868                 move.b  (a2)+,d4
+ROM:0008A86A                 adda.w  (a3,d4.w),a3
+
+
+[palette]
+91c000 : fixed
+91c800 : changing
+
+ROM:000014C0                 move.w  $500(a5),d0	// level?
+ROM:000014C4                 move.b  byte_14DE(pc,d0.w),d0
+ROM:000014C8                 asl.w   #8,d0
+ROM:000014CA                 add.w   d0,d0
+ROM:000014CC                 add.w   d0,d0
+ROM:000014CE                 movea.l #$91C800,a1
+ROM:000014D4                 movea.l #unk_ECA00,a0
+ROM:000014DA                 adda.w  d0,a0
+ROM:000014DC                 bra.s   loc_153E
+
+
+ROM:0000146A load_palette:                           ; CODE XREF: sub_144A+14¡üp
+ROM:0000146A                 moveq   #$FFFFFFFF,d0
+ROM:0000146C                 move.l  d0,$2E6(a5)
+ROM:00001470                 move.w  $500(a5),d0	// level?
+ROM:00001474                 asl.w   #8,d0
+ROM:00001476                 add.w   d0,d0
+ROM:00001478                 movea.l #$91C200,a1
+ROM:0000147E                 movea.l #unk_E8600,a0
+ROM:00001484                 adda.w  d0,a0
+ROM:00001486                 moveq   #$F,d1
+ROM:00001488                 bsr.w   sub_1540
+ROM:0000148C                 movea.l #$91C000,a1
+ROM:00001492                 movea.l #unk_E8400,a0
+ROM:00001498                 moveq   #$F,d1
+ROM:0000149A                 bra.w   sub_1540
