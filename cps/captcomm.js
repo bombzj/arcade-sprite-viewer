@@ -303,405 +303,60 @@ function getCB(addr) {
 }
 
 frameAddress = [
-	0x14DDE4, 0x108c30, 0x111384, //0x14ec90, 0x13a22e, 0x151c94, 0x152c22, 0x1397ca, 0x151454, 0x10a696, 0x10bf0e, 0x11b1a2, 0x13e6fe
+	0xAFE14, 0x60002, 0x64976, 0x5FEf8 //0x14ec90, 0x13a22e, 0x151c94, 0x152c22, 0x1397ca, 0x151454, 0x10a696, 0x10bf0e, 0x11b1a2, 0x13e6fe
 ];
 
 // get frame from addr. return a frame obj
 function getRomFrame(addr, f){
-//	if(!curRomFrame2)
-//		curRomFrame2 = 0;
 	var bf = new bytebuffer(romFrameData);
 	var bf2 = new bytebuffer(romFrameData);
-	var bf3 = new bytebuffer(romFrameData);
-	var bf4 = new bytebuffer(romFrameData);
-//	let offset = bf.getShort(addr + curRomFrame2 * 2);
-
+	let positionTable = 0xCB016;
+	
 	let frame = {
-			sprites : [],
+			sprites : []
 	};
 	
-//	bf.position(addr + offset);
-	if(f >= 0) {	// use frameAddress and has multiple frames
-		let offset = bf.getShort(addr + f * 2);
-		if(offset == 0)
-			return;
-		let addr2 = addr + offset;
-		let addr3= addr2 + bf.getShort(addr2);
-
-		addr = addr3;
-	}
-	
+	debugger
 	bf.position(addr);
+
+	bf.skip(4);
+	let palette = bf.getuShort();
+	bf.skip(4);
+	let pidx = bf.getShort();
+	bf.skip(4);
+	let spriteNumber = bf.getShort();
+
+	// let tileNumber = bf.getShort();
+	// let spriteNumber = bf.getShort();
+	// let flag = bf.get();
+	// let palette = bf.get();
+	// let pidx = bf.getShort();
 	
-	let cb1addr = bf.getShort(addr - 8);
-	if(cb1addr) {
-		frame.cb1 = getCB(0x214A2 + cb1addr);
-	}
-
-	let cb2addr = bf.getShort(addr - 6);
-	if(cb2addr) {
-		frame.cb2 = getCB(0x214A2 + cb2addr);
-	}
-
-
-	let func = bf.get();
-	frame.info = '0x'+addr.toString(16).toUpperCase() + ' function 0x' + func.toString(16).toUpperCase();
-
-	if(func == 0x0) {	// single tile
-		let cnt = bf.get();
-
-		let nxy =  bf.get();
-		let nx = nxy % 16;
-		let ny = nxy >> 4;
-		
-		let palette = bf.get();
-
-		let x = bf.getShort();
-		let y = bf.getShort();
-		
-
-		
-		let tile = bf.getShort();
-
-
-		let sprite = {
-				x : x,
-				y : y,
-				tile : tile,
-				nx : nx + 1,
-				ny : ny + 1,
-				vflip : palette & 0x40,	// this tile need flip
-				hflip : palette & 0x20,	// this tile need flip
-				pal : palette & 0x1F,
-			};
-		
-		frame.sprites.push(sprite);
-	} else if(func == 0x8) {	// multiple tiles with same palette/size
-			
-		let cnt = bf.get();	// tile count
-		bf.skip(2);
-
-		let nxy = bf.get();
-		let nx = nxy % 16;
-		let ny = nxy >> 4;
-		
-		let palette = bf.get();
-		
-
-		let addr2 = bf.getShort() + 0x10678A;
-		bf2.position(addr2)
-		
-		let x = bf.getShort();
-		let y = -bf.getShort();
-		
-		let tile = bf.getShort();
-		if(tile > 0) {
-			let sprite = {
-					x : x,
-					y : y,
-					tile : tile,
-					nx : nx + 1,
-					ny : ny + 1,
-					vflip : palette & 0x40,	// this tile need flip
-					hflip : palette & 0x20,	// this tile need flip
-					pal : palette & 0x1F,
-				};
-			
-			frame.sprites.push(sprite);
-			cnt--;
-		}
-		
-		for(let i = 0;i < cnt;i++) {
-
-			x += bf2.getShort();
-			y -= bf2.getShort();
-
-			
-			let tile = bf.getShort();
-			if(tile < 0) {
-				i--;
-				continue;
-			}
-
-			let sprite = {
-					x : x,
-					y : y,
-					tile : tile,
-					nx : nx + 1,
-					ny : ny + 1,
-					vflip : palette & 0x40,	// this tile need flip
-					hflip : palette & 0x20,	// this tile need flip
-					pal : palette & 0x1F,
-				};
-			
-			frame.sprites.push(sprite);
-
-		}
-
-
-	} else if(func == 0xC) {	// multiple tiles with different palette/size
-		
-		let cnt = bf.get();
-		bf.skip(2);
-		cnt = bf.getShort();
-
-
-		for(let i = 0;i < cnt;i++) {
-			let x = bf.getShort();
-			let y = -bf.getShort();
-			
-			let nxy = bf.get();
-			let nx = nxy % 16;
-			let ny = nxy >> 4;
-			
-			let palette = bf.get();
-			
-			let tile = bf.getShort();
-
-
-			let sprite = {
-					x : x,
-					y : y,
-					tile : tile,
-					nx : nx + 1,
-					ny : ny + 1,
-					vflip : palette & 0x40,	// this tile need flip
-					hflip : palette & 0x20,	// this tile need flip
-					pal : palette & 0x1F,
-				};
-			
-			frame.sprites.push(sprite);
-
-		}
-	} else if(func == 0x1C) {	// single tile with fixed palette=1
-		
-		let cnt = bf.get();
-		bf.skip(4);
-
-
-		let x = bf.getShort();
-		let y = bf.getShort();
-		
-		let nxy = 0;
-		let nx = nxy % 16;
-		let ny = nxy >> 4;
-		
-		let palette = 1;
-		
-		let tile = bf.getShort();
-
-
-		let sprite = {
-				x : x,
-				y : y,
-				tile : tile,
-				nx : nx + 1,
-				ny : ny + 1,
-				vflip : palette & 0x40,	// this tile need flip
-				hflip : palette & 0x20,	// this tile need flip
-				pal : palette & 0x1F,
-			};
-		
-		frame.sprites.push(sprite);
-
-
-	} else if(func == 0x10) {	// multiple sets of tiles, all with different palette/size
-		let cnt = bf.get();
-		bf.skip(2)
-
-		let nxy = bf.get();
-		let nx = nxy % 16;
-		let ny = nxy >> 4;
-		
-		let palette = bf.get();
-		
-		cnt = bf.getShort();
-		
-		for(let i = 0;i < cnt;i++) {
-			let x = bf.getShort();
-			let y = -bf.getShort();
-			let addr2 = bf.getInt();
-			bf2.position(addr2);
-			
-
-			let cnt2 = bf2.get() + 1;
-			bf2.skip();
-
-			let addr3 = bf2.getShort() + 0x10678A;
-			bf3.position(addr3);
-			
-			let tile = bf2.getShort();
-			if(tile > 0) {
-				let sprite = {
-						x : x,
-						y : y,
-						tile : tile,
-						nx : nx + 1,
-						ny : ny + 1,
-						vflip : palette & 0x40,	// this tile need flip
-						hflip : palette & 0x20,	// this tile need flip
-						pal : palette & 0x1F,
-					};
-				
-				frame.sprites.push(sprite);
-				cnt2--;
-			}
-
-			for(let j = 0;j < cnt2;j++) {
-				x += bf3.getShort();
-				y -= bf3.getShort();
-				
-				let tile = bf2.getShort();
-				if(tile <= 0) {
-					j--;
-					continue;
-				}
-					
-				let sprite = {
-						x : x,
-						y : y,
-						tile : tile,
-						nx : nx + 1,
-						ny : ny + 1,
-						vflip : palette & 0x40,	// this tile need flip
-						hflip : palette & 0x20,	// this tile need flip
-						pal : palette & 0x1F,
-					};
-				
-				frame.sprites.push(sprite);
-			}
-
-		}
-		
-	} else if(func == 0x14) {	// multiple sets of tiles, each set of tiles with same palette/size
-		let cnt = bf.get();
-		bf.skip(2)
-		cnt = bf.getShort();
-
-		
-		for(let i = 0;i < cnt;i++) {
-			let x = bf.getShort();
-			let y = -bf.getShort();
-			let addr2 = bf.getInt();
-			bf2.position(addr2);
-			
-			let nxy = bf2.get() & 0x7f;
-			let nx = nxy % 16;
-			let ny = nxy >> 4;
-			
-			let palette = bf2.get();
-			let cnt2 = bf2.get() + 1;
-			bf2.skip();
-
-			let addr3 = bf2.getShort() + 0x10678A;
-			bf3.position(addr3);
-			
-			let tile = bf2.getShort();
-			if(tile > 0) {
-				let sprite = {
-						x : x,
-						y : y,
-						tile : tile,
-						nx : nx + 1,
-						ny : ny + 1,
-						vflip : palette & 0x40,	// this tile need flip
-						hflip : palette & 0x20,	// this tile need flip
-						pal : palette & 0x1F,
-					};
-				
-				frame.sprites.push(sprite);
-				cnt2--;
-			}
-
-			for(let j = 0;j < cnt2;j++) {
-				x += bf3.getShort();
-				y -= bf3.getShort();
-				
-				let tile = bf2.getShort();
-				if(tile <= 0) {
-					j--;
-					continue;
-				}
-					
-				let sprite = {
-						x : x,
-						y : y,
-						tile : tile,
-						nx : nx + 1,
-						ny : ny + 1,
-						vflip : palette & 0x40,	// this tile need flip
-						hflip : palette & 0x20,	// this tile need flip
-						pal : palette & 0x1F,
-					};
-				
-				frame.sprites.push(sprite);
-			}
-
-		}
-	} else if(func == 0x18) {		// 4 tiles with 4 directions, make a circle
-		bf.skip();
-		let nxy = bf.get();
-		let nx = nxy % 16;
-		let ny = nxy >> 4;
-		
-		let palette = bf.get();
-		let x = bf.getShort();
-		let y = bf.getShort();
-		let tile = bf.getShort();
-		
-		let sprite = {
-				x : x,
-				y : y,
-				tile : tile,
-				nx : nx + 1,
-				ny : ny + 1,
-				vflip : palette & 0x40,	// this tile need flip
-				hflip : palette & 0x20,	// this tile need flip
-				pal : palette & 0x1F,
-			};
-		frame.sprites.push(sprite);
-		palette += 0x20;
-		sprite = {
-				x : x + 0x10,
-				y : y,
-				tile : tile,
-				nx : nx + 1,
-				ny : ny + 1,
-				vflip : palette & 0x40,	// this tile need flip
-				hflip : palette & 0x20,	// this tile need flip
-				pal : palette & 0x1F,
-			};
-		frame.sprites.push(sprite);
-		palette += 0x20;
-		sprite = {
-				x : x,
-				y : y + 0x10,
-				tile : tile,
-				nx : nx + 1,
-				ny : ny + 1,
-				vflip : palette & 0x40,	// this tile need flip
-				hflip : palette & 0x20,	// this tile need flip
-				pal : palette & 0x1F,
-			};
-		frame.sprites.push(sprite);
-		palette += 0x20;
-		sprite = {
-				x : x + 0x10,
-				y : y + 0x10,
-				tile : tile,
-				nx : nx + 1,
-				ny : ny + 1,
-				vflip : palette & 0x40,	// this tile need flip
-				hflip : palette & 0x20,	// this tile need flip
-				pal : palette & 0x1F,
-			};
-		frame.sprites.push(sprite);
-		
-	} else {
-		labelInfo.innerHTML = 'unsupported 0x' + func.toString(16).toUpperCase();
-		return;
-	}
+	let pos = bf.getInt(positionTable + pidx);
+	bf2.position(pos);
+	frame.info = 'sprite:' + addr.toString(16).toUpperCase() + ' position:' + pos.toString(16).toUpperCase();
+	let x = 0;
+	let y = 0;
 	
+	for(let j = 0;j < spriteNumber;j++) {
+		x += bf2.getShort();
+		y += bf2.getShort();
+		let tile = bf.getShort();
+
+		let sprite = {
+			x : x,
+			y : y,
+			tile : tile,
+			nx : 1,
+			ny : 1,
+			vflip : palette & 0x40,	// this tile need flip
+			hflip : palette & 0x20,	// this tile need flip
+			pal : palette & 0x1F,
+		};
+
+		frame.sprites.push(sprite);
+//		console.log("tile: ", JSON.stringify(sprite));
+	}
 	return frame;
 }
 

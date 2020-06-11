@@ -1,4 +1,12 @@
 
+[sprite]
+
+
+
+ROM:00004FBC obj_draw_sprite:
+ROM:00004FC8                 movea.l $18(a0),a1      ; sprite data
+ROM:00004FCC                 move.w  $28(a0),d1      ; position index
+ROM:00004FD0                 movea.l #off_CB016,a2   ; position table
 
 [address]
 ROM:00000AF8                 move.w  #$90C0,($80010A).l ; palette base
