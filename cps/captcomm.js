@@ -57,7 +57,7 @@ var playerCB = [	// collision boxes groups for 4 players
 ];
 
 var animAddress = [
-	0xAFD28, 0x49EE8, 0x9E6E2, 0x9931C, 0x5FEF8, 0x6486C, 0x60316
+	0xAFE14, 0xAFF1E, 0xAFF50, 0xB011C, 0xAFD28, 0x49EE8, 0x9E6E2, 0x9931C, 0x5FEF8, 0x6486C, 0x60316
 ];
 // show object animation from rom address
 function drawAnimation(addr) {
@@ -88,7 +88,7 @@ function loopDrawAnimation(addr) {
 	let flag = bf.getShort();
 	let offset = bf.getShort();
 
-
+debugger
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	
 	let frame = getRomFrame(addr);
@@ -277,7 +277,7 @@ function getCB(addr) {
 }
 
 frameAddress = [
-	0xAFE14, 0x60002, 0x64976, 0x5FEf8 //0x14ec90, 0x13a22e, 0x151c94, 0x152c22, 0x1397ca, 0x151454, 0x10a696, 0x10bf0e, 0x11b1a2, 0x13e6fe
+	0xAFE14, 0x60002, 0x64976, 0x5FEf8, 0x99330 //0x14ec90, 0x13a22e, 0x151c94, 0x152c22, 0x1397ca, 0x151454, 0x10a696, 0x10bf0e, 0x11b1a2, 0x13e6fe
 ];
 
 // get frame from addr. return a frame obj
@@ -293,7 +293,8 @@ function getRomFrame(addr, f){
 	bf.position(addr);
 
 	bf.skip(4);
-	let palette = bf.getuShort();
+	let flag = bf.getuShort();
+	let palette = flag;
 	bf.skip(4);
 	let pidx = bf.getShort();
 	bf.skip(4);
@@ -311,17 +312,27 @@ function getRomFrame(addr, f){
 	let x = 0;
 	let y = 0;
 	
+debugger
+
 	for(let j = 0;j < spriteNumber;j++) {
+		let nx = 0;
+		let ny = 0;
 		x += bf2.getShort();
 		y += bf2.getShort();
+		if(flag & 0x80) {
+			let nxy = bf2.get();
+			nx = nxy % 16;
+			ny = nxy >> 4;
+			palette = bf2.get();
+		}
 		let tile = bf.getShort();
 
 		let sprite = {
 			x : x,
 			y : y,
 			tile : tile,
-			nx : 1,
-			ny : 1,
+			nx : nx + 1,
+			ny : ny + 1,
 			vflip : palette & 0x40,	// this tile need flip
 			hflip : palette & 0x20,	// this tile need flip
 			pal : palette & 0x1F,
