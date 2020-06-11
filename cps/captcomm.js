@@ -57,7 +57,7 @@ var playerCB = [	// collision boxes groups for 4 players
 ];
 
 var animAddress = [
-	
+	0xAFD28, 0x49EE8, 0x9E6E2, 0x9931C, 0x5FEF8, 0x6486C, 0x60316
 ];
 // show object animation from rom address
 function drawAnimation(addr) {
@@ -70,56 +70,28 @@ function drawAnimation(addr) {
 		clearTimeout(animTimer)
 		animTimer = null;
 	}
-	
-	let testbyte = bf.get(addr);	// if 1 or 2 probably index of anim, if 3f probably index of frame
-	if(testbyte <= 0x4) {
-		let offset = bf.getShort(addr + curAnimAct * 2);
-		if(offset == 0)
-			return;
-		addr = addr + offset;
-	}
-
-	
-	
-//	let addr = animAddress[curAnim];
-//	var bf = new bytebuffer(romFrameData);
-	
-//	let offset = bf.getShort(addr + curAnimAct * 2);
-//	if(offset == 0) {
-//		labelInfo.innerText = "EOF";
-//		return;
-//	}
-//	let startAddress = addr + offset;
-	
 
 	loopDrawAnimation(addr);
-
-//	labelInfo.innerText = 'addr:' + addr.toString(16).toUpperCase() + "/" + startAddress.toString(16).toUpperCase() + " off:"
-//			+ offset.toString(16).toUpperCase() + ' act:' + curAnimAct
-//			+ ' ' + curAnim + '/' + curAnimAct + "/" + (bf.getShort(addr)/2-1);
 }
 function loopDrawAnimation(addr) {
 	animTimer = null;
 	var bf = new bytebuffer(romFrameData, addr);
 	
-	let offset = bf.getShort();
-	if(offset < 0) {
-		addr = addr + offset;
-		bf.position(addr);
-		offset = bf.getShort();
-	}
 
-	
-	let fr = offset + addr;
-	let flag2 = bf.get();
-	let flag = bf.get();
-//	let link = bf.getInt();
-//	let flag = bf.getShort();
+	bf.position(addr);
+
+	bf.skip(4);
+	let palette = bf.getuShort();
+	bf.skip(4);
+	let pidx = bf.getShort();
+	bf.skip(2);
+	let flag = bf.getShort();
+	let offset = bf.getShort();
 
 
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	
-	let frame = getRomFrame(addr + bf.getShort(addr));
+	let frame = getRomFrame(addr);
 	if(!frame) {
 		return;
 	}
@@ -127,9 +99,11 @@ function loopDrawAnimation(addr) {
 	labelInfo.innerText = 'anim:' + addr.toString(16).toUpperCase();
 	
 	drawRomFrameBase(frame);
-
-	addr = addr + 4;
-	animTimer = setTimeout("loopDrawAnimation("+ addr +")", 200);
+	addr = addr + offset * 2 + 0x12;
+	if(flag < 0) {	// repeat
+		addr = bf.getInt(addr);
+	}
+		animTimer = setTimeout("loopDrawAnimation("+ addr +")", 200);
 }
 
 
@@ -316,7 +290,6 @@ function getRomFrame(addr, f){
 			sprites : []
 	};
 	
-	debugger
 	bf.position(addr);
 
 	bf.skip(4);
