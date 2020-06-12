@@ -146,23 +146,15 @@ function drawMap() {
 	var bf3 = new bytebuffer(romFrameData);
 	ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
 	
-	let tileindex = bf.getInt(mapAddress + curMap * 8);
-	let tileaddr = bf.getInt(mapAddress + curMap * 8 + 4);
 	let bigindex = bf.getInt(0x1DE0A + curMap * 4);
 	
-//	labelInfo.innerText = 'address:' + bf.position().toString(16).toUpperCase()
-//			+ ' 2x2tile address:' + mapTileAddress[curMap].toString(16).toUpperCase();
 	var imageData = ctxBack.createImageData(gridWidth, gridHeight);
 
 	var height = 2;
 	bf3.position(bigindex);
 	
 	let startscr=0;
-//	for(let scr=0;scr<6 + mapAddressSkip * 2;scr++) {
-	// let scenecount = bf3.getr(-2) / 2;
-	// let scenelength = bf3.getr(-1);
-	// labelInfo.innerHTML += ',size:' + scenecount+','+scenelength;
-	// bf3.skip(mapAddressSkip * 2 * scenecount + mapScene * 2);
+
 	let w = mapdata[curMap][0];
 	let h = mapdata[curMap][1];
 
@@ -171,8 +163,6 @@ function drawMap() {
 	bf3.skip(mapAddressSkip * 2);
 	for(let scr=0;scr<6;scr++) {
 		
-		// if(scr%2==0 && scr > 0)
-		// 	bf3.skip(2 * (scenecount-1))
 		if(scr == 2 || scr == 4) {	// jump to next row
 
 			if(h <= scr / 2)  {
@@ -181,20 +171,14 @@ function drawMap() {
 			bf3.skip((w - 2) * 2);
 		}
 		let scrTile = bf3.getShort();
-//		if(scr<mapAddressSkip * 2)
-//			continue;
-//		
+		
 		let scrx = (scr % 2) * 256;
 		let scry = (scr >> 1) * 256;
-		// let scry = 256 - (scr & 1) * 256;//Math.floor(startscr / height) * 256;
-		// let scrx = (scr >> 1) * 256;//(height - startscr % height - 1) * 256;
 
 		bf.position(mapAddress + (scrTile << 10));
 	
 		for(let i=0;i<16;i++) {
 			for(let j=0;j<16;j++) {
-				// let maptile=bf.getShort();
-				// bf2.position(maptile + tileaddr);
 						
 				let tile = bf.getShort() + 0x6800;
 				let flag = bf.get();
@@ -209,76 +193,68 @@ function drawMap() {
 				ctxBack.putImageData(imageData, scrx + (i)%32 * gridHeight, scry + (j) * gridWidth);
 			}
 		}
-		// startscr++;
 	}
 
 }
 
-var map2Address = 0xA9D4A;	// layer 2 background
+var map2Address = 0x13A470;	// layer 2 background
 function drawMap2() {
+	// palset = curMap;
+	// loadRomPal();
+
 	var bf = new bytebuffer(romFrameData);
 	var bf2 = new bytebuffer(romFrameData);
 	var bf3 = new bytebuffer(romFrameData);
 	ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
 	
-	let tileindex = bf.getInt(map2Address + curMap * 8);
-	let tileaddr = bf.getInt(map2Address + curMap * 8 + 4);
-	let bigindex = bf.getInt(0xA9934 + curMap * 4);
-	
-//	labelInfo.innerText = 'address:' + bf.position().toString(16).toUpperCase()
-//			+ ' 2x2tile address:' + mapTileAddress[curMap].toString(16).toUpperCase();
-	var imageData = ctxBack.createImageData(gridWidth*2, gridHeight*2);
+	var imageData = ctxBack.createImageData(gridWidth * 2, gridHeight * 2);
+
+	let bigindex = bf.getInt(0x1E20E + curMap * 4);
 
 	var height = 2;
 	bf3.position(bigindex);
 	
 	let startscr=0;
-//	for(let scr=0;scr<6 + mapAddressSkip * 2;scr++) {
-	let scenecount = bf3.getr(-2) / 2;
-	let scenelength = bf3.getr(-1);
-	labelInfo.innerHTML += ',size:' + scenecount+','+scenelength;
-	bf3.skip(mapAddressSkip * 2 * scenecount + mapScene * 2);
 
-	for(let scr=0;scr<4;scr++) {
+	let w = mapdata[curMap][0];
+	let h = mapdata[curMap][1];
+
+	// bf3.skip(mapdata[curMap][3] * w * 2);
+	// bf3.skip(mapdata[curMap][2] * 2);
+	bf3.skip(mapAddressSkip * 2);
+	for(let scr=0;scr<2;scr++) {
 		
-		if(scr%2==0 && scr > 0)
-			bf3.skip(2 * (scenecount-1))
+		// if(scr == 2 || scr == 4) {	// jump to next row
+
+		// 	if(h <= scr / 2)  {
+		// 		break;
+		// 	}
+		// 	bf3.skip((w - 2) * 2);
+		// }
+		let scrTile = bf3.getShort();
 		
-		let scrTile = bf3.get();
-//		if(scr<mapAddressSkip * 2)
-//			continue;
-//		
+		let scrx = (scr % 2) * 256;
+		let scry = (scr >> 1) * 256;
 
-		let scry = 256 - (scr & 1) * 256;//Math.floor(startscr / height) * 256;
-		let scrx = (scr >> 1) * 256;//(height - startscr % height - 1) * 256;
-
-		bf.position(tileindex+scrTile * 16 * 2);
+		bf.position(map2Address + (scrTile << 10));
 	
-		for(let i=0;i<4;i++) {
-			for(let j=0;j<4;j++) {
-				let maptile=bf.getShort();
-				bf2.position(maptile + tileaddr);
-				for(let gi=0;gi<mapGrid;gi++)
-					for(let gj=0;gj<mapGrid;gj++) {
+		for(let i=0;i<8;i++) {
+			for(let j=0;j<8;j++) {
 						
-						let tile = bf2.getShort();
-						let flag = bf2.get();
-						let pal = bf2.get();
-						if(hideBackground) {	// hide background based on flag and color, 0x10 maybe the switch
-							let hide = flag & 0xF;
-							if((pal & 0x80) == 0)
-								hide = 16;
-							drawTilesBase(imageData, tile, 1, 1, (pal & 0x1F) + 0x60, 32, false, (pal & 0x40), (pal & 0x20), hide);
-						} else 
-							drawTilesBase(imageData, tile, 1, 1, (pal & 0x1F) + 0x60, 32, false, (pal & 0x40), (pal & 0x20));
-						ctxBack.putImageData(imageData, scrx + (j*mapGrid+gj)%32 * gridHeight*2, scry + (i*mapGrid+gi) * gridWidth*2);
-					}
+				let tile = bf.getShort() + 0x1400;
+				let flag = bf.get();
+				let pal = bf.get();
+				if(hideBackground) {	// hide background based on flag and color, 0x10 maybe the switch
+					let hide = flag & 0xF;
+					if((pal & 0x80) == 0)
+						hide = 16;
+					drawTilesBase(imageData, tile, 1, 1, (pal & 0x1F) + 0x40, 32, false, (pal & 0x60), (pal & 0x20), hide);
+				} else 
+					drawTilesBase(imageData, tile, 1, 1, (pal & 0x1F) + 0x40, 32, false, (pal & 0x60), (pal & 0x20));
+				ctxBack.putImageData(imageData, scrx + (i)%32 * gridHeight * 2, scry + (j) * gridWidth * 2);
 			}
 		}
-		startscr++;
 	}
-
-
 
 }
 

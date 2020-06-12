@@ -4,6 +4,10 @@
 0x904000 = background layer
 0x908000 = background 2 layer
 
+ROM:0001C4B0 bg1_draw_column:
+
+ROM:0001D956 bg2_draw_column:
+
 ROM:00098A98 bg_draw_column:                         ; CODE XREF: ROM:00098A38↑p
 ROM:00098A98                                         ; ROM:00098A48↑p ...
 ROM:00098A98                 move.w  (a1)+,(a2)
