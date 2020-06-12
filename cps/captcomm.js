@@ -125,8 +125,22 @@ let mapWidth = 32;
 let mapHeight;	// default 8
 let mapGrid = 2;		// each map tile contains 4 raw tiles?
 
+var mapdata = [
+	[16, 6, 1, 5],	// width, height, init x, init y
+	[1, 1, 1, 0],
+	[32, 2, 1, 0],
+	[1, 1, 1, 0],
+	[1, 1, 0, 0],
+	[1, 1, 1, 0],
+	[16, 3, 1, 1],
+	[1, 1, 1, 0],
+	[1, 1, 1, 0],
+];
 // draw a background with tilemap
 function drawMap() {
+	palset = curMap;
+	loadRomPal();
+
 	var bf = new bytebuffer(romFrameData);
 	var bf2 = new bytebuffer(romFrameData);
 	var bf3 = new bytebuffer(romFrameData);
@@ -149,18 +163,29 @@ function drawMap() {
 	// let scenelength = bf3.getr(-1);
 	// labelInfo.innerHTML += ',size:' + scenecount+','+scenelength;
 	// bf3.skip(mapAddressSkip * 2 * scenecount + mapScene * 2);
+	let w = mapdata[curMap][0];
+	let h = mapdata[curMap][1];
+
+	bf3.skip(mapdata[curMap][3] * w * 2);
+	bf3.skip(mapdata[curMap][2] * 2);
 	bf3.skip(mapAddressSkip * 2);
-	for(let scr=0;scr<2;scr++) {
+	for(let scr=0;scr<6;scr++) {
 		
 		// if(scr%2==0 && scr > 0)
 		// 	bf3.skip(2 * (scenecount-1))
-		
+		if(scr == 2 || scr == 4) {	// jump to next row
+
+			if(h <= scr / 2)  {
+				break;
+			}
+			bf3.skip((w - 2) * 2);
+		}
 		let scrTile = bf3.getShort();
 //		if(scr<mapAddressSkip * 2)
 //			continue;
 //		
-		let scrx = scr * 256;
-		let scry = 0;
+		let scrx = (scr % 2) * 256;
+		let scry = (scr >> 1) * 256;
 		// let scry = 256 - (scr & 1) * 256;//Math.floor(startscr / height) * 256;
 		// let scrx = (scr >> 1) * 256;//(height - startscr % height - 1) * 256;
 
@@ -171,7 +196,7 @@ function drawMap() {
 				// let maptile=bf.getShort();
 				// bf2.position(maptile + tileaddr);
 						
-				let tile = bf.getShort() + 0x6800;debugger
+				let tile = bf.getShort() + 0x6800;
 				let flag = bf.get();
 				let pal = bf.get();
 				if(hideBackground) {	// hide background based on flag and color, 0x10 maybe the switch
