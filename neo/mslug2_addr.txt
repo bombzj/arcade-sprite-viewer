@@ -1,0 +1,41 @@
+
+
+[palette]
+0x214000 = color data
+0x200000 = palette page index
+0x78FFC = palette total index
+0x10921A = temp ram base
+
+step:
+ROM:0007905C                 lea     off_78FFC,a0
+ROM:00079060                 jsr     palette_load_page
+  then
+ROM:0008F1C0                 lea     (off_7902E).l,a0
+ROM:0008F1C6                 jsr     palette_load_page
+  then
+ROM:0009B512                 movea.l 4(a0),a0        ; = 53272
+ROM:0009B516                 jsr     palette_load_page
+
+ROM:00085E56 palette_load_page:
+ROM:00085E5C                 move.w  (a0),d0
+
+ROM:00085E6E                 lea     (unk_10921A).l,a1
+ROM:00085E74                 adda.w  d0,a1
+
+ROM:00085E7C                 move.w  2(a0),d1        ; page index
+
+
+
+ROM:00085E9E                 lea     (off_200000).l,a2
+ROM:00085EA4                 adda.l  d1,a2
+ROM:00085EA6                 move.l  a2,2(a1)        ; write temp list to ram 10935A - 10995A
+
+ROM:00084518                 move.b  $A(a2),d0       ; load from ram 10935A - 10995A
+ROM:0008451C                 bsr.w   palette_load2
+
+ROM:000809D6 palette_load:
+ROM:000809D6                 lea     (unk_214000).l,a3
+ROM:000809DC                 move.l  a4,d7
+ROM:000809DE                 addq.w  #2,a4
+ROM:000809E0                 addq.w  #2,a0
+ROM:000809E2                 move.w  (a0)+,d0        ; a0 : index table
