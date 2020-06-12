@@ -17,8 +17,8 @@ function loadRomPal() {
 function mslugPalette(addr) {
 	var bf = new bytebuffer(romFrameData);
 	var bf2 = new bytebuffer(romFrameData);
-debugger
-	for(let p = 0;p < 32;p++) {
+
+	for(let p = 0;p < 0x100;p++) {
 		let idx2 = bf.getuShort(addr);		// write to
 		if(idx2 == 0xFFFF) {
 			break;
@@ -30,10 +30,14 @@ debugger
 
 		let to = idx2 * 0x10;
 		palData[to] = 0;
+		bf2.skip(2);
 
 		for(let i = 0;i < 15;i++) {
-			let dt = bf2.getuShort();
-			let addr3 = 0x214000 + (dt << 1);
+			let dt = bf2.getuShort() << 1;
+			if(dt > 0x8000) {	// signed because ROM:000809EE    move.w  (a3,d0.w),(a4)+
+				dt -= 0x10000;
+			}
+			let addr3 = 0x214000 + dt;		
 			let color = bf.getuShort(addr3);
 
 			let blue = ((color>>8) & 0xf) * 0x11;

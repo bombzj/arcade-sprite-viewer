@@ -4,7 +4,9 @@
 0x214000 = color data
 0x200000 = palette page index
 0x78FFC = palette total index
-0x10921A = temp ram base, use dirty flag to sync to gfx
+
+0x10921A = index list for loading
+0x10C21A? = temp ram base, use dirty flag to sync to gfx
 
 step:
 ROM:0007905C                 lea     off_78FFC,a0
