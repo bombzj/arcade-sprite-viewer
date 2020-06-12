@@ -1,5 +1,22 @@
 
-[sprite]
+[background]
+ROM:00098A98 bg_draw_column:                         ; CODE XREF: ROM:00098A38↑p
+ROM:00098A98                                         ; ROM:00098A48↑p ...
+ROM:00098A98                 move.w  (a1)+,(a2)
+ROM:00098A9A                 move.w  d1,2(a2)        ; write to bg layer
+ROM:00098A9E                 move.w  (a1)+,4(a2)
+ROM:00098AA2                 move.w  d1,6(a2)
+ROM:00098AA6                 lea     $80(a2),a2
+ROM:00098AAA                 move.l  a2,d2
+ROM:00098AAC                 andi.l  #$91FFFC,d2
+ROM:00098AB2                 movea.l d2,a2
+ROM:00098AB4                 dbf     d0,bg_draw_column
+
+ROM:0001C3CC                 bsr.w   bg1_set_draw_to
+ROM:0001C3D0                 bsr.w   bg1_set_draw_from
+
+
+[sprite & animation]
 ROM:00004FBC obj_draw_sprite:
 ROM:00004FC8                 movea.l $18(a0),a1      ; sprite data
 ROM:00004FCC                 move.w  $28(a0),d1      ; position index
