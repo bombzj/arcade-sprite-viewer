@@ -102,7 +102,73 @@ frameAddress = [
 
 // get frame from addr. return a frame obj
 function getRomFrame(addr, curRomFrame2){
+	var bf = new bytebuffer(romFrameData);
+	var bf2 = new bytebuffer(romFrameData);
+	
+	if(curRomFrame2 >= 0) {
+		let offset = bf.getShort(addr + curRomFrame2 * 2);
+		
+		bf.position(addr + offset);
+	} else {
+		bf.position(addr);
+	}
 
+
+
+	
+	let frame = {
+			sprites : []
+	};
+	let func = bf.get();	// function to draw
+	
+	frame.info = '0x'+addr.toString(16).toUpperCase() + ' function 0x' + func.toString(16).toUpperCase();
+	
+	if(func == 0x8 || func == 0xC || func == 0xA || func == 0xE || func == 0x4 || 
+			func == 0x0 || func == 0x2 || func == 0x10 || func == 0x6) {
+		let cnt = bf.get();
+		if(func == 0x4 || func == 0x0 || func == 0x2 || func == 0x6)
+			cnt = 1;
+		bf.skip(4)
+		let nxy = bf.get();
+		let nx = nxy % 16;
+		let ny = nxy >> 4;
+		let palette = bf.get();
+		
+		let t1 = bf.get();	// t1 / t2 point to position data
+		let t2 = bf.get();
+		
+		let addr2 = bf2.getInt(0x8A870 + t1);
+		bf2.position(addr2 + bf2.getShort(addr2 + t2));
+		for(let i = 0;i < cnt;i++) {
+			let y = bf2.getShort();
+			let x = bf2.getShort();
+			if(func == 0xA || func == 0xE)
+				y = -y;
+			if(func == 0xC || func == 0xE)
+				x = -x;
+
+			let tile = bf.getShort();
+			let sprite = {
+					x : x,
+					y : y,
+					tile : tile,
+					nx : nx + 1,
+					ny : ny + 1,
+					vflip : palette & 0x40,	// this tile need flip
+					hflip : palette & 0x20,	// this tile need flip
+					pal : palette & 0x1F,
+				};
+			
+			frame.sprites.push(sprite);
+		}
+	
+		
+	} else {
+		labelInfo.innerHTML = 'unsupported 0x' + func.toString(16).toUpperCase();
+		return;
+	}
+	console.log('function 0x' + func.toString(16).toUpperCase());
+	return frame;
 }
 
 
