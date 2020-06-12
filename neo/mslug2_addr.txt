@@ -4,7 +4,7 @@
 0x214000 = color data
 0x200000 = palette page index
 0x78FFC = palette total index
-0x10921A = temp ram base
+0x10921A = temp ram base, use dirty flag to sync to gfx
 
 step:
 ROM:0007905C                 lea     off_78FFC,a0
@@ -39,3 +39,7 @@ ROM:000809DC                 move.l  a4,d7
 ROM:000809DE                 addq.w  #2,a4
 ROM:000809E0                 addq.w  #2,a0
 ROM:000809E2                 move.w  (a0)+,d0        ; a0 : index table
+
+
+ROM:000845AE palette_write:
+ROM:000845E2                 bclr    #7,(a0)         ; dirty flag, to flush to gfx

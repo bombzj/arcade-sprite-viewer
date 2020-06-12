@@ -1,4 +1,5 @@
 "use strict"
+// seems only for kof
 function loadRomPalNeo(bf, to) {
 	for(let c = 0;c < 16;c++) {
 		let color = bf.getShort();
