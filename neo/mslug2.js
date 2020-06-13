@@ -39,12 +39,7 @@ function mslugPalette(addr) {
 			}
 			let addr3 = 0x214000 + dt;		
 			let color = bf.getuShort(addr3);
-
-			let blue = ((color>>8) & 0xf) * 0x11;
-			let green = ((color>>4) & 0xf) * 0x11;
-			let red = ((color>>0) & 0xf) * 0x11;
-			
-			palData[i + to + 1] = blue | green << 8 | red << 16 | 0xFF000000;
+			palData[i + to + 1] = neo2rgb(color);
 		}
 		addr += 6;
 	}

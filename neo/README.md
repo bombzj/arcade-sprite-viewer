@@ -11,8 +11,8 @@
 * Click [here](https://bombzj.github.io/arcade-sprite-viewer/?kof98) to view `kof98`.
 
 ## TODO
-* kof97 background
-* fix palette problem
+* kof97/mslug2 background
+* how to use dark bit in colors
 
 ## Reference
 * [NeoGeo Sprite graphics format](https://wiki.neogeodev.org/index.php?title=Sprite_graphics_format)
