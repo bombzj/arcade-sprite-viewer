@@ -75,7 +75,58 @@ let mapGrid = 2;		// each map tile contains 4 raw tiles?
 
 // draw a background with tilemap
 function drawMap() {
+	var bf = new bytebuffer(romFrameData);
+	var bf2 = new bytebuffer(romFrameData);
+	var bf3 = new bytebuffer(romFrameData);
+	ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
 	
+	let tileindex = 0xA4000 + curMap * 0x2000;
+	let tileaddr = bf.getInt(0x85CCA + curMap * 4);
+	let bigindex = bf.getInt(map2Address + curMap * 16);
+	
+	//labelInfo.innerText = 'address:' + bf.position().toString(16).toUpperCase()
+	//		+ ' 2x2tile address:' + mapTileAddress[curMap].toString(16).toUpperCase();
+	var imageData = ctxBack.createImageData(gridWidth, gridHeight);
+	
+	var height = 2;
+	bf3.position(bigindex);
+	
+	let startscr=0;
+	for(let scr=0;scr<6;scr++) {
+	//	if(scr%2==0)bf3.skip(4)
+		let scrTile = 0;//bf3.getShort();
+		
+	
+		let scry =  (scr & 0x3) * 256;//Math.floor(startscr / height) * 256;
+		let scrx = 256 - (scr >> 2) * 256;//(height - startscr % height - 1) * 256;
+	
+		bf.position(tileindex+scrTile * 16 * 2+0x80 * ((scr&3)+0+(mapAddressSkip + (scr>>2))*8));
+		if(scr == 0)
+			labelInfo.innerHTML += ' start:' + bf.position().toString(16).toUpperCase();
+	
+		for(let i=0;i<8;i++) {
+			for(let j=0;j<8;j++) {
+				let maptile=bf.getShort();
+				bf2.position((maptile << 4) + tileaddr);
+				for(let gi=0;gi<mapGrid;gi++)
+					for(let gj=0;gj<mapGrid;gj++) {
+						
+						let tile = bf2.getShort() + 0x1800;
+						let flag = bf2.get();
+						let pal = bf2.get();
+						if(hideBackground) {	// hide background based on flag and color, 0x10 maybe the switch
+							let hide = flag & 0xF;
+							if((pal & 0x80) == 0)
+								hide = 16;
+							drawTilesBase(imageData, tile, 1, 1, (pal & 0x1F) + 0x40, 16, false, (pal & 0x40), (pal & 0x20), hide);
+						} else 
+							drawTilesBase(imageData, tile, 1, 1, (pal & 0x1F) + 0x40, 16, false, (pal & 0x40), (pal & 0x20));
+						ctxBack.putImageData(imageData, scrx + ((7-i)*mapGrid+(1-gi)) * gridHeight, scry + (j*mapGrid+gj) * gridWidth);
+					}
+			}
+		}
+		startscr++;
+	}
 }
 
 var map2Data = [
