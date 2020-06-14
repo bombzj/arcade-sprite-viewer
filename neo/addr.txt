@@ -1,4 +1,21 @@
 
+SCB1 is used to store the tilemaps and tile attributes of each sprite.
+
+(Note that the $7000~$7FFF range in VRAM is used for the Fix layer).
+
+Each sprite has a 64-words table, in which each pair of words correspond to a tile in the sprite, top to bottom.
+
+Even locations are the tile number's 16 lower bits:
+
+Bit	15	14	13	12	11	10	9	8	7	6	5	4	3	2	1	0
+Def	Tile number LSBs
+Odd locations contain the remaining tile number bits, palette index and attributes:
+
+Bit	15	14	13	12	11	10	9	8	7	6	5	4	3	2	1	0
+Def	Palette	Tile number MSBs	3bit Auto-anim	2bit Auto-anim	Vertical flip	Horizontal flip
+
+
+
 System Information:
 Resolution:                         320(304?)x224
 Color Palette:                      65,536

@@ -20,13 +20,13 @@ ROM:0007A98A
 ROM:0007A98A loc_7A98A:                              ; CODE XREF: obj_update_sprite2+6B4↓j
 ROM:0007A98A                 moveq   #0,d4
 ROM:0007A98C                 moveq   #0,d5
-ROM:0007A98E                 move.l  (a0)+,d3        ; a0=21F224 (11F224), d3=10
+ROM:0007A98E                 move.l  (a0)+,d3        ; a0=21F224 (11F224), d3=10, x|y
 ROM:0007A990                 move.b  (a0)+,d4        ; w = 1
 ROM:0007A992                 move.b  (a0)+,d5        ; h = 3
 
   then
-ROM:0007AF1E                 move.l  d1,(a1)+        ; 7C10 0FFF, a1 = 0x106664, temp ram for sprite， 7C10 = position y
-ROM:0007AF20                 move.l  d5,(a1)+        ; C003 6B06, C003 = position x
+ROM:0007AF1E                 move.l  d1,(a1)+        ; 7C10 0FFF, a1 = 0x106664, temp ram for sprite, 7C10 = palette&flag
+ROM:0007AF20                 move.l  d5,(a1)+        ; C003 6B06, 6B06 = position x + tile count, C003 = position y
 ROM:0007AF22                 move.l  a0,(a1)+        ; 21f22a -> 107c3a, tiles address
 
   then
