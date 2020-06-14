@@ -135,6 +135,46 @@ var map2Data = [
 let map2Width = 16;
 let map2Height = 8;
 function drawMap2() {
+	var bf = new bytebuffer(romFrameData);
+	ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
+	
+	let tileindex = 0xD8000 + curMap * 0x2000;
+	let tileaddr = bf.getInt(0x85CCA + curMap * 4);
+	let bigindex = bf.getInt(map2Address + curMap * 16);
+	
+	//labelInfo.innerText = 'address:' + bf.position().toString(16).toUpperCase()
+	//		+ ' 2x2tile address:' + mapTileAddress[curMap].toString(16).toUpperCase();
+	var imageData = ctxBack.createImageData(gridWidth*2, gridHeight*2);
+	
+	var height = 2;
+	
+	for(let scr=0;scr<8;scr++) {
+	
+		let scry =  (scr & 0x3) * 256;//Math.floor(startscr / height) * 256;
+		let scrx = 256-(scr >> 2) * 256;//(height - startscr % height - 1) * 256;
+	
+		bf.position(tileindex + 0x100 * ((scr&3)+3+(mapAddressSkip + (scr>>2))*8));
+		if(scr == 0)
+			labelInfo.innerHTML += ' start:' + bf.position().toString(16).toUpperCase();
+		
+		for(let i=0;i<8;i++) {
+			for(let j=0;j<8;j++) {
+				
+				let tile = bf.getShort() + 0xC00;
+				let flag = bf.get();
+				let pal = bf.get();
+				if(hideBackground) {	// hide background based on flag and color, 0x10 maybe the switch
+					let hide = flag & 0xF;
+					if((pal & 0x80) == 0)
+						hide = 16;
+					drawTilesBase(imageData, tile, 1, 1, (pal & 0x1F) + 0x60, 32, false, (pal & 0x40), (pal & 0x20), hide);
+				} else 
+					drawTilesBase(imageData, tile, 1, 1, (pal & 0x1F) + 0x60, 32, false, (pal & 0x40), (pal & 0x20));
+				ctxBack.putImageData(imageData, scrx + i * gridHeight*2, scry + j * gridWidth*2);
+
+			}
+		}
+	}
 
 }
 
