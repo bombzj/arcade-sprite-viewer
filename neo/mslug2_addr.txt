@@ -51,6 +51,8 @@ ROM:0007FA90                 move.l  d7,(a6)         ; d7=82c1 a801 = position y
 
 0x10921A = index list for loading
 0x10C21A? = temp ram base, use dirty flag to sync to gfx
+palette_load_sprite : load one palette for certain sprite/object and save index in object ram
+palette_load_page : load a page of fixed palette
 
 step:
 ROM:0007905C                 lea     off_78FFC,a0
@@ -61,6 +63,60 @@ ROM:0008F1C6                 jsr     palette_load_page
   then
 ROM:0009B512                 movea.l 4(a0),a0        ; = 53272
 ROM:0009B516                 jsr     palette_load_page
+  then
+ROM:00086140                 move.l  a0,2(a1,d6.w)   ; palette load extra
+  then
+ROM:000BE1A6                 move.w  #$125,d0
+ROM:000BE1AA                 move.b  #0,d1
+ROM:000BE1AE                 jsr     palette_load_sprite ; d0=from
+  then
+ROM:0006FF92                 move.w  #$3BE,d0
+ROM:0006FF96                 move.b  #0,d1
+ROM:0006FF9A                 jsr     palette_load_sprite ; d0=from
+  then
+ROM:00092CD0                 move.w  $6C(a6),d0
+ROM:00092CD4                 lea     unk_90E54,a0
+ROM:00092CD8                 add.w   d0,d0
+ROM:00092CDA                 move.w  (a0,d0.w),d0
+ROM:00092CDE                 move.b  #1,d1
+ROM:00092CE2                 jsr     palette_load_sprite ; d0=from
+ROM:00092CE8                 move.w  $6C(a6),d0
+ROM:00092CEC                 lea     unk_90E54,a0
+ROM:00092CF0                 add.w   d0,d0
+ROM:00092CF2                 move.w  (a0,d0.w),d0
+ROM:00092CF6                 move.b  #1,d1
+ROM:00092CFA                 jsr     palette_load_sprite ; d0=from
+ROM:00092D00                 move.w  $6C(a6),d0
+ROM:00092D04                 lea     unk_90E54,a0
+ROM:00092D08                 add.w   d0,d0
+ROM:00092D0A                 move.w  (a0,d0.w),d0
+ROM:00092D0E                 move.b  #1,d1
+ROM:00092D12                 jsr     palette_load_sprite ; d0=from
+  then
+ROM:00099B68                 move.w  #$7A,d0 ; 'z'
+ROM:00099B6C                 move.b  #1,d1
+ROM:00099B70                 jsr     palette_load_sprite ; d0=from
+ROM:00099B76                 move.w  #$7C,d0 ; '|'
+ROM:00099B7A                 move.b  #1,d1
+ROM:00099B7E                 jsr     palette_load_sprite ; d0=from
+ROM:00099B84                 move.w  #$7E,d0 ; '~'
+ROM:00099B88                 move.b  #1,d1
+ROM:00099B8C                 jsr     palette_load_sprite ; d0=from
+ROM:00099B92                 move.w  #$80,d0
+ROM:00099B96                 move.b  #1,d1
+ROM:00099B9A                 jsr     palette_load_sprite ; d0=from
+  then
+ROM:00096054                 move.w  #$38D,d0
+ROM:00096058                 move.b  #0,d1
+ROM:0009605C                 jsr     palette_load_sprite ; d0=from
+  then
+ROM:00070386                 move.w  #$3AA,d0
+ROM:0007038A                 move.b  #0,d1
+ROM:0007038E                 jsr     palette_load_sprite ; d0=from
+  then
+ROM:00070104                 move.w  #$200,d0
+ROM:00070108                 move.b  #0,d1
+ROM:0007010C                 jsr     palette_load_sprite ; d0=from
 
 ROM:00085E56 palette_load_page:
 ROM:00085E5C                 move.w  (a0),d0

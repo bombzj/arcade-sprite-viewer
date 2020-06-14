@@ -9,6 +9,18 @@ function loadRomPal() {
 	mslugPalette(0x78FFC);
 	mslugPalette(0x7902E);
 	mslugPalette(0x53272);
+
+	mslugPalette2(0x125);
+	mslugPalette2(0x3BE);
+
+	mslugPalette2(0x7A);
+	mslugPalette2(0x7C);
+	mslugPalette2(0x7E);
+	mslugPalette2(0x80);
+
+	mslugPalette2(0x38D);
+	mslugPalette2(0x3AA);
+	mslugPalette2(0x200);
 	
 	if(showPal)
 		drawPal();
@@ -44,6 +56,35 @@ function mslugPalette(addr) {
 		addr += 6;
 	}
 
+}
+
+var palette_empty = 0x60;
+// palette not fixed in position
+function mslugPalette2(addr) {
+	var bf = new bytebuffer(romFrameData);
+	var bf2 = new bytebuffer(romFrameData);
+
+	let idx = addr;		// write from
+	idx <<= 5;
+	let addr2 = 0x200000 + idx;
+	bf2.position(addr2);
+
+	let to = palette_empty * 0x10;
+	palData[to] = 0;
+	bf2.skip(2);
+
+	for(let i = 0;i < 15;i++) {
+		let dt = bf2.getuShort() << 1;
+		if(dt > 0x8000) {	// signed because ROM:000809EE    move.w  (a3,d0.w),(a4)+
+			dt -= 0x10000;
+		}
+		let addr3 = 0x214000 + dt;		
+		let color = bf.getuShort(addr3);
+		palData[i + to + 1] = neo2rgb(color);
+	}
+
+
+	palette_empty++;
 }
 
 function movetoTile(tile) {
