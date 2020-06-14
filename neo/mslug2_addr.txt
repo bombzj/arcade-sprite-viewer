@@ -1,5 +1,49 @@
 
 
+[sprite]
+ROM:0007A87E obj_update_sprite2:
+ROM:0007A87E                 move.l  a0,d7
+ROM:0007A880                 bne.w   loc_7A886       ; a0=11f222
+  translation
+ROM:0007A8A6                 movea.l d7,a0           ; a7=21f222 (11f222) when loaded, 0x100000 -> 0x200000
+
+ROM:0007A974 loc_7A974:                              ; CODE XREF: obj_update_sprite2:loc_7A91C↑j
+ROM:0007A974                 move.b  (a0)+,-(sp)
+ROM:0007A976                 move.b  (a0)+,d7
+ROM:0007A978                 eor.b   d7,d1
+ROM:0007A97A                 swap    d1
+ROM:0007A97C                 movea.w #$10,a3
+ROM:0007A980                 move.w  d3,d1
+ROM:0007A982                 ori.w   #$F00,d1        ; d1 = 7C10 0FFF
+ROM:0007A986                 move.w  #$10,d2
+ROM:0007A98A
+ROM:0007A98A loc_7A98A:                              ; CODE XREF: obj_update_sprite2+6B4↓j
+ROM:0007A98A                 moveq   #0,d4
+ROM:0007A98C                 moveq   #0,d5
+ROM:0007A98E                 move.l  (a0)+,d3        ; a0=21F224 (11F224), d3=10
+ROM:0007A990                 move.b  (a0)+,d4        ; w = 1
+ROM:0007A992                 move.b  (a0)+,d5        ; h = 3
+
+  then
+ROM:0007AF1E                 move.l  d1,(a1)+        ; 7C10 0FFF, a1 = 0x106664, temp ram for sprite， 7C10 = position y
+ROM:0007AF20                 move.l  d5,(a1)+        ; C003 6B06, C003 = position x
+ROM:0007AF22                 move.l  a0,(a1)+        ; 21f22a -> 107c3a, tiles address
+
+  then
+ROM:0007ECC8                 movea.l 8(a3),a4        ; tile list, 0026CAAC
+...
+ROM:0007ECD4                 move.w  6(a3),d4        ; d4 = tile count, 6B06 (& 0x3E)
+...
+ROM:0007ECEC                 move.w  (a3),d6         ; palette & flag, 7C10
+...
+ROM:0007FA84                 move.w  4(a3),d7        ; d7 = C003, position y
+ROM:0007FA88                 move.l  d3,(a6)         ; d3 = 84c1 3402, position x, a6 = 3c0000
+ROM:0007FA8A                 nop
+ROM:0007FA8C                 move.l  d4,(a6)         ; d4 = 80c1 4fff, zoom?
+ROM:0007FA8E                 nop
+ROM:0007FA90                 move.l  d7,(a6)         ; d7=82c1 a801 = position y
+
+
 [palette]
 0x214000 = color data
 0x200000 = palette page index
