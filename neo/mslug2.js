@@ -103,13 +103,15 @@ function movetoTile(tile) {
 }
 
 var animAddress = [
-	
+	0x703AC, 0x2EB1C2, 0x96570, 0x2F2112, 0xBDC74, 0x46B78, 0x46EDE, 0x4735C, 0x47200,
+	0xC2F8, 0x68818, 0x688CC, 0x4A730, 0xC0BCA, 0xC12AC, 0x73DCC, 0x65CDA, 0x69E64,
+	0x5442E, 0x54384, 0x42DE8, 0xA22BC
 ];
 var curAnim;	// current animation index
 var curAnimAct;	// current animation index
 // show object animation from rom address
 var animTimer;
-function drawAnimation(addr) {return;
+function drawAnimation(addr) {
 //	let addr = animAddress[curAnim];
 	var bf = new bytebuffer(romFrameData);
 	if(!addr)
@@ -121,23 +123,31 @@ function drawAnimation(addr) {return;
 	}
 	
 
-	loopDrawAnimation(addr, 0xA);
+	loopDrawAnimation(addr);
 }
-function loopDrawAnimation(addr, offset) {
+function loopDrawAnimation(addr, offset = 0xA) {
 	animTimer = null;
 
 	var bf = new bytebuffer(romFrameData, addr);
-	let fr = bf.getInt();
-	let link = bf.getInt();
-	let flag = bf.getShort();
-
+	let animfunc = bf.get();
+	if(animfunc != 4) {
+		labelInfo.innerText = 'anim:' + (addr).toString(16).toUpperCase() + ' func:' + animfunc.toString(16).toUpperCase();
+		return;
+	}
+	let tmp = bf.get();	// 40, 44?
+	tmp = bf.get();	// 0, FC?
+	tmp = bf.get();	// 0?
+	let addr2 = bf.getInt();
+	let frame = getRomFrame(addr2);
+	if(!frame) {
+		return;
+	}
+	labelInfo.innerText = 'anim:' + (addr).toString(16).toUpperCase();
 
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	drawRomFrame(fr);
+	drawRomFrameBase(frame);
 	addr += offset;
 
-	if(flag < 0)
-		return;
 	animTimer = setTimeout("loopDrawAnimation("+ addr +"," + offset+")", 200);
 }
 
@@ -173,7 +183,8 @@ function setMapTileStart(mapstart) {
 
 
 frameAddress = [		// bp 331C get D4
-	0x15D648, 0x15D3C8, 0x15D744, 0x15D77C, 0x11F222, 0x100000, 0x156D42, 0x1568D6, 0x156902, 0x144E92, 0x10083C, 0x10088C, // 0x106670, 0x100040, 0x103BF2, 0x148B5A, 0x16C9DE, 0x16CA2E
+	0x15D648, 0x15D3C8, 0x15D744, 0x15D77C, 0x11F222, 0x100000, 0x156D42, 0x1568D6, 0x156902, 0x144E92, 0x10083C, 0x10088C, 
+	0x19BD88, 0x163EFA, 0x166560, // 0x106670, 0x100040, 0x103BF2, 0x148B5A, 0x16C9DE, 0x16CA2E
 	// 0x3F3D, 0x3F3E, 0x36DD, 0x1525, 0x68F, 0x68C, 0x695, 0x692, 0x1B2A, 0x1B2C, 0x1B32, 0x2CBD
 ];
 
@@ -196,6 +207,10 @@ function getRomFrame(addr, f = 0) {
 
 	bf.position(addr);
 	let cnt = bf.get();	// sprite count
+	if(cnt > 0x10) {
+		debugger;
+		return;
+	}
 	let flag = bf.get();
 	let palette = 0x60;
 
@@ -206,7 +221,6 @@ function getRomFrame(addr, f = 0) {
 		let nx = bf.get();
 		let ny = bf.get();
 		//let d0 = bf.getuShort();
-	debugger
 	
 		for(let i = 0;i < nx;i++) {
 			for(let j = 0;j < ny;j++) {
