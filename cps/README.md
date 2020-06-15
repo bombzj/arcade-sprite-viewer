@@ -10,6 +10,11 @@
 
 * Click [here](https://bombzj.github.io/arcade-sprite-viewer/?dino) to view `dino`.
 
+![varth animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animvarth.gif)<br/>
+![varth background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/mapvarth.png)<br/>
+
+* Click [here](https://bombzj.github.io/arcade-sprite-viewer/?varth) to view `varth`.
+
 ## TODO
 * more games
 * update palette set accordingly
