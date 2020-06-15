@@ -15,6 +15,10 @@
 
 * Click [here](https://bombzj.github.io/arcade-sprite-viewer/?varth) to view `varth`.
 
+![captcomm animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animcapt.gif)<br/>
+![captcomm background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/mapcapt.png)<br/>
+
+
 ## TODO
 * more games
 * update palette set accordingly
