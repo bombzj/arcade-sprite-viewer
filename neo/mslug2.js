@@ -5,10 +5,20 @@ var paletteAddress2 = 0x116400;
 
 // load pal from rom and oveewrite old
 function loadRomPal() {
+	var bf = new bytebuffer(romFrameData);
 
 	mslugPalette(0x78FFC);
 	mslugPalette(0x7902E);
 	mslugPalette(0x53272);
+
+	palette_empty = 0x60
+
+	var playerPalette = 0x90E54;
+
+	mslugPalette2(bf.getuShort(playerPalette));
+	mslugPalette2(bf.getuShort(playerPalette + 2));
+	mslugPalette2(bf.getuShort(playerPalette + 4));
+	mslugPalette2(bf.getuShort(playerPalette + 6));
 
 	mslugPalette2(0x125);
 	mslugPalette2(0x3BE);
@@ -163,7 +173,7 @@ function setMapTileStart(mapstart) {
 
 
 frameAddress = [		// bp 331C get D4
-	0x11F222, 0x100000, 0x156D42, 0x1568D6, 0x156902, 0x144E92, 0x10083C, // 0x106670, 0x100040, 0x103BF2, 0x148B5A, 0x16C9DE, 0x16CA2E
+	0x15D648, 0x15D3C8, 0x15D744, 0x15D77C, 0x11F222, 0x100000, 0x156D42, 0x1568D6, 0x156902, 0x144E92, 0x10083C, 0x10088C, // 0x106670, 0x100040, 0x103BF2, 0x148B5A, 0x16C9DE, 0x16CA2E
 	// 0x3F3D, 0x3F3E, 0x36DD, 0x1525, 0x68F, 0x68C, 0x695, 0x692, 0x1B2A, 0x1B2C, 0x1B32, 0x2CBD
 ];
 
@@ -182,37 +192,39 @@ function getRomFrame(addr, f = 0) {
 	// 	addr = bf.getShort(addr - 0x100000 + 4);
 	// }
 	
-	
-	bf.position(addr);
-	bf.skip(1);
-	let flag = bf.get();
-	let palette = 2;
-	let x = bf.getShort();
-	let y = bf.getShort();
-	let nx = bf.get();
-	let ny = bf.get();
-	//let d0 = bf.getuShort();
-debugger
-
 	frame.info = '0x'+addr.toString(16).toUpperCase();
 
-	for(let i = 0;i < nx;i++) {
-		for(let j = 0;j < ny;j++) {
-			let tile = bf.getuShort() + ((flag & 0xF0) << 12);
-			let sprite = {
-				x: i << 4,
-				y: j << 4,
-				tile: tile,
-				nx: 1,
-				ny: 1,
-				vflip: flag & 0x2,	// this tile need flip
-				hflip: flag & 0x1,	// this tile need flip
-				pal: palette,
-			};
-			frame.sprites.push(sprite);
+	bf.position(addr);
+	let cnt = bf.get();	// sprite count
+	let flag = bf.get();
+	let palette = 0x60;
+
+	for(let c = 0;c < cnt;c++) {
+		
+		let x = bf.getShort();
+		let y = -bf.getShort();
+		let nx = bf.get();
+		let ny = bf.get();
+		//let d0 = bf.getuShort();
+	debugger
+	
+		for(let i = 0;i < nx;i++) {
+			for(let j = 0;j < ny;j++) {
+				let tile = bf.getuShort() + ((flag & 0xF0) << 12);
+				let sprite = {
+					x: (i << 4) + x,
+					y: (j << 4) + y,
+					tile: tile,
+					nx: 1,
+					ny: 1,
+					vflip: flag & 0x2,	// this tile need flip
+					hflip: flag & 0x1,	// this tile need flip
+					pal: palette,
+				};
+				frame.sprites.push(sprite);
+			}
 		}
 	}
-	
 
 	return frame;
 }

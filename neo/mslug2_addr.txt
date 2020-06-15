@@ -118,22 +118,28 @@ ROM:00070104                 move.w  #$200,d0
 ROM:00070108                 move.b  #0,d1
 ROM:0007010C                 jsr     palette_load_sprite ; d0=from
 
+
 ROM:00085E56 palette_load_page:
 ROM:00085E5C                 move.w  (a0),d0
-
+...
 ROM:00085E6E                 lea     (unk_10921A).l,a1
 ROM:00085E74                 adda.w  d0,a1
-
+...
 ROM:00085E7C                 move.w  2(a0),d1        ; page index
-
-
-
+...
 ROM:00085E9E                 lea     (off_200000).l,a2
 ROM:00085EA4                 adda.l  d1,a2
 ROM:00085EA6                 move.l  a2,2(a1)        ; write temp list to ram 10935A - 10995A
-
+...
 ROM:00084518                 move.b  $A(a2),d0       ; load from ram 10935A - 10995A
 ROM:0008451C                 bsr.w   palette_load2
+  or
+ROM:00086098 palette_load_sprite:
+...
+ROM:00086168                 move.b  $1B(a6),d1      ; sometimes 4 palettes for one object
+ROM:0008616C                 move.b  d0,$17(a6,d1.w) ; save palettes to object ram, d1=0, 1, 2, 3 if multiple palettes
+
+
 
 ROM:000809D6 palette_load:
 ROM:000809D6                 lea     (unk_214000).l,a3
@@ -145,3 +151,7 @@ ROM:000809E2                 move.w  (a0)+,d0        ; a0 : index table
 
 ROM:000845AE palette_write:
 ROM:000845E2                 bclr    #7,(a0)         ; dirty flag, to flush to gfx
+
+
+
+
