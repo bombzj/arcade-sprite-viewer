@@ -4,7 +4,7 @@ var paletteAddress = 0x114000;	// all palettes are here
 var paletteAddress2 = 0x116400;
 
 var palsetAddress = [
-	0x53272, 0x545D4, 0xC8374, 0xCAEAA, 0x55482, 0x566CA, 0x1D666, 0x57CEC, 0xCAEAA
+	0x53272, 0x545D4, 0xC8374, 0xCAEAA, 0x55482, 0x566CA, 0x57CEC, 0x545D4, 0x4E226, 0x545D4
 ];
 
 // load pal from rom and oveewrite old
@@ -161,7 +161,7 @@ function drawAnimationFrame(addr, c = ctx, offx = 128, offy = 160, cbbase = 0x10
 
 
 var mapAddress = [
-	0x531BA, 0x54574, 0xC82AC, 0xCAC6A, 0x55452, 0x56638, 0x1D72E, 0x58BD6
+	0x531BA, 0x54574, 0xC82AC, 0xCAC6A, 0x55452, 0x56638, 0x58BD6, 0x549A2, 0x4E1D0, 0xC7A5A
 ];
 var map2Address = 0x1923A;	// layer 2 background
 
@@ -189,6 +189,8 @@ function drawMap() {
 	let x = bf.getShort();
 	let h = bf.getShort();
 
+	labelInfo.innerText += ' height:'+h;
+
 	bf2.position(addr2);
 	bf2.skip(4 * h * mapAddressSkip);
 
@@ -206,7 +208,7 @@ function drawMap() {
 			}
 			drawTilesBase(imageData, tile, 1, 1, pal, 16, false, (flag & 0x2), (flag & 0x1), false);
 
-			ctxBack.putImageData(imageData, i * gridHeight, j * gridWidth);
+			ctxBack.putImageData(imageData, i * gridHeight, j * gridWidth - mapAddressSkipY * 32);
 		}
 	}
 

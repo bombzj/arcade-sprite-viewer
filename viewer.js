@@ -194,6 +194,7 @@ var animTimer;
 
 var mapScene = 0;
 var mapAddressSkip = 0;
+var mapAddressSkipY = 0;
 
 var hideBackground = false;
 
@@ -702,7 +703,11 @@ window.addEventListener("keydown", function (event) {
     
 	switch(event.key) {
 		case 'ArrowUp':
-			if(event.ctrlKey) {	// change palette
+			if(event.shiftKey) {	// move background
+				mapAddressSkipY--;
+				if(mapAddressSkipY <0)
+					mapAddressSkipY=0
+			} else if(event.ctrlKey) {	// change palette
 				palset-=1;
 				if(palset < 0)
 					palset = 0;
@@ -723,6 +728,7 @@ window.addEventListener("keydown", function (event) {
 						curMap = 0;
 					mapScene=0;
 					mapAddressSkip=0;
+					mapAddressSkipY=0;
 				} else if(mode == 4) {
 					curPlayerFrame--;
 					if(curPlayerFrame < 0)
@@ -740,7 +746,9 @@ window.addEventListener("keydown", function (event) {
 		break;
 			
 		case 'ArrowDown':
-			if(event.ctrlKey) {	// change palette
+			if(event.shiftKey) {	// move background
+				mapAddressSkipY++;
+			} else if(event.ctrlKey) {	// change palette
 				palset++;
 				if(palset >= maxPalSet)
 					palset = maxPalSet;
@@ -760,6 +768,7 @@ window.addEventListener("keydown", function (event) {
 						curMap = 100;
 					mapScene=0;
 					mapAddressSkip=0;
+					mapAddressSkipY=0;
 					//}
 				} else if(mode == 4) {
 					curPlayerFrame++;
@@ -813,7 +822,11 @@ window.addEventListener("keydown", function (event) {
 		break;
 		
 		case 'ArrowLeft':
-			if(event.ctrlKey) {	// change palette
+			if(event.shiftKey) {	// move background
+				mapAddressSkip--;
+				if(mapAddressSkip <0)
+					mapAddressSkip=0
+			} else if(event.ctrlKey) {	// change palette
 				palset2--;
 				if(palset2<0)
 					palset2=0;
@@ -832,6 +845,7 @@ window.addEventListener("keydown", function (event) {
 					if(mapScene<0)
 						mapScene=0;
 					mapAddressSkip=0;
+					mapAddressSkipY=0;
 				} else if(mode == 4) {
 					curPlayerType--;
 					if(curPlayerType < 0)
@@ -847,7 +861,9 @@ window.addEventListener("keydown", function (event) {
 		break;
 			
 		case 'ArrowRight':
-			if(event.ctrlKey) {	// change palette
+			if(event.shiftKey) {	// move background
+				mapAddressSkip++;
+			} else if(event.ctrlKey) {	// change palette
 				palset2++;
 				loadRomPal();
 			} else {
@@ -858,6 +874,7 @@ window.addEventListener("keydown", function (event) {
 				} else if(mode == 2 || mode == 3) {
 					mapScene++;
 					mapAddressSkip=0;
+					mapAddressSkipY=0;
 				} else if(mode == 4) {
 					curPlayerType++;
 					if(curPlayerType >= playerSpriteAddress.length)
