@@ -34,10 +34,10 @@
 	<div style="position:absolute;left:550px;top:600px;">
 		x=<span id="labelx"></span>,
 		y=<span id="labely"></span>,
-		tile=<input id="labeltn" size="4" onchange="movetoTile(parseInt(this.value,16))"></span>,
+		tile=<input id="labeltn" size="4" onchange="movetoTile(parseInt(this.value,16));this.blur();"></span>,
 		pal=<span id="labelpal"></span>,
-		maptile=<input size="5" onchange="setMapTileStart(parseInt(this.value, 16))">
-		anim=<input size="5" id="anim" onchange='drawAnimation(parseInt(this.value, 16))'>
+		maptile=<input size="5" onchange="setMapTileStart(parseInt(this.value, 16));this.blur();">
+		anim=<input size="5" id="anim" onchange='drawAnimation(parseInt(this.value, 16));this.blur();'>
 	</div>
 
 	<div id="moving"
@@ -56,7 +56,7 @@
 			<a style="margin-left:10px;padding:2px;border:1px solid black;" id="downloadAnchorElem"
 				href="javascript:void(0)" onclick="downloadJson()">Download</a>
 		</div>
-		<select id="comboMode" onchange="switchmode(this.selectedIndex);">
+		<select id="comboMode" onchange="switchmode(this.selectedIndex);this.blur();">
 			<option value ="0">tiles</option>
 			<option value ="1">sprite</option>
 			<option value="2">bg layer</option>
@@ -64,8 +64,8 @@
 			<option value="4">player</option>
 			<option value="5">animation</option>
 		</select>
-		frame=<input id="nFrame" size="5" onchange="drawRomFrame(parseInt(this.value, 16))">
-		hex=<input id="hexFrame" size="5" onchange="setFramePos(parseInt(this.value, 16)/4)">
+		frame=<input id="nFrame" size="5" onchange="drawRomFrame(parseInt(this.value, 16));this.blur();">
+		hex=<input id="hexFrame" size="5" onchange="setFramePos(parseInt(this.value, 16)/4);this.blur();">
 	</div>
 
 	<div id="labelInfo" style="position:absolute;left:550px;top:520px;"></div>
