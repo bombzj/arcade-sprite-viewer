@@ -3,13 +3,17 @@
 var paletteAddress = 0x114000;	// all palettes are here
 var paletteAddress2 = 0x116400;
 
+var palsetAddress = [
+	0x53272, 0x545D4, 0xC8374, 0xCAEAA, 0x55482, 0x566CA, 0x1D666, 0x57CEC, 0xCAEAA
+];
+
 // load pal from rom and oveewrite old
 function loadRomPal() {
 	var bf = new bytebuffer(romFrameData);
 
 	mslugPalette(0x78FFC);
 	mslugPalette(0x7902E);
-	mslugPalette(0x53272);
+	mslugPalette(palsetAddress[palset]);
 
 	palette_empty = 0x60
 
@@ -157,8 +161,7 @@ function drawAnimationFrame(addr, c = ctx, offx = 128, offy = 160, cbbase = 0x10
 
 
 var mapAddress = [
-	0x531BA, 0x531C6, 0x531D2, 0x531DE, 0x531EA, 0x531F6,
-	0x54574, 0x54580, 0x5458C, 0x54598, 0x545A4, 0x545B0
+	0x531BA, 0x54574, 0xC82AC, 0xCAC6A, 0x55452, 0x56638, 0x1D72E, 0x58BD6
 ];
 var map2Address = 0x1923A;	// layer 2 background
 
@@ -170,9 +173,12 @@ let mapGrid = 2;		// each map tile contains 4 raw tiles?
 var autoAnim = 0;
 
 function drawMap() {
+	palset = curMap;
+	loadRomPal();
+
 	var bf = new bytebuffer(romFrameData);
 	var bf2 = new bytebuffer(romFrameData);
-	let addr = mapAddress[curMap];	// mapAddressSkip
+	let addr = mapAddress[curMap] + mapScene * 12;	// mapAddressSkip
 
 	ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
 	var imageData = ctxBack.createImageData(gridWidth, gridHeight);
