@@ -156,15 +156,48 @@ function drawAnimationFrame(addr, c = ctx, offx = 128, offy = 160, cbbase = 0x10
 }
 
 
-var mapAddress = 0x112850;
+var mapAddress = [
+	0x531BA, 0x531C6, 0x531D2, 0x531DE, 0x531EA, 0x531F6, 0x27D698
+];
 var map2Address = 0x1923A;	// layer 2 background
 
 let mapWidth = 32;
 let mapHeight;	// default 8
 let mapGrid = 2;		// each map tile contains 4 raw tiles?
 // draw a background with tilemap
-function drawMap() {
 
+var autoAnim = 0;
+
+function drawMap() {
+	var bf = new bytebuffer(romFrameData);
+	var bf2 = new bytebuffer(romFrameData);
+	let addr = mapAddress[curMap];	// mapAddressSkip
+
+	ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
+	var imageData = ctxBack.createImageData(gridWidth, gridHeight);
+
+	bf.position(addr);
+	let addr2 = bf.getInt();
+	let addr3 = bf.getInt();
+	let x = bf.getShort();
+	let h = bf.getShort();
+
+	bf2.position(addr2);
+	bf2.skip(4 * h * mapAddressSkip);
+
+	for(let i = 0;i < 32;i++) {
+		for(let j = 0;j < h;j++) {
+			let tile = bf2.getuShort();
+			let pal = bf2.get();
+			let flag = bf2.get();
+
+			drawTilesBase(imageData, tile, 1, 1, pal, 16, false, (flag & 0x2), (flag & 0x1), false);
+
+			ctxBack.putImageData(imageData, i * gridHeight, j * gridWidth);
+		}
+	}
+
+	autoAnim++;
 }
 
 
