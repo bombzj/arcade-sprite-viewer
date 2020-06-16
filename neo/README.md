@@ -10,8 +10,9 @@
 
 * Click [here](https://bombzj.github.io/arcade-sprite-viewer/?kof98) to view `kof98`.
 
-![background mslug2](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/mapmslug2.gif)<br/>
-![animation mslug2](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animmslug2.gif)<br/>
+![mslug2 background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/mapmslug2.gif)<br/>
+![mslug2 background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/map3mslug2.png)
+![mslug2 animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animmslug2.gif)<br/>
 
 ## TODO
 * kof97 background
