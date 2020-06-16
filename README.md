@@ -16,7 +16,7 @@ An arcade game sprite / map viewer (cps1 neogeo ...)
 ## NEOGEO [view more](https://github.com/bombzj/arcade-sprite-viewer/tree/master/neo)
 ![kof97 animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animkof97.gif)<br/>
 ![kof98 animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animkof98.gif)<br/>
-![mslug2 background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/map3mslug2.png)<br/>
+![mslug2 background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/map3mslug2.gif)<br/>
 
 * Click [here](https://bombzj.github.io/arcade-sprite-viewer/?kof97) to view `kof97`.
 
