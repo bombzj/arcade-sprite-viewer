@@ -157,7 +157,8 @@ function drawAnimationFrame(addr, c = ctx, offx = 128, offy = 160, cbbase = 0x10
 
 
 var mapAddress = [
-	0x531BA, 0x531C6, 0x531D2, 0x531DE, 0x531EA, 0x531F6, 0x27D698
+	0x531BA, 0x531C6, 0x531D2, 0x531DE, 0x531EA, 0x531F6,
+	0x54574, 0x54580, 0x5458C, 0x54598, 0x545A4, 0x545B0
 ];
 var map2Address = 0x1923A;	// layer 2 background
 
@@ -190,7 +191,13 @@ function drawMap() {
 			let tile = bf2.getuShort();
 			let pal = bf2.get();
 			let flag = bf2.get();
-
+			let a8 = flag & 0b1000;	// 8 frame auto animation
+			let a4 = flag & 0b0100;	// 4 frame auto animation
+			if(a8) {
+				tile += (autoAnim & 0x7);
+			} else if(a4) {
+				tile += (autoAnim & 0x3);
+			}
 			drawTilesBase(imageData, tile, 1, 1, pal, 16, false, (flag & 0x2), (flag & 0x1), false);
 
 			ctxBack.putImageData(imageData, i * gridHeight, j * gridWidth);
