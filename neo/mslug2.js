@@ -1,8 +1,5 @@
 "use strict"
 
-var paletteAddress = 0x114000;	// all palettes are here
-var paletteAddress2 = 0x116400;
-
 var palsetAddress = [
 	0x53272, 0x545D4, 0xC8374, 0xCAEAA, 0x55482, 0x566CA, 0x57CEC, 0x545D4, 0x4E226, 0x545D4
 ];
