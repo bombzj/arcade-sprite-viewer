@@ -70,9 +70,7 @@ function init(name) {
 		loadData('rom/' + name, function (data3) {
 			labelInfo.innerHTML = '<font color="red">Extracting...</font>';
 
-			var inflator = pako.Inflate();
-			inflator.push(data3, true);
-			romFrameData = inflator.result;
+			romFrameData = chkfile(data3);
 
 			labelInfo.innerHTML = '';
 
@@ -86,13 +84,22 @@ function init(name) {
 		}, function() {
 			labelInfo.innerHTML = '<font color="red">Rom not found</font>';
 		});
-		var inflator = pako.Inflate();
-		inflator.push(data2, true);
-		gfxData = inflator.result;
+
+		gfxData = chkfile(data2);
 	}, function() {
 		labelInfo.innerHTML = '<font color="red">Gfx not found</font>';
 	});
 
+}
+
+function chkfile(data) {
+	let arr = new Uint32Array(data, 0, 1);
+	if(arr[0] == 0x8088B1F) {
+		var inflator = pako.Inflate();
+		inflator.push(data, true);
+		return inflator.result;
+	}
+	return new Uint8Array(data);
 }
 
 // empty function, needs to be replaced
