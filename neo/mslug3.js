@@ -1,7 +1,8 @@
 "use strict"
 
 var palsetAddress = [
-	0x2E152, 0x545D4, 0xC8374, 0xCAEAA, 0x55482, 0x566CA, 0x57CEC, 0x545D4, 0x4E226, 0x545D4
+	0x2E152, 0x2E152, 0x2E152, 
+	//0x545D4, 0xC8374, 0xCAEAA, 0x55482, 0x566CA, 0x57CEC, 0x545D4, 0x4E226, 0x545D4
 ];
 
 // load pal from rom and oveewrite old
@@ -158,7 +159,8 @@ function drawAnimationFrame(addr, c = ctx, offx = 128, offy = 160, cbbase = 0x10
 
 
 var mapAddress = [
-	0x531BA, 0x54574, 0xC82AC, 0xCAC6A, 0x55452, 0x56638, 0x58BD6, 0x549A2, 0x4E1D0, 0xC7A5A
+	0x2E0B0, 0x2E01C, 0x2E066, 
+	//0x54574, 0xC82AC, 0xCAC6A, 0x55452, 0x56638, 0x58BD6, 0x549A2, 0x4E1D0, 0xC7A5A
 ];
 var map2Address = 0x1923A;	// layer 2 background
 
@@ -188,14 +190,15 @@ function drawMap() {
 
 	labelInfo.innerText += ' height:'+h;
 
-	bf2.position(addr2);
+	bf2.position(0x200000 + 0x100000);
 	bf2.skip(4 * h * mapAddressSkip);
-
+debugger
 	for(let i = 0;i < 32;i++) {
 		for(let j = 0;j < h;j++) {
 			let tile = bf2.getuShort();
 			let pal = bf2.get();
 			let flag = bf2.get();
+			tile += (flag & 0xF0) << 12;
 			let a8 = flag & 0b1000;	// 8 frame auto animation
 			let a4 = flag & 0b0100;	// 4 frame auto animation
 			if(a8) {
