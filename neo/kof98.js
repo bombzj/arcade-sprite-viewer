@@ -31,9 +31,7 @@ function movetoTile(tile) {
 	refresh()
 }
 
-var animAddress = [
-	
-];
+var animAddress = 0x240000;
 var curAnim;	// current animation index
 var curAnimAct;	// current animation index
 // show object animation from rom address
@@ -89,7 +87,7 @@ function loopDrawAnimation(base, addr, offset) {
 	let y = bf.getShort();
 	let af = bf.getShort();		// sprite offset
 
-	let addr2 = bf.getInt(0x240000 + curAnim * 4);
+	let addr2 = bf.getInt(animAddress + curAnim * 4);
 
 	let frame = getRomFrame(addr2, af);
 	if(!frame) {
@@ -494,7 +492,7 @@ function loadRomFrame() {
 	var bf = new bytebuffer(romFrameData);
 	
 	for(let i = 0;i < 44;i++) {
-		let addr = bf.getInt(0x240000 + i * 4);
+		let addr = bf.getInt(animAddress + i * 4);
 		frameAddress.push(addr);
 		if(palmap[i])
 			spritePaletteMap.set(addr, palmap[i]);
