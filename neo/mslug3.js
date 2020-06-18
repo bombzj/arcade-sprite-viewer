@@ -172,11 +172,14 @@ let mapGrid = 2;		// each map tile contains 4 raw tiles?
 // draw a background with tilemap
 
 var autoAnim = 0;
-var memoryPage = new Map([
-	[0xD570, 0x100000], 
-	[0x200, -0x100000], 
-	[0x8854, 0x200000],
-	[0xC9AC, 0x300000]
+var memoryPageOffset = 49;	// after memory map, add this
+var memoryMap = new Map([
+	[0x05BA, 0],
+	[0x0200, -23], 
+	[0xD570, 1], 
+	[0xC9AC, -7],
+	[0xDC2E, -11],
+	[0x1540, 8]
 ]);
 
 function drawMap() {
@@ -194,7 +197,7 @@ function drawMap() {
 	let addr2 = (bf.getShort() << 3) + 0x1002;
 	let page = bf.getuShort(addr2);	// memory page
 	debugger
-	let addr3 = bf.getInt(addr2 + 2) + memoryPage.get(page);
+	let addr3 = bf.getInt(addr2 + 2) + (memoryMap.get(page) + memoryPageOffset) * 0x10000;
 	let offset = bf.getuShort();
 	bf.skip(4);
 	let x = bf.getShort();
