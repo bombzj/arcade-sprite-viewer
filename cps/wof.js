@@ -107,12 +107,53 @@ function setMapTileStart(mapstart) {
 
 
 frameAddress = [
-
+	0x6FF94, 0x755F2
 ];
 
 // get frame from addr. return a frame obj
 function getRomFrame(addr){
-
+	var bf = new bytebuffer(romFrameData);
+	bf.position(addr);
+	let func = bf.get();
+	if(func == 0x8) {
+		
+	}else if(func == 0xc) {	// with 2 sub frames
+		bf.skip();
+		addr = bf.getInt();
+		bf.position(addr + 1);
+	} else {
+		labelInfo.innerHTML = 'unsupported';
+		return;
+	}
+	bf.skip(2);
+	
+	let frame = {
+			sprites : []
+	};//debugger
+	let cnt = bf.get();
+	for(let i = 0;i < cnt;i++) {
+		let x = bf.getShort();
+		let y = -bf.getShort();
+		let nxy = bf.get();
+		let nx = nxy % 16;
+		let ny = nxy >> 4;
+		let palette = bf.get();
+		let tile = bf.getShort();
+		let sprite = {
+				x : x,
+				y : y,
+				tile : tile,
+				nx : nx + 1,
+				ny : ny + 1,
+				vflip : palette & 0x40,	// this tile need flip
+				hflip : palette & 0x20,	// this tile need flip
+				pal : palette & 0x1F,
+			};
+		
+		frame.sprites.push(sprite);
+	}
+	
+	return frame;
 }
 
 
