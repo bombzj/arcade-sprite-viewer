@@ -159,7 +159,7 @@ function drawAnimationFrame(addr, c = ctx, offx = 128, offy = 160, cbbase = 0x10
 
 
 var mapAddress = [
-	0x2E0B0, 0x2E01C, 0x2E066, 
+	0x2E01C, 0x2E066, 0x2E0B0
 	//0x54574, 0xC82AC, 0xCAC6A, 0x55452, 0x56638, 0x58BD6, 0x549A2, 0x4E1D0, 0xC7A5A
 ];
 var map2Address = 0x1923A;	// layer 2 background
@@ -170,6 +170,7 @@ let mapGrid = 2;		// each map tile contains 4 raw tiles?
 // draw a background with tilemap
 
 var autoAnim = 0;
+var memoryPage = new Map([[0xD570, 0x100000], [0x200, -0x100000], [0x8854, 0x200000]]);
 
 function drawMap() {
 	palset = curMap;
@@ -183,14 +184,22 @@ function drawMap() {
 	var imageData = ctxBack.createImageData(gridWidth, gridHeight);
 
 	bf.position(addr);
-	let addr2 = bf.getInt();
-	let addr3 = bf.getInt();
+	let addr2 = (bf.getShort() << 3) + 0x1002;
+	let page = bf.getuShort(addr2);	// memory page
+	debugger
+	let addr3 = bf.getInt(addr2 + 2) + memoryPage.get(page);
+	let offset = bf.getuShort();
+	bf.skip(4);
 	let x = bf.getShort();
 	let h = bf.getShort();
+	if(h > 0x100) {	// too 
+		debugger;
+		return;
+	}
 
 	labelInfo.innerText += ' height:'+h;
 
-	bf2.position(0x200000 + 0x100000);
+	bf2.position(addr3 + offset);
 	bf2.skip(4 * h * mapAddressSkip);
 debugger
 	for(let i = 0;i < 32;i++) {
