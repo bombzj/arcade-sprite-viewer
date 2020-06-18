@@ -1,0 +1,4 @@
+
+ROM:00017A3A    move.w  d7,(unk_2FFFE4).l ; switch memory
+
+uses 2bytes from 0x2FFFE4 to move memory data, a protective mechanism
