@@ -2,3 +2,65 @@
 ROM:00017A3A    move.w  d7,(unk_2FFFE4).l ; switch memory
 
 uses 2bytes from 0x2FFFE4 to move memory data, a protective mechanism
+
+mame drivers/neogeo.cpp
+WRITE16_MEMBER(neogeo_base_state::write_bankprot)
+{
+	m_bank_base = m_slots[m_curr_slot]->get_bank_base(data);
+	m_bank_cartridge->set_base((uint8_t *)m_slots[m_curr_slot]->get_rom_base() + m_bank_base);
+}
+
+after code 17A3A, see what d7 affect memory
+
+find 200000,100000,w.2a7a,2a74 before switching (default 05BA)
+200038
+
+0200 -> ??      -23     // page 0?
+D570 -> 210038  +1
+8854 -> 260038  +6
+
+C9AC -> ??      -7
+DC2E -> ??      -11
+1540 -> 280038  +8
+
+5DD2 -> 270038  +7
+
+
+find 200000,100000,w.9d8e,9d8f
+24006A
+0200 -> ??
+D570 -> 25006A
+8854 -> 2A006A
+
+C9AC -> ??
+DC2E -> ??
+1540 -> 2C006A
+
+
+find 200000,100000,w.0010,0102,fb29
+2D01E8
+0200 -> ??
+D570 -> 2E01E8
+8854 -> ?
+
+C9AC -> 2601E8
+DC2E -> 2201E8
+1540 -> ?
+
+
+
+when 1540 find 200000,100000,w.0121,1160
+200024
+
+0200 -> ??
+D570 -> ??
+8854 -> ??
+
+C9AC -> ??
+DC2E -> ??
+
+
+when DC2E find 200000,100000,w.3c60,0e90
+2e0042
+
+0200 -> 210042  -12
