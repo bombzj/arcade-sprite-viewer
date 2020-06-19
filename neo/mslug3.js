@@ -40,6 +40,7 @@ function loadRomPal() {
 }
 
 function mslugPalette(addr) {
+	var rombase = unscramble(0x0904);
 	var bf = new bytebuffer(romFrameData);
 	var bf2 = new bytebuffer(romFrameData);
 
@@ -50,7 +51,7 @@ function mslugPalette(addr) {
 		}
 		let idx = bf.getShort(addr + 2);		// write from
 		idx <<= 5;
-		let addr2 = 0x200000 + idx;
+		let addr2 = 0x200000 + idx + rombase;
 		bf2.position(addr2);
 
 		let to = idx2 * 0x10;
@@ -62,7 +63,7 @@ function mslugPalette(addr) {
 			if(dt > 0x8000) {	// signed because ROM:000809EE    move.w  (a3,d0.w),(a4)+
 				dt -= 0x10000;
 			}
-			let addr3 = 0x220000 + dt;		
+			let addr3 = 0x220000 + dt + rombase;		
 			let color = bf.getuShort(addr3);
 			palData[i + to + 1] = neo2rgb(color);
 		}
@@ -74,12 +75,13 @@ function mslugPalette(addr) {
 var palette_empty = 0x60;
 // palette not fixed in position
 function mslugPalette2(addr) {
+	var rombase = unscramble(0x05BA);
 	var bf = new bytebuffer(romFrameData);
 	var bf2 = new bytebuffer(romFrameData);
 
 	let idx = addr;		// write from
 	idx <<= 5;
-	let addr2 = 0x200000 + idx;
+	let addr2 = 0x200000 + idx + rombase;
 	bf2.position(addr2);
 
 	let to = palette_empty * 0x10;
@@ -91,7 +93,7 @@ function mslugPalette2(addr) {
 		if(dt > 0x8000) {	// signed because ROM:000809EE    move.w  (a3,d0.w),(a4)+
 			dt -= 0x10000;
 		}
-		let addr3 = 0x214000 + dt;		
+		let addr3 = 0x214000 + dt + rombase;		
 		let color = bf.getuShort(addr3);
 		palData[i + to + 1] = neo2rgb(color);
 	}
@@ -172,15 +174,6 @@ let mapGrid = 2;		// each map tile contains 4 raw tiles?
 // draw a background with tilemap
 
 var autoAnim = 0;
-var memoryPageOffset = 49;	// after memory map, add this
-var memoryMap = new Map([
-	[0x05BA, 0],
-	[0x0200, -23], 
-	[0xD570, 1], 
-	[0xC9AC, -7],
-	[0xDC2E, -11],
-	[0x1540, 8]
-]);
 
 function drawMap() {
 	palset = curMap;
@@ -197,7 +190,7 @@ function drawMap() {
 	let addr2 = (bf.getShort() << 3) + 0x1002;
 	let page = bf.getuShort(addr2);	// memory page
 	debugger
-	let addr3 = bf.getInt(addr2 + 2) + (memoryMap.get(page) + memoryPageOffset) * 0x10000;
+	let addr3 = bf.getInt(addr2 + 2) + unscramble(page);
 	let offset = bf.getuShort();
 	bf.skip(4);
 	let x = bf.getShort();
@@ -211,7 +204,7 @@ function drawMap() {
 
 	bf2.position(addr3 + offset);
 	bf2.skip(4 * h * mapAddressSkip);
-debugger
+
 	for(let i = 0;i < 32;i++) {
 		for(let j = 0;j < h;j++) {
 			let tile = bf2.getuShort();
@@ -325,4 +318,39 @@ function loadRomFrame() {
 	// 	// if(palmap[i])
 	// 	// 	spritePaletteMap.set(addr, palmap[i]);
 	// }
+}
+
+
+function unscramble(sel) {
+	var bankoffset =
+	[
+		0x000000, 0x020000, 0x040000, 0x060000, // 00
+		0x070000, 0x090000, 0x0b0000, 0x0d0000, // 04
+		0x0e0000, 0x0f0000, 0x120000, 0x130000, // 08
+		0x140000, 0x150000, 0x180000, 0x190000, // 12
+		0x1a0000, 0x1b0000, 0x1e0000, 0x1f0000, // 16
+		0x200000, 0x210000, 0x240000, 0x250000, // 20
+		0x260000, 0x270000, 0x2a0000, 0x2b0000, // 24
+		0x2c0000, 0x2d0000, 0x300000, 0x310000, // 28
+		0x320000, 0x330000, 0x360000, 0x370000, // 32
+		0x380000, 0x390000, 0x3c0000, 0x3d0000, // 36
+		0x400000, 0x410000, 0x440000, 0x450000, // 40
+		0x460000, 0x470000, 0x4a0000, 0x4b0000, // 44
+		0x4c0000, // rest not used?
+	];
+
+	// unscramble bank number
+	let data =
+		(BIT(sel, 14) << 0)+
+		(BIT(sel, 12) << 1)+
+		(BIT(sel, 15) << 2)+
+		(BIT(sel,  6) << 3)+
+		(BIT(sel,  3) << 4)+
+		(BIT(sel,  9) << 5);
+
+	return -0x100000 + bankoffset[data];
+}
+
+function BIT(sel, n) {
+	return (sel >> n) & 1;
 }
