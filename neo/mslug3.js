@@ -3,6 +3,8 @@
 var palsetAddress = [
 	0x2E152, 0x2E152, 0x2E152, 
 	0x2E67E, 0x2E67E, 0x2E67E, 
+	0x2E85C, 0x2E85C,
+	0xF7126, 0xF7126,
 	//0x545D4, 0xC8374, 0xCAEAA, 0x55482, 0x566CA, 0x57CEC, 0x545D4, 0x4E226, 0x545D4
 ];
 
@@ -164,6 +166,8 @@ function drawAnimationFrame(addr, c = ctx, offx = 128, offy = 160, cbbase = 0x10
 var mapAddress = [
 	0x2E01C, 0x2E066, 0x2E0B0,
 	0x2E560, 0x2E5BE, 0x2E622,
+	0x2E806, 0x2E82E,
+	0xF6FD2, 0xF7052
 	//0x54574, 0xC82AC, 0xCAC6A, 0x55452, 0x56638, 0x58BD6, 0x549A2, 0x4E1D0, 0xC7A5A
 ];
 var map2Address = 0x1923A;	// layer 2 background
@@ -309,8 +313,10 @@ var palmap = [
 
 ];
 
+var levelAddress = 0xECE2C;	// all level data begin here
 function loadRomFrame() {
-	// var bf = new bytebuffer(romFrameData);
+	var bf = new bytebuffer(romFrameData);
+	var bf2 = new bytebuffer(romFrameData);
 	
 	// for(let i = 0;i < 21;i++) {
 	// 	let addr = bf.getInt(0x120280 + i * 4);
@@ -318,6 +324,32 @@ function loadRomFrame() {
 	// 	// if(palmap[i])
 	// 	// 	spritePaletteMap.set(addr, palmap[i]);
 	// }
+
+	// load level data to palette and map
+	// palsetAddress = [];
+	// mapAddress = [];
+	bf.position(levelAddress);
+	for(let i = 0;i < 19;i++) {
+		let addr = bf.getInt();
+		let dataaddr = bf.getInt(addr + 6);
+		bf2.position(dataaddr);
+
+		let palette;
+		for(let j = 0;j < 100;j++) {
+			let func = bf2.getShort();
+			if(func == 0x28) {		// end of level data
+				break;
+			} else if(func == 0x4) {
+				palette = bf2.getInt();
+			} else if(func == 0x24) {
+				let x = bf2.getShort();
+				let bg = bf2.getInt();
+				palsetAddress.push(palette);
+				mapAddress.push(bg + 0x8);
+			}
+		}
+
+	}
 }
 
 

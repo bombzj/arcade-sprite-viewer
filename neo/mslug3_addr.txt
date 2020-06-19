@@ -1,4 +1,96 @@
 
+[level data]
+ROM:000ECE2C level_data_table:dc.l off_EC23E
+ROM:000ECE30                 dc.l off_EC376
+ROM:000ECE34                 dc.l off_EC4B8
+ROM:000ECE38                 dc.l off_EC5CC
+ROM:000ECE3C                 dc.l unk_EC87C
+ROM:000ECE40                 dc.l unk_ECAAA
+
+
+ROM:000ED148                 move.l  a0,$6A(a6)
+  then
+ROM:000ED38A                 movea.l $6A(a6),a4
+ROM:000ED38E                 movea.l 2(a4),a0        ; a4 = EC242
+  then
+ROM:000196D2 init_func:                              ; CODE XREF: level_update:loc_1988A↓p
+ROM:000196D2
+ROM:000196D2 ; FUNCTION CHUNK AT ROM:000165FA SIZE 00000008 BYTES
+ROM:000196D2
+ROM:000196D2                 move.w  (a1)+,d7
+ROM:000196D4                 jmp     loc_196D8(pc,d7.w)
+
+
+[background]
+ROM:0002E394                 dc.b   0                ; 1-1
+ROM:0002E395                 dc.b   8                ; func = 0x0008
+ROM:0002E396                 dc.b   0
+ROM:0002E397                 dc.b   2
+ROM:0002E398                 dc.b $DD
+ROM:0002E399                 dc.b $88
+ROM:0002E39A                 dc.w 0                  ; func = 0
+ROM:0002E39C                 dc.w 0
+ROM:0002E39E                 dc.w $30
+ROM:0002E3A0                 dc.l unk_2E0C2
+ROM:0002E3A4                 dc.w $14                ; func = 0x14
+ROM:0002E3A6                 dc.w 0
+ROM:0002E3A8                 dc.w 0
+ROM:0002E3AA                 dc.w 0
+ROM:0002E3AC                 dc.w $14                ; func = 0x14
+ROM:0002E3AE                 dc.w 4
+ROM:0002E3B0                 dc.w 0
+ROM:0002E3B2                 dc.w 0
+ROM:0002E3B4                 dc.w $14                ; func = 0x14
+ROM:0002E3B6                 dc.w 8
+ROM:0002E3B8                 dc.w 0
+ROM:0002E3BA                 dc.w 0
+ROM:0002E3BC                 dc.w $14                ; func = 0x14
+ROM:0002E3BE                 dc.w $C
+ROM:0002E3C0                 dc.w 0
+ROM:0002E3C2                 dc.w 0
+ROM:0002E3C4                 dc.w 4                  ; func = 0x4
+ROM:0002E3C6                 dc.l unk_2E152          ; palette load page
+ROM:0002E3CA                 dc.w $10                ; func = 0x10
+ROM:0002E3CC                 dc.l unk_37E00
+ROM:0002E3D0                 dc.w $34                ; func = 0x34
+ROM:0002E3D2                 dc.w $FFFF
+ROM:0002E3D4                 dc.w $44                ; func = 0x44
+ROM:0002E3D6                 dc.w $9D0
+ROM:0002E3D8                 dc.w $9D4
+ROM:0002E3DA                 dc.w $C                 ; func = 0xC
+ROM:0002E3DC                 dc.l unk_F5D2C
+ROM:0002E3E0                 dc.w $40                ; func = 0x40
+ROM:0002E3E2                 dc.b   0
+ROM:0002E3E3                 dc.b  $A
+ROM:0002E3E4                 dc.w $30                ; func = 0x30
+ROM:0002E3E6                 dc.b   0
+ROM:0002E3E7                 dc.b $60 ; `
+ROM:0002E3E8                 dc.b   0
+ROM:0002E3E9                 dc.b $80
+ROM:0002E3EA                 dc.b   0
+ROM:0002E3EB                 dc.b   0
+ROM:0002E3EC                 dc.b   0
+ROM:0002E3ED                 dc.b   0
+ROM:0002E3EE                 dc.w $3C                ; func = 0x3C
+ROM:0002E3F0                 dc.b $FF
+ROM:0002E3F1                 dc.b $F0
+ROM:0002E3F2                 dc.w $24                ; func = 0x24, background
+ROM:0002E3F4                 dc.w 0
+ROM:0002E3F6                 dc.l unk_2E014          ; 1-1 map1
+ROM:0002E3FA                 dc.w $24                ; func = 0x24
+ROM:0002E3FC                 dc.w 4
+ROM:0002E3FE                 dc.l unk_2E05E          ; 1-1 map2
+ROM:0002E402                 dc.w $24                ; func = 0x24
+ROM:0002E404                 dc.w 8
+ROM:0002E406                 dc.l unk_2E0A8          ; 1-1 map3
+ROM:0002E40A                 dc.w $18                ; func = 0x18
+
+
+
+
+
+
+
 ROM:00017A3A    move.w  d7,(unk_2FFFE4).l ; switch memory
 
 uses 2bytes from 0x2FFFE4 to move memory data, a protective mechanism
