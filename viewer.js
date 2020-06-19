@@ -998,6 +998,7 @@ window.addEventListener("keydown", function (event) {
 			break;
 		case 'p':
 			showPal = !showPal;
+			ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
 			loadRomPal();
 			saveStatus();
 			break;
