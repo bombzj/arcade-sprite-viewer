@@ -13,6 +13,8 @@
 ![mslug2 background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/mapmslug2.gif)<br/>
 ![mslug2 background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/map2mslug2.png)
 ![mslug2 animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animmslug2.gif)<br/>
+## mslug3
+![mslug2 background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/mapmslug3.gif)<br/>
 ## kof2000
 ![kof2000 animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animkof2000.gif)<br/>
 ![kof2000 animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/anim2kof2000.gif)<br/>
