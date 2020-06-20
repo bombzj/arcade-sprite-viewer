@@ -175,7 +175,7 @@ function drawAnimationFrame(addr, c = ctx, offx = 128, offy = 160, cbbase = 0x10
 
 
 var mapAddress = [
-	0x2E01C, 0x2E066, 0x2E0B0,	// level 1
+	0x2E014, 0x2E05E, 0x2E0A8,	// level 1
 	// 0x2E560, 0x2E5BE, 0x2E622,
 	// 0x2E806, 0x2E82E,
 	// 0xF6FD2, 0xF7052,			// level 2
@@ -212,26 +212,53 @@ function drawMap() {
 	ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
 	var imageData = ctxBack.createImageData(gridWidth, gridHeight);
 
-	bf.position(addr);
-	let addr2 = (bf.getShort() << 3) + 0x1002;
+	let countdown = mapScene;
+	let addr2, offset, w, h, saveaddr;	// save addr for display
+	let nextbg;	// next background in the same scene
+	bf.position(addr);debugger
+	for(let j = 0;j < 10;j++) {
+		let func = bf.getShort();
+		if(func == 0) {
+			let tmp1 = bf.getShort();
+			nextbg = bf.getShort();
+		} else if(func == 0x4) {
+			saveaddr = bf.position();
+			addr2 = bf.getShort();
+			offset = bf.getuShort();
+			bf.skip(4);
+			w = bf.getShort();
+			h = bf.getShort();
+			let tmp1 = bf.getInt();
+			if(addr2 == 0) {		// skip this
+				continue;
+			}
+			if(--countdown < 0) {
+				break;	// found a background
+			}
+		} else {
+			labelInfo.innerText += ' bg not found';
+			return;
+		}
+	}
+
+
+	
+	addr2 = (addr2 << 3) + 0x1002;
 	let page = bf.getuShort(addr2);	// memory page
-	debugger
 	let addr3 = bf.getInt(addr2 + 2) + unscramble(page);
-	let offset = bf.getuShort();
-	bf.skip(4);
-	let x = bf.getShort();
-	let h = bf.getShort();
+
 	if(h > 0x100) {	// too 
 		debugger;
 		return;
 	}
 
-	labelInfo.innerText += ' height:'+h;
+	labelInfo.innerText += ' height:'+h+' addr:' + saveaddr.toString(16).toUpperCase();
 
 	bf2.position(addr3 + offset);
 	bf2.skip(4 * h * mapAddressSkip);
 
-	for(let i = 0;i < 32;i++) {
+	let imax = Math.min(w - mapAddressSkip, 34);
+	for(let i = 0;i < imax;i++) {
 		for(let j = 0;j < h;j++) {
 			let tile = bf2.getuShort();
 			let pal = bf2.get();
@@ -387,7 +414,7 @@ function loadRomFrame() {
 					let x = bf2.getShort();
 					let bg = bf2.getInt();
 					palsetAddress.push(palette);
-					mapAddress.push(getbgtile(bg));
+					mapAddress.push(bg);
 				} else if(func == 0x34 || func == 0x40 || func == 0x3C || func == 0x48 || func == 0x20) {
 					bf2.skip(2);
 				} else if(func == 0x14 || func == 0x18) {
@@ -408,21 +435,6 @@ function loadRomFrame() {
 		}
 	}
 	maxMap = mapAddress.length;
-}
-
-function getbgtile(addr) {
-	// var bf = new bytebuffer(romFrameData, addr);
-	// for(let j = 0;j < 100;j++) {
-	// 	let func = bf2.getShort();
-	// 	if(func == 0) {
-	// 		let tmp1 = bf.getShort();
-	// 		let tmp2 = bf.getShort();
-	// 	} else if(func == 0x4) {
-	// 		let tmp1 = bf.getShort();
-	// 		let tmp2 = bf.getShort();
-	// 	}
-	// }
-	return addr + 0x8;
 }
 
 
