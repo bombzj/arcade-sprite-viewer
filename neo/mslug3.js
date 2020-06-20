@@ -2,20 +2,20 @@
 
 var palsetAddress = [
 	0x2E152, 0x2E152, 0x2E152, 
-	0x2E67E, 0x2E67E, 0x2E67E, 
-	0x2E85C, 0x2E85C,
-	0xF7126, 0xF7126,			// level 2
-	0x2E94C, 0x2E94C,
-	0x2EB38,
-	0x287EE, 0x287EE,			// level 3
-	0x2ED16, 0x2ED16,
-	0x2F09C, 0x2F09C, 0x2F09C,
-	0x337D6,
-	0x2F41C, 0x2F41C, 0x2F41C,
-	0x2F672, 0x2F672,
-	0x2FA26, 0x2FA26, 0x2FA26,
-	0x2FDAC, 0x2FDAC, 0x2FDAC,	// level 4
-	0x3627A, 0x3627A,
+	// 0x2E67E, 0x2E67E, 0x2E67E, 
+	// 0x2E85C, 0x2E85C,
+	// 0xF7126, 0xF7126,			// level 2
+	// 0x2E94C, 0x2E94C,
+	// 0x2EB38,
+	// 0x287EE, 0x287EE,			// level 3
+	// 0x2ED16, 0x2ED16,
+	// 0x2F09C, 0x2F09C, 0x2F09C,
+	// 0x337D6,
+	// 0x2F41C, 0x2F41C, 0x2F41C,
+	// 0x2F672, 0x2F672,
+	// 0x2FA26, 0x2FA26, 0x2FA26,
+	// 0x2FDAC, 0x2FDAC, 0x2FDAC,	// level 4
+	// 0x3627A, 0x3627A,
 	//0x545D4, 0xC8374, 0xCAEAA, 0x55482, 0x566CA, 0x57CEC, 0x545D4, 0x4E226, 0x545D4
 ];
 
@@ -176,20 +176,20 @@ function drawAnimationFrame(addr, c = ctx, offx = 128, offy = 160, cbbase = 0x10
 
 var mapAddress = [
 	0x2E01C, 0x2E066, 0x2E0B0,	// level 1
-	0x2E560, 0x2E5BE, 0x2E622,
-	0x2E806, 0x2E82E,
-	0xF6FD2, 0xF7052,			// level 2
-	0x2E912, 0x2E92C,
-	0x2EB0E,
-	0x287B4, 0x287CE,			// level 3
-	0x2ECCE, 0x2ECE8,
-	0x2EF04, 0x2EF50, 0x2EFBE,
-	0x337A8,
-	0x2F3C8, 0x2F3E2, 0x2F3FC,
-	0x2F56C, 0x2F5EC,
-	0x2F98E, 0x2F9CA, 0x2F9E4,
-	0x2FCBC, 0x2FBF8, 0x2FD34,	// level 4
-	0x36238, 0x3625A,			// level 5
+	// 0x2E560, 0x2E5BE, 0x2E622,
+	// 0x2E806, 0x2E82E,
+	// 0xF6FD2, 0xF7052,			// level 2
+	// 0x2E912, 0x2E92C,
+	// 0x2EB0E,
+	// 0x287B4, 0x287CE,			// level 3
+	// 0x2ECCE, 0x2ECE8,
+	// 0x2EF04, 0x2EF50, 0x2EFBE,
+	// 0x337A8,
+	// 0x2F3C8, 0x2F3E2, 0x2F3FC,
+	// 0x2F56C, 0x2F5EC,
+	// 0x2F98E, 0x2F9CA, 0x2F9E4,
+	// 0x2FCBC, 0x2FBF8, 0x2FD34,	// level 4
+	// 0x36238, 0x3625A,			// level 5
 	//0x54574, 0xC82AC, 0xCAC6A, 0x55452, 0x56638, 0x58BD6, 0x549A2, 0x4E1D0, 0xC7A5A
 ];
 var map2Address = 0x1923A;	// layer 2 background
@@ -350,53 +350,67 @@ function loadRomFrame() {
 	// load level data to palette and map
 	// palsetAddress = [];
 	// mapAddress = [];
-	bf.position(levelAddress);
-	for(let i = 0;i < 19;i++) {
-		let addr = bf.getInt();
-		let dataaddr = bf.getInt(addr + 6);
-		bf2.position(dataaddr);
-
-		let palette;
-		for(let j = 0;j < 100;j++) {
-			let func = bf2.getShort();
-			if(func == 0x28) {		// end of level data?
-				let status = bf2.getShort();
-				if(status > 0) {
-					break;
-				}
-			} else if(func == 0x2C) {
-				let status = bf2.getShort();
-				if(status > 0) {
-					break;
-				}
-				bf2.skip(4);
-			} else if(func == 0x4) {
-				palette = bf2.getInt();
-			} else if(func == 0x24) {
-				let x = bf2.getShort();
-				let bg = bf2.getInt();
-				palsetAddress.push(palette);
-				mapAddress.push(getbacktile(bg));
-			} else if(func == 0x34 || func == 0x40 || func == 0x3C || func == 0x48) {
-				bf2.skip(2);
-			} else if(func == 0x14 || func == 0x18) {
-				bf2.skip(6);
-			} else if(func == 0x0 || func == 0x30) {
-				bf2.skip(8);
-			} else if(func == 0x8 || func == 0x10 || func == 0x44 || func == 0xC || func == 0x1C) {
-				bf2.skip(4);
-			} else {
-				labelInfo.innerText = 'unknown func 0x' + func.toString(16).toUpperCase() + ' at ' +
-					(bf2.position()-2).toString(16).toUpperCase();
-				debugger
+	for(let s = 0;s < 5;s++) {
+		let sceneAddr = bf.getInt(levelAddress + s * 4);	// all scenes are linked together
+		bf.position(sceneAddr + 2);
+		for(let i = 0;i < 100;i++) {
+			let offset = bf.getShort();
+			if(offset == 0) {
 				break;
 			}
+			let nextScene = bf.position() + offset;
+			let funcScene = bf.get();
+			bf.skip();
+	
+			let dataaddr = bf.getInt();
+			bf2.position(dataaddr);
+	
+			let palette;
+			for(let j = 0;j < 100;j++) {
+				let func = bf2.getShort();
+				if(func == -1) {
+					break;
+				} else if(func == 0x28) {		// end of level data?
+					let status = bf2.getShort();
+					if(status > 0) {
+						break;
+					}
+				} else if(func == 0x2C) {
+					let status = bf2.getShort();
+					if(status > 0) {
+						break;
+					}
+					bf2.skip(4);
+				} else if(func == 0x4) {
+					palette = bf2.getInt();
+				} else if(func == 0x24) {
+					let x = bf2.getShort();
+					let bg = bf2.getInt();
+					palsetAddress.push(palette);
+					mapAddress.push(getbgtile(bg));
+				} else if(func == 0x34 || func == 0x40 || func == 0x3C || func == 0x48 || func == 0x20) {
+					bf2.skip(2);
+				} else if(func == 0x14 || func == 0x18) {
+					bf2.skip(6);
+				} else if(func == 0x0 || func == 0x30 || func == 0x4C || func == 0x38) {
+					bf2.skip(8);
+				} else if(func == 0x8 || func == 0x10 || func == 0x44 || func == 0xC || func == 0x1C) {
+					bf2.skip(4);
+				} else {
+					labelInfo.innerText = 'unknown func 0x' + func.toString(16).toUpperCase() + ' at ' +
+						(bf2.position()-2).toString(16).toUpperCase();
+					debugger
+					break;
+				}
+			}
+	
+			bf.position(nextScene);
 		}
-
-	}debugger
+	}
+	maxMap = mapAddress.length;
 }
 
-function getbacktile(addr) {
+function getbgtile(addr) {
 	// var bf = new bytebuffer(romFrameData, addr);
 	// for(let j = 0;j < 100;j++) {
 	// 	let func = bf2.getShort();

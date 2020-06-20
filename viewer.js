@@ -47,6 +47,7 @@ var curRomFrame;
 var curRomFrame2 = 0;		// if more than one frames together
 var curMap;
 var romName;
+var maxMap = 100;
 
 function init(name) {
 	romName = name;
@@ -771,8 +772,8 @@ window.addEventListener("keydown", function (event) {
 				} else if(mode == 2 || mode == 3) {
 					//if(curMap < mapTileAddress.length - 1) {
 					curMap++;
-					if(curMap >= 100)
-						curMap = 100;
+					if(curMap >= maxMap)
+						curMap = maxMap;
 					mapScene=0;
 					mapAddressSkip=0;
 					mapAddressSkipY=0;

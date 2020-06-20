@@ -7,13 +7,22 @@ ROM:000ECE38                 dc.l off_EC5CC
 ROM:000ECE3C                 dc.l unk_EC87C
 ROM:000ECE40                 dc.l unk_ECAAA
 
-
+ROM:000ED1CC func1_list:                             ; CODE XREF: ROM:000ED1C6↑j
+ROM:000ED1CC                 jmp     loc_ED1D0(pc,d0.w)
+ROM:000ED1D0 loc_ED1D0:                              ; CODE XREF: ROM:func1_list↑j
+ROM:000ED1D0                 bra.w   loc_ED1E8
+ROM:000ED1D4                 bra.w   loc_ED214
+ROM:000ED1D8                 bra.w   loc_ED240
+ROM:000ED1DC                 bra.w   loc_ED258
+ROM:000ED1E0                 bra.w   loc_ED270
+ROM:000ED1E4                 bra.w   loc_ED288
+  then
 ROM:000ED148                 move.l  a0,$6A(a6)
   then
 ROM:000ED38A                 movea.l $6A(a6),a4
 ROM:000ED38E                 movea.l 2(a4),a0        ; a4 = EC242
   then
-ROM:000196D2 init_func:                              ; CODE XREF: level_update:loc_1988A↓p
+ROM:000196D2 func2_list:                              ; CODE XREF: level_update:loc_1988A↓p
 ROM:000196D2
 ROM:000196D2 ; FUNCTION CHUNK AT ROM:000165FA SIZE 00000008 BYTES
 ROM:000196D2
@@ -87,27 +96,20 @@ ROM:0002E40A                 dc.w $18                ; func = 0x18
 
   then
 
-ROM:000194A6 func2_list:                             ; CODE XREF: sub_19480:loc_194A2↑j
+ROM:000194A6 func3_list:                             ; CODE XREF: sub_19480:loc_194A2↑j
 ROM:000194A6                 bra.w   loc_194C6
-ROM:000194AA ; ---------------------------------------------------------------------------
 ROM:000194AA                 bra.w   loc_194EC
-ROM:000194AE ; ---------------------------------------------------------------------------
 ROM:000194AE                 bra.w   loc_195BA
-ROM:000194B2 ; ---------------------------------------------------------------------------
 ROM:000194B2                 bra.w   loc_195E0
-ROM:000194B6 ; ---------------------------------------------------------------------------
 ROM:000194B6                 bra.w   loc_19610
-ROM:000194BA ; ---------------------------------------------------------------------------
 ROM:000194BA                 bra.w   loc_19638
-ROM:000194BE ; ---------------------------------------------------------------------------
 ROM:000194BE                 bra.w   loc_19684
-ROM:000194C2 ; ---------------------------------------------------------------------------
 ROM:000194C2                 bra.w   loc_194DE
 
 
 
 
-
+[rom prot]
 ROM:00017A3A    move.w  d7,(unk_2FFFE4).l ; switch memory
 
 uses 2bytes from 0x2FFFE4 to move memory data, a protective mechanism
