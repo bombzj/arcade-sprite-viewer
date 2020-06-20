@@ -21,6 +21,8 @@
 ![captcomm animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animcapt.gif)<br/>
 ![captcomm background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/mapcapt.png)<br/>
 
+## wof
+![wof background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/mapwof.png)<br/>
 
 # TODO
 * more games
