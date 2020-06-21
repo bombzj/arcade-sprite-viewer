@@ -22,6 +22,7 @@
 ![captcomm background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/mapcapt.png)<br/>
 
 ## wof
+![wof animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animwof.gif)<br/>
 ![wof background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/mapwof.png)<br/>
 
 # TODO
