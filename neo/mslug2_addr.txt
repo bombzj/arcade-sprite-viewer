@@ -1,6 +1,18 @@
 
 
 [sprite]
+ROM:00033EE6                 lea     off_33E6A,a0
+  then
+ROM:00033F18                 lea     (a0,d0.w),a0    ; a0=33e6a
+ROM:00033F1C                 move.l  (a0)+,$72(a6)
+ROM:00033F20                 move.l  (a0)+,$6C(a6)
+ROM:00033F24                 move.l  (a0)+,d0
+  then
+ROM:00034028                 movea.l $6C(a6),a0      ; a0=33BB0
+  then
+ROM:000055A4                 move.l  8(a0),d0
+ROM:000055A8                 add.l   d0,(a0)
+  then
 ROM:0007A87E obj_update_sprite2:
 ROM:0007A87E                 move.l  a0,d7
 ROM:0007A880                 bne.w   loc_7A886       ; a0=11f222

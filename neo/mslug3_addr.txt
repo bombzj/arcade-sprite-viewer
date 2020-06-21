@@ -1,4 +1,16 @@
 
+[sprite]
+
+ROM:00005570                 movem.l d0-d1,$14(a0)   ; d0=00ed 88b2, d1=0107 f26f, a0=101444
+
+ROM:0000DD5A                 movem.l d0-d1/d7,(a0)   ; d0=000c 3f40, d1=ffff 8d04, d7=aa24 71d2, a0=109196
+
+
+ROM:0000E0BA                 move.l  d0,(a6)         ; d0 = 1040 bbf4
+ROM:0000E0BC                 add.l   d2,d0
+ROM:0000E0BE                 move.l  d1,(a6)         ; d1 = 1041 8a20
+
+
 [level data]
 ROM:000ECE2C level_data_table:dc.l off_EC23E
 ROM:000ECE30                 dc.l off_EC376
