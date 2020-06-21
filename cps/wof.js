@@ -58,19 +58,89 @@ var playerCB = [	// collision boxes groups for 4 players
 	0x100000,0x100C00,0x101800,0x102400
 ];
 
-
+var animAddress = [
+	0x6F75A, 0x74C04
+];
 var curAnim;	// current animation index
 var curAnimAct;	// current animation index
 // show object animation from rom address
 var animTimer;
 function drawAnimation(addr) {
+	//	let addr = animAddress[curAnim];
+	var bf = new bytebuffer(romFrameData);
+	if(!addr)
+		addr = animAddress[curAnim];
+
+	if(animTimer) {
+		clearTimeout(animTimer)
+		animTimer = null;
+	}
+//	let addr = animAddress[curAnim];
+//	var bf = new bytebuffer(romFrameData);
+	
+//	let offset = bf.getShort(addr + curAnimAct * 2);
+//	if(offset == 0) {
+//		labelInfo.innerText = "EOF";
+//		return;
+//	}
+//	let startAddress = addr + offset;
+	
+
+	loopDrawAnimation(addr, 0xA);
 }
 function loopDrawAnimation(addr, offset) {
+	animTimer = null;
 
+	var bf = new bytebuffer(romFrameData, addr);
+	let fr = bf.getInt();
+	let link = bf.getInt();
+	let flag = bf.getShort();
+
+
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	drawRomFrame(fr);
+	addr += offset;
+
+	if(flag < 0)
+		return;
+	animTimer = setTimeout("loopDrawAnimation("+ addr +"," + offset+")", 200);
 }
 
 function drawAnimationFrame(addr, c = ctx, offx = 128, offy = 160, cbbase = 0x103000) {
-
+	var bf = new bytebuffer(romFrameData, addr);
+	let fr = bf.getShort();
+	let fr2 = bf.getShort();
+	let index = bf.getInt();	// ??
+	let cb1 = bf.get();	// collision box attack
+	let cb2 = bf.get();	// collision box defense
+	if(fr < 0) {
+		return fr;
+	}
+	
+	let frame = romFrames[fr / 4];
+	if(!frame) debugger
+	drawRomFrameBase(frame, c, offx, offy);
+	if(fr2 >= 0) {
+		let frame2 = romFrames[fr2 / 4];
+		if(!frame2) debugger
+		drawRomFrameBase(frame2, c, offx, offy);
+	}
+	
+	c.lineWidth = 1;
+	// draw cross
+	c.strokeStyle = 'purple';
+	c.moveTo(offx - 30, offy);
+	c.lineTo(offx + 30, offy);
+	c.moveTo(offx, offy - 30);
+	c.lineTo(offx, offy + 30);
+	c.stroke();
+	// draw collision box
+	bf.position(cbbase + 0xc * cb1);
+	c.strokeStyle = 'green';
+	drawCB(bf, c, offx, offy)
+	bf.position(cbbase + 0xc * cb2);
+	c.strokeStyle = 'red';
+	drawCB(bf, c, offx, offy)
 }
 
 function drawCB(bf, c = ctx, offx = 128, offy = 160) {
