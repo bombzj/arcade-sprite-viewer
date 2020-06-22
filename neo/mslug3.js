@@ -121,9 +121,10 @@ function movetoTile(tile) {
 }
 
 var animAddress = [
-	0x703AC, 0x2EB1C2, 0x96570, 0x2F2112, 0xBDC74, 0x46B78, 0x46EDE, 0x4735C, 0x47200,
-	0xC2F8, 0x68818, 0x688CC, 0x4A730, 0xC0BCA, 0xC12AC, 0x73DCC, 0x65CDA, 0x69E64,
-	0x5442E, 0x54384, 0x42DE8, 0xA22BC
+	0x3D69A6, 0x37B9C6, 0x3968C0, 0x396D10, 0x396DE0, 0x396E64, 0x396ECA, 0x3c6164,
+	0x3B3A5C, 0x3B3682, 0x3b4218,
+	0x3d7786, 0x3dab1e, 0x3c6618
+
 ];
 var curAnim;	// current animation index
 var curAnimAct;	// current animation index
@@ -139,22 +140,31 @@ function drawAnimation(addr) {
 		clearTimeout(animTimer)
 		animTimer = null;
 	}
+
+	let addr2 = (addr & 0x7FFFFF) >> 16;
+	let offset = addr & 0xFFFF;
+
+
+	addr2 = (addr2 << 3) + 0x1002;
+	let page = bf.getuShort(addr2);
+	let poffset = unscramble(page);
+	addr = bf.getInt(addr2 + 2) + poffset + offset;
 	
 
 	loopDrawAnimation(addr);
 }
 function loopDrawAnimation(addr, offset = 0xA) {
 	animTimer = null;
-
+debugger
 	var bf = new bytebuffer(romFrameData, addr);
 	let animfunc = bf.get();
 	if(animfunc != 4) {
 		labelInfo.innerText = 'anim:' + (addr).toString(16).toUpperCase() + ' func:' + animfunc.toString(16).toUpperCase();
 		return;
 	}
-	let tmp = bf.get();	// 40, 44?
-	tmp = bf.get();	// 0, FC?
-	tmp = bf.get();	// 0?
+	let tmp = bf.get();
+	tmp = bf.get();
+	tmp = bf.get();
 	let addr2 = bf.getInt();
 	let frame = getRomFrame(addr2);
 	if(!frame) {
@@ -300,24 +310,22 @@ frameAddress = [		// bp 331C get D4
 ];
 
 // get frame from addr. return a frame obj
-function getRomFrame(addr, f = 0) {
+function getRomFrame(addr, f) {
 	var bf = new bytebuffer(romFrameData);
 	var bf2 = new bytebuffer(romFrameData);
 	let frame = {
 		sprites: [],
 	};
 	
-
-	// draw by $8544
-	// if(f >= 0) {	// use frameAddress and has multiple frames
-	// 	addr = bf.getInt(addr - 0x100000 + f * 4);
-	// 	addr = bf.getShort(addr - 0x100000 + 4);
-	// }
-	
-	bf.position(addr + f * 12);
-	let addr2 = bf.getShort();
-	let offset = bf.getuShort();	// memory page
-debugger
+	let addr2, offset;
+	if(f >= 0) {
+		bf.position(addr + f * 10);
+		addr2 = bf.getShort();
+		offset = bf.getuShort();	// memory page
+	} else {
+		addr2 = (addr & 0x7FFFFF) >> 16;
+		offset = addr & 0xFFFF;
+	}
 
 	addr2 = (addr2 << 3) + 0x1002;
 	let page = bf.getuShort(addr2);

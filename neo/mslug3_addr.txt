@@ -1,5 +1,57 @@
 
+[animation]
+stop at 1B7CC/1B7D6 and a1 is the data, initial code from PREF_ADDR 
+
+ROM:00076304                 movea.l #$396D98,a1
+ROM:0007630A                 move.w  #$100,d0
+ROM:0007630E                 jsr     obj_init_sprite ; [in] a1
+  or
+ROM:00076098                 lea     obj_sprite_3,a1
+ROM:0007609C                 move.w  $6A(a6),d0
+ROM:000760A0                 add.w   d0,d0
+ROM:000760A2                 add.w   d0,d0
+ROM:000760A4                 movea.l (a1,d0.w),a1
+ROM:000760A8                 move.w  #$100,d0
+ROM:000760AC                 jsr     obj_init_sprite ; [in] a1
+  then
+ROM:0001B7CC ; [in] a1
+ROM:0001B7CC obj_init_sprite:   // here a1 = animation data
+ROM:0001B7CC                 lea     $20(a6),a0
+ROM:0001B7D0                 move.b  #0,$18(a6)
+
 [sprite]
+215CAE = crab
+216A0E = crab
+120588 = fish
+24724A = letter F
+22e9d8 = big fish
+200064 =splash
+
+2506ec=body
+25070c=leg
+
+
+ROM:000E0FCA                 lea     dword_E0E62,a1
+ROM:000E0FCE                 move.w  $6A(a6),d0
+ROM:000E0FD2                 add.w   d0,d0
+ROM:000E0FD4                 add.w   d0,d0
+ROM:000E0FD6                 movea.l (a1,d0.w),a1
+ROM:000E0FDA                 move.w  #$100,d0
+ROM:000E0FDE                 jsr     obj_init_sprite ; [in] a1
+...
+ROM:0001B7E2 loc_1B7E2:                              ; CODE XREF: ROM:0001B7DC↑j
+ROM:0001B7E2                 move.l  a1,(a0)         ; initial sprite data
+ROM:0001B7E4                 move.w  #0,4(a0)
+ROM:0001B7EA                 move.w  d0,6(a0)
+
+
+ROM:0001B7F4                 move.l  (a0),d7         ; d7 = 3b3ace, translate d7
+  then 
+ROM:0001B9E0                 move.b  (a1)+,d5
+ROM:0001B9E2                 move.b  (a1)+,d0
+ROM:0001B9E4                 move.b  (a1)+,d6
+ROM:0001B9E6                 move.l  (a1)+,d7
+  or
 ROM:000341A8                 move.l  (a0),d7         ; a0=33bce, d7=24 7132 (addr of obj data)
 
 ROM:00005570                 movem.l d0-d1,$14(a0)   ; d0=00ed 88b2, d1=0107 f26f, a0=101444
