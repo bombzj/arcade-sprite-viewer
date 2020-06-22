@@ -27,7 +27,7 @@ function loadRomPal() {
 	mslugPalette(0x46A8);		// ROM:0000470E
 	mslugPalette(palsetAddress[palset]);
 
-	palette_empty = 0x60
+	palette_empty = paletted_start;	// dynamic palette
 
 	mslugPalette2(0x8A9);
 	mslugPalette2(0x8AB);
@@ -88,10 +88,11 @@ function mslugPalette(addr) {
 
 }
 
-var palette_empty = 0x60;
+var paletted_start = 0x70
+var palette_empty;
 // palette not fixed in position
 function mslugPalette2(addr) {
-	var rombase = unscramble(0x05BA);
+	var rombase = unscramble(0x0904);
 	var bf = new bytebuffer(romFrameData);
 	var bf2 = new bytebuffer(romFrameData);
 
@@ -99,7 +100,7 @@ function mslugPalette2(addr) {
 	idx <<= 5;
 	let addr2 = 0x200000 + idx + rombase;
 	bf2.position(addr2);
-
+debugger
 	let to = palette_empty * 0x10;
 	palData[to] = 0;
 	bf2.skip(2);
@@ -109,7 +110,7 @@ function mslugPalette2(addr) {
 		if(dt > 0x8000) {	// signed because ROM:000809EE    move.w  (a3,d0.w),(a4)+
 			dt -= 0x10000;
 		}
-		let addr3 = 0x214000 + dt + rombase;		
+		let addr3 = 0x220000 + dt + rombase;		
 		let color = bf.getuShort(addr3);
 		palData[i + to + 1] = neo2rgb(color);
 	}
@@ -158,7 +159,7 @@ function drawAnimation(addr) {
 }
 function loopDrawAnimation(addr, offset = 0xA) {
 	animTimer = null;
-debugger
+
 	var bf = new bytebuffer(romFrameData, addr);
 	let animfunc = bf.get();
 	if(animfunc != 4) {
@@ -228,7 +229,7 @@ function drawMap() {
 	let countdown = mapScene;
 	let addr2, offset, w, h, saveaddr;	// save addr for display
 	let nextbg;	// next background in the same scene
-	bf.position(addr);debugger
+	bf.position(addr);
 	for(let j = 0;j < 10;j++) {
 		let func = bf.getShort();
 		if(func == 0) {
@@ -344,8 +345,8 @@ function getRomFrame(addr, f) {
 		debugger;
 		return;
 	}
-	let flag = bf.get();
-	let palette = 0x60;
+	let flag = bf.get();debugger
+	let palette = paletted_start;
 
 	for(let c = 0;c < cnt;c++) {
 		
