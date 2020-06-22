@@ -27,7 +27,10 @@ function loadRomPal() {
 	mslugPalette(0x46A8);		// ROM:0000470E
 	mslugPalette(palsetAddress[palset]);
 
-	// palette_empty = 0x60
+	palette_empty = 0x60
+
+	mslugPalette2(0x8A9);
+	mslugPalette2(0x8AB);
 
 	// var playerPalette = 0x90E54;
 
@@ -63,7 +66,7 @@ function mslugPalette(addr) {
 			break;
 		}
 		let idx = bf.getShort(addr + 2);		// write from
-		idx <<= 5;
+		idx <<= 5;	// all palettes are lined, each 16 color = 32bytes
 		let addr2 = 0x200000 + idx + rombase;
 		bf2.position(addr2);
 
@@ -342,7 +345,7 @@ function getRomFrame(addr, f) {
 		return;
 	}
 	let flag = bf.get();
-	let palette = 0x0;
+	let palette = 0x60;
 
 	for(let c = 0;c < cnt;c++) {
 		

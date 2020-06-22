@@ -289,3 +289,7 @@ when 509C    find 200000,100000,w.7e5b,7e5c
 2e0014
 
 
+[palette]
+ROM:0000D998 palette_load_page:   // load many palettes until FFFF, for background
+ROM:0000DA32                 cmpi.w  #$FFFF,d0
+
