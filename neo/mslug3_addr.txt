@@ -1,5 +1,6 @@
 
 [sprite]
+ROM:000341A8                 move.l  (a0),d7         ; a0=33bce, d7=24 7132 (addr of obj data)
 
 ROM:00005570                 movem.l d0-d1,$14(a0)   ; d0=00ed 88b2, d1=0107 f26f, a0=101444
 
@@ -9,6 +10,8 @@ ROM:0000DD5A                 movem.l d0-d1/d7,(a0)   ; d0=000c 3f40, d1=ffff 8d0
 ROM:0000E0BA                 move.l  d0,(a6)         ; d0 = 1040 bbf4
 ROM:0000E0BC                 add.l   d2,d0
 ROM:0000E0BE                 move.l  d1,(a6)         ; d1 = 1041 8a20
+
+ROM:0000DE58                 lea     off_1000+2-off_1000(a3,d2.w),a3
 
 
 [level data]
@@ -147,7 +150,7 @@ DC2E -> ??      -11
 1540 -> 280038  +8
 
 5DD2 -> 270038  +7
-46A4 -> ??      -24
+46A4 -> ??      -25
 1586 -> ??      +22
 0162 -> 2c0038  +12
 99de -> ??      -22

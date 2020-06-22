@@ -296,9 +296,7 @@ function setMapTileStart(mapstart) {
 
 
 frameAddress = [		// bp 331C get D4
-	0x15D648, 0x15D3C8, 0x15D744, 0x15D77C, 0x11F222, 0x100000, 0x156D42, 0x1568D6, 0x156902, 0x144E92, 0x10083C, 0x10088C, 
-	0x19BD88, 0x163EFA, 0x166560, // 0x106670, 0x100040, 0x103BF2, 0x148B5A, 0x16C9DE, 0x16CA2E
-	// 0x3F3D, 0x3F3E, 0x36DD, 0x1525, 0x68F, 0x68C, 0x695, 0x692, 0x1B2A, 0x1B2C, 0x1B32, 0x2CBD
+	0x33C34, 0x33CEA, 0x33D96, 0x33E6A,
 ];
 
 // get frame from addr. return a frame obj
@@ -316,6 +314,17 @@ function getRomFrame(addr, f = 0) {
 	// 	addr = bf.getShort(addr - 0x100000 + 4);
 	// }
 	
+	bf.position(addr + f * 12);
+	let addr2 = bf.getShort();
+	let offset = bf.getuShort();	// memory page
+debugger
+
+	addr2 = (addr2 << 3) + 0x1002;
+	let page = bf.getuShort(addr2);
+	let poffset = unscramble(page);
+	addr = bf.getInt(addr2 + 2) + poffset + offset;
+
+
 	frame.info = '0x'+addr.toString(16).toUpperCase();
 
 	bf.position(addr);
@@ -325,7 +334,7 @@ function getRomFrame(addr, f = 0) {
 		return;
 	}
 	let flag = bf.get();
-	let palette = 0x60;
+	let palette = 0x0;
 
 	for(let c = 0;c < cnt;c++) {
 		
