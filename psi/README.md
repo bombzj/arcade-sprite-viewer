@@ -14,5 +14,11 @@
 
 * Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?gunbird2) to view `Gunbird2`.
 
+## Strikers 1945 iii
+![1945ii animation](https://bombzj.github.io/arcade-sprite-viewer/res/anim1945iii.gif)<br/>
+![1945ii background](https://bombzj.github.io/arcade-sprite-viewer/res/map1945iii.png)<br/>
+
+* Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?1945iii) to view `Strikers 1945iii`.
+
 # TODO
 * 1945iii
