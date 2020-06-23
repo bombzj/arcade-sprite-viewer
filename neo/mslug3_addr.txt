@@ -1,6 +1,19 @@
+[colllision box]
+player:
+stand: 36D7C, squat: 36D9A
+
+[object] a6
+$0.l = obj function
+$3e = x on screen
+$40 = $48 = y
+$50 = collision box
+$20 = animation  (leg)
+$8c = animation2 (body)
+
+stop at 1B7CC/1B7D6 and a1 is the (animation address), initial code from PREF_ADDR 
+stop at DCB0 and d7 is the (sprite address)
 
 [animation]
-stop at 1B7CC/1B7D6 and a1 is the data, initial code from PREF_ADDR 
 
 ROM:00076304                 movea.l #$396D98,a1
 ROM:0007630A                 move.w  #$100,d0

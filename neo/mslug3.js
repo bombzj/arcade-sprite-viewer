@@ -29,8 +29,8 @@ function loadRomPal() {
 
 	palette_empty = paletted_start;	// dynamic palette
 
-	mslugPalette2(0x8A9);
-	mslugPalette2(0x8AB);
+	// mslugPalette2(0x8A9);
+	// mslugPalette2(0x8AB);
 
 	// var playerPalette = 0x90E54;
 
@@ -56,52 +56,38 @@ function loadRomPal() {
 }
 
 function mslugPalette(addr) {
-	var rombase = unscramble(0x0904);
 	var bf = new bytebuffer(romFrameData);
-	var bf2 = new bytebuffer(romFrameData);
 
 	for(let p = 0;p < 0x100;p++) {
 		let idx2 = bf.getuShort(addr);		// write to
 		if(idx2 == 0xFFFF) {
 			break;
 		}
-		let idx = bf.getShort(addr + 2);		// write from
-		idx <<= 5;	// all palettes are lined, each 16 color = 32bytes
-		let addr2 = 0x200000 + idx + rombase;
-		bf2.position(addr2);
+		let idx = bf.getShort(addr + 2);
 
-		let to = idx2 * 0x10;
-		palData[to] = 0;
-		bf2.skip(2);
+		mslugPaletteBase(idx, idx2 * 0x10)
 
-		for(let i = 0;i < 15;i++) {
-			let dt = bf2.getuShort() << 1;
-			if(dt > 0x8000) {	// signed because ROM:000809EE    move.w  (a3,d0.w),(a4)+
-				dt -= 0x10000;
-			}
-			let addr3 = 0x220000 + dt + rombase;		
-			let color = bf.getuShort(addr3);
-			palData[i + to + 1] = neo2rgb(color);
-		}
 		addr += 6;
 	}
-
 }
 
 var paletted_start = 0x70
 var palette_empty;
 // palette not fixed in position
 function mslugPalette2(addr) {
+	mslugPaletteBase(addr, palette_empty * 0x10)
+	palette_empty++;
+}
+
+function mslugPaletteBase(idx, to) {
 	var rombase = unscramble(0x0904);
 	var bf = new bytebuffer(romFrameData);
 	var bf2 = new bytebuffer(romFrameData);
 
-	let idx = addr;		// write from
 	idx <<= 5;
 	let addr2 = 0x200000 + idx + rombase;
 	bf2.position(addr2);
-debugger
-	let to = palette_empty * 0x10;
+
 	palData[to] = 0;
 	bf2.skip(2);
 
@@ -115,7 +101,6 @@ debugger
 		palData[i + to + 1] = neo2rgb(color);
 	}
 
-
 	palette_empty++;
 }
 
@@ -126,20 +111,28 @@ function movetoTile(tile) {
 
 var animAddress = [
 	0x3D69A6, 0x37B9C6, 0x3968C0, 0x396D10, 0x396DE0, 0x396E64, 0x396ECA, 0x3c6164,
-	0x3B3A5C, 0x3B3682, 0x3b4218,
-	0x3d7786, 0x3dab1e, 0x3c6618
-
+	[0x3B3A5C,0x8A9,0xB2F52] , [0x3B3682,0x8A9,0xB2F52], 0x3b4218,
+	0x3d7786, 0x3dab1e, 0x3c6618,
+	0x37ae5e, 0x37c696, 0x3b66f8, 0x37c418, 0x38d8ca,
+	0x321868, 0x32001a, 0x328788,
+	0x3db0ee
 ];
 var curAnim;	// current animation index
 var curAnimAct;	// current animation index
 // show object animation from rom address
 var animTimer;
 function drawAnimation(addr) {
+	animCB = null;
 //	let addr = animAddress[curAnim];
 	var bf = new bytebuffer(romFrameData);
-	if(!addr)
+	if(!addr) {
 		addr = animAddress[curAnim];
-
+		if(typeof addr !== 'number') {
+			animCB = addr[2];
+			mslugPaletteBase(addr[1], paletted_start * 0x10)
+			addr = addr[0];
+		}
+	}
 	if(animTimer) {
 		clearTimeout(animTimer)
 		animTimer = null;
@@ -157,20 +150,42 @@ function drawAnimation(addr) {
 
 	loopDrawAnimation(addr);
 }
+var animCB;	// for cb saving in animation
 function loopDrawAnimation(addr, offset = 0xA) {
 	animTimer = null;
 
 	var bf = new bytebuffer(romFrameData, addr);
-	let animfunc = bf.get();
-	if(animfunc != 4) {
-		labelInfo.innerText = 'anim:' + (addr).toString(16).toUpperCase() + ' func:' + animfunc.toString(16).toUpperCase();
-		return;
+
+	for(let i = 0;i < 10;i++) {
+		let animfunc = bf.get();
+		if(animfunc == 4) {
+			break;
+		} else if(animfunc == 0x10) {	// has more to do but...
+			bf.skip(3);
+		} else if(animfunc == 0x20) {	// has more to do but...
+			let prop = bf.get();
+			let data = bf.getInt();
+			if(prop == 0x50) {
+				// change collision box
+				animCB = data;
+			}
+		} else if(animfunc == 0x0) {
+			bf.skip(7);
+		} else if(animfunc == 0x18 || animfunc == 0x1C) {
+			bf.skip(3);
+		} else {
+			labelInfo.innerText = 'unsupport: anim:' + (addr).toString(16).toUpperCase() + ' func:' + animfunc.toString(16).toUpperCase();
+			return;
+		}
 	}
 	let tmp = bf.get();
 	tmp = bf.get();
 	tmp = bf.get();
 	let addr2 = bf.getInt();
 	let frame = getRomFrame(addr2);
+	if(animCB) {
+		frame.cb1 = getCB(animCB);
+	}
 	if(!frame) {
 		return;
 	}
@@ -181,6 +196,18 @@ function loopDrawAnimation(addr, offset = 0xA) {
 	addr += offset;
 
 	animTimer = setTimeout("loopDrawAnimation("+ addr +"," + offset+")", 200);
+}
+function getCB(addr) {
+	if(!addr) {
+		return null;
+	}
+	var bf = new bytebuffer(romFrameData, addr);
+	return {
+		x : bf.getShort(),
+		y : bf.getShort(),
+		x2 : bf.getShort(),
+		y2 : bf.getShort(),
+	}
 }
 
 function drawAnimationFrame(addr, c = ctx, offx = 128, offy = 160, cbbase = 0x103000) {
@@ -345,7 +372,7 @@ function getRomFrame(addr, f) {
 		debugger;
 		return;
 	}
-	let flag = bf.get();debugger
+	let flag = bf.get();
 	let palette = paletted_start;
 
 	for(let c = 0;c < cnt;c++) {
