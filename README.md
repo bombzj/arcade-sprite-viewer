@@ -10,21 +10,21 @@ BTW. CPS & NEOGEO both use 68k but PSIKYOSH uses SH-2 which is far more difficul
 ![punisher animation](https://bombzj.github.io/arcade-sprite-viewer/res/punisheranim.gif)<br/>
 ![dino animation](https://bombzj.github.io/arcade-sprite-viewer/res/animdino.gif)<br/>
 
-* Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?punisher) to view `punisher`.
+* Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?punisher) to view `Punisher`.
 
 ## PSIKYOSH [view more](https://bombzj.github.io/arcade-sprite-viewer/psi)
 ![1945ii animation](https://bombzj.github.io/arcade-sprite-viewer/res/anim1945ii.gif)<br/>
 ![gunbird2 background](https://bombzj.github.io/arcade-sprite-viewer/res/mapgunbird2.png)<br/>
 
-* Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?1945ii) to view `strikers 1945ii`.
+* Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?1945ii) to view `Strikers 1945ii`.
 
-## NEOGEO [view more](https://bombzj.github.io/arcade-sprite-viewer/neo)
+## NEO GEO [view more](https://bombzj.github.io/arcade-sprite-viewer/neo)
 ![kof97 animation](https://bombzj.github.io/arcade-sprite-viewer/res/animkof97.gif)<br/>
 ![kof98 animation](https://bombzj.github.io/arcade-sprite-viewer/res/animkof98.gif)<br/>
 ![mslug2 background](https://bombzj.github.io/arcade-sprite-viewer/res/map3mslug2.gif)<br/>
 ![kof2000 animation](https://bombzj.github.io/arcade-sprite-viewer/res/animkof2000.gif)<br/>
 
-* Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?kof97) to view `kof97`.
+* Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?kof97) to view `King of Fighters 97`.
 
 ## Usage
 * m key = change mode from 1 - 6 loop

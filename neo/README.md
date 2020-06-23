@@ -1,24 +1,24 @@
-# neogeo
+# NEO GEO by SNK
 * Click [here](https://github.com/bombzj/arcade-sprite-viewer/neo) to view source code.</p>
-## kof97
+## King of Fighters 97
 ![image kof97](https://bombzj.github.io/arcade-sprite-viewer/res/imgkof97.png)<br/>
 ![image kof97](https://bombzj.github.io/arcade-sprite-viewer/res/img2kof97.png)<br/>
 
 * Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?kof97) to view `kof97`.
-## kof98
+## King of Fighters 98
 ![image kof98](https://bombzj.github.io/arcade-sprite-viewer/res/imgkof98.png)<br/>
 ![image kof98](https://bombzj.github.io/arcade-sprite-viewer/res/img2kof98.png)<br/>
 
 * Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?kof98) to view `kof98`.
-## mslug2
+## Metal Slug 2
 ![mslug2 background](https://bombzj.github.io/arcade-sprite-viewer/res/mapmslug2.gif)<br/>
 ![mslug2 background](https://bombzj.github.io/arcade-sprite-viewer/res/map2mslug2.png)
 ![mslug2 animation](https://bombzj.github.io/arcade-sprite-viewer/res/animmslug2.gif)<br/>
-## mslug3
+## Metal Slug 3
 ![mslug3 background](https://bombzj.github.io/arcade-sprite-viewer/res/mapmslug3.gif)<br/>
 ![mslug3 background](https://bombzj.github.io/arcade-sprite-viewer/res/map2mslug3.gif)<br/>
 ![mslug3 animation](https://bombzj.github.io/arcade-sprite-viewer/res/animmslug3.gif)<br/>
-## kof2000
+## King of Fighters 2000
 ![kof2000 animation](https://bombzj.github.io/arcade-sprite-viewer/res/animkof2000.gif)<br/>
 ![kof2000 animation](https://bombzj.github.io/arcade-sprite-viewer/res/anim2kof2000.gif)<br/>
 
