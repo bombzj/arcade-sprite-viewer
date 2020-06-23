@@ -110,14 +110,14 @@ function movetoTile(tile) {
 }
 
 var animAddress = [
-	0x3D69A6, 0x37B9C6, 0x3968C0, 0x396D10, 0x396DE0, 0x396E64, 0x396ECA, 0x3c6164,
-	[0x3B3A5C,0x8A9,0xB2F52] , [0x3B3682,0x8A9,0xB2F52], 0x3b4218,
+	[0x3D69A6,0x9D0], [0x37B9C6,0x9D0], 0x3968C0, [0x396D10,0x38D], [0x396DE0,0x38D], 0x396E64, 0x396ECA, 0x3c6164,
+	[0x3B3A5C,0x8A9,0xB2F52] , [0x3B3682,0x8A9,0xB2F52], [0x3b4218,0x8A8],
 	0x3d7786, 0x3dab1e, 0x3c6618,
 	0x37ae5e, 0x37c696, 0x3b66f8, 0x37c418, 0x38d8ca,
-	0x321868, 0x32001a, 0x328788,
+	[0x321868,0x855], [0x32001a,0x855], [0x328788,0x855],
 	0x3db0ee
 ];
-var curAnim;	// current animation index
+var curAnim;	// cur	rent animation index
 var curAnimAct;	// current animation index
 // show object animation from rom address
 var animTimer;
@@ -129,7 +129,12 @@ function drawAnimation(addr) {
 		addr = animAddress[curAnim];
 		if(typeof addr !== 'number') {
 			animCB = addr[2];
-			mslugPaletteBase(addr[1], paletted_start * 0x10)
+			if(palsetSpr) {
+				mslugPaletteBase(palsetSpr, paletted_start * 0x10);
+			} else {
+				mslugPaletteBase(addr[1], paletted_start * 0x10);
+				palsetSpr = addr[1];
+			}
 			addr = addr[0];
 		}
 	}

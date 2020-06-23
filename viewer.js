@@ -131,6 +131,7 @@ xhr.send();
 
 var palset;	// current palette set with 32*16 colors, per level
 var palset2;	// per scene?
+var palsetSpr;	// palset for sprite (neogeo)
 var maxPalSet = 50;
 
 var showPal;
@@ -742,6 +743,7 @@ window.addEventListener("keydown", function (event) {
 					if(curPlayerFrame < 0)
 						curPlayerFrame = 0;
 				} else if(mode == 5) {
+					palsetSpr = 0;
 					curAnimAct = 0;
 					curAnim--;
 					if(curAnim < 0)
@@ -781,6 +783,7 @@ window.addEventListener("keydown", function (event) {
 				} else if(mode == 4) {
 					curPlayerFrame++;
 				} else if(mode == 5) {
+					palsetSpr = 0;
 					curAnimAct = 0;
 					curAnim++;
 //					if(curAnim >= animAddress.length)
@@ -811,8 +814,11 @@ window.addEventListener("keydown", function (event) {
 		case ',':
 			if(mode == 2 || mode == 3) {
 				mapAddressSkip--;
-				if(mapAddressSkip <0)
+				if(mapAddressSkip <0) {
 					mapAddressSkip=0
+				}
+			} else if(mode == 5) {
+				palsetSpr--;
 			} else {
 				if(curPal > 0)
 					curPal--
@@ -823,6 +829,8 @@ window.addEventListener("keydown", function (event) {
 		case '.':
 			if(mode == 2 || mode == 3) {
 				mapAddressSkip++;
+			} else if(mode == 5) {
+				palsetSpr++;
 			} else {
 				curPal++;
 			}
