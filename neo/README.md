@@ -1,25 +1,26 @@
 # neogeo
+* Click [here](https://github.com/bombzj/arcade-sprite-viewer/neo) to view source code.</p>
 ## kof97
-![image kof97](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/imgkof97.png)<br/>
-![image kof97](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/img2kof97.png)<br/>
+![image kof97](https://bombzj.github.io/arcade-sprite-viewer/res/imgkof97.png)<br/>
+![image kof97](https://bombzj.github.io/arcade-sprite-viewer/res/img2kof97.png)<br/>
 
 * Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?kof97) to view `kof97`.
 ## kof98
-![image kof98](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/imgkof98.png)<br/>
-![image kof98](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/img2kof98.png)<br/>
+![image kof98](https://bombzj.github.io/arcade-sprite-viewer/res/imgkof98.png)<br/>
+![image kof98](https://bombzj.github.io/arcade-sprite-viewer/res/img2kof98.png)<br/>
 
 * Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?kof98) to view `kof98`.
 ## mslug2
-![mslug2 background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/mapmslug2.gif)<br/>
-![mslug2 background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/map2mslug2.png)
-![mslug2 animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animmslug2.gif)<br/>
+![mslug2 background](https://bombzj.github.io/arcade-sprite-viewer/res/mapmslug2.gif)<br/>
+![mslug2 background](https://bombzj.github.io/arcade-sprite-viewer/res/map2mslug2.png)
+![mslug2 animation](https://bombzj.github.io/arcade-sprite-viewer/res/animmslug2.gif)<br/>
 ## mslug3
-![mslug3 background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/mapmslug3.gif)<br/>
-![mslug3 background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/map2mslug3.gif)<br/>
-![mslug3 animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animmslug3.gif)<br/>
+![mslug3 background](https://bombzj.github.io/arcade-sprite-viewer/res/mapmslug3.gif)<br/>
+![mslug3 background](https://bombzj.github.io/arcade-sprite-viewer/res/map2mslug3.gif)<br/>
+![mslug3 animation](https://bombzj.github.io/arcade-sprite-viewer/res/animmslug3.gif)<br/>
 ## kof2000
-![kof2000 animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animkof2000.gif)<br/>
-![kof2000 animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/anim2kof2000.gif)<br/>
+![kof2000 animation](https://bombzj.github.io/arcade-sprite-viewer/res/animkof2000.gif)<br/>
+![kof2000 animation](https://bombzj.github.io/arcade-sprite-viewer/res/anim2kof2000.gif)<br/>
 
 
 # TODO

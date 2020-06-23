@@ -1,23 +1,28 @@
-# arcade-sprite-viewer
-An arcade game sprite / map viewer (cps1 neogeo ...)
+<meta name="google-site-verification" content="c0XDkWOd2V_c74sAGyck5d1YfR3l1-Xkc-oQkGo2Y30" />
 
-## CPS [view more](https://github.com/bombzj/arcade-sprite-viewer/tree/master/cps)
-![punisher animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/punisheranim.gif)<br/>
-![dino animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animdino.gif)<br/>
+# arcade-sprite-viewer
+An arcade game sprite viewer / map viewer (cps1 neogeo etc.)
+* Images are assembled by putting together serials of tiles that extracted from rom data. Currently it only supports a few games, Metal Slug, King of Fighters, Punisher, Dinosaur & Cadillacs, Gunbird, Warth, etc.
+BTW. CPS & NEOGEO both use 68k but PSIKYOSH uses SH-2 which is far more difficult to read.
+* Click [here](https://github.com/bombzj/arcade-sprite-viewer) to view source code.</p>
+
+## CPS [view more](https://bombzj.github.io/arcade-sprite-viewer/cps)
+![punisher animation](https://bombzj.github.io/arcade-sprite-viewer/res/punisheranim.gif)<br/>
+![dino animation](https://bombzj.github.io/arcade-sprite-viewer/res/animdino.gif)<br/>
 
 * Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?punisher) to view `punisher`.
 
-## PSIKYOSH [view more](https://github.com/bombzj/arcade-sprite-viewer/tree/master/psi)
-![1945ii animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/anim1945ii.gif)<br/>
-![gunbird2 background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/mapgunbird2.png)<br/>
+## PSIKYOSH [view more](https://bombzj.github.io/arcade-sprite-viewer/psi)
+![1945ii animation](https://bombzj.github.io/arcade-sprite-viewer/res/anim1945ii.gif)<br/>
+![gunbird2 background](https://bombzj.github.io/arcade-sprite-viewer/res/mapgunbird2.png)<br/>
 
 * Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?1945ii) to view `strikers 1945ii`.
 
-## NEOGEO [view more](https://github.com/bombzj/arcade-sprite-viewer/tree/master/neo)
-![kof97 animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animkof97.gif)<br/>
-![kof98 animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animkof98.gif)<br/>
-![mslug2 background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/map3mslug2.gif)<br/>
-![kof2000 animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animkof2000.gif)<br/>
+## NEOGEO [view more](https://bombzj.github.io/arcade-sprite-viewer/neo)
+![kof97 animation](https://bombzj.github.io/arcade-sprite-viewer/res/animkof97.gif)<br/>
+![kof98 animation](https://bombzj.github.io/arcade-sprite-viewer/res/animkof98.gif)<br/>
+![mslug2 background](https://bombzj.github.io/arcade-sprite-viewer/res/map3mslug2.gif)<br/>
+![kof2000 animation](https://bombzj.github.io/arcade-sprite-viewer/res/animkof2000.gif)<br/>
 
 * Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?kof97) to view `kof97`.
 
@@ -43,7 +48,7 @@ An arcade game sprite / map viewer (cps1 neogeo ...)
 
 ## TODO
 * webgl & wasm?
-* more games, wof?
+* more games
 * how to know which pen/color of background layer is in front of sprites?
 
 ## Reference

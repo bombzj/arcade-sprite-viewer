@@ -1,29 +1,30 @@
 # cps
+* Click [here](https://github.com/bombzj/arcade-sprite-viewer/cps) to view source code.</p>
 ## punisher
-![punisher animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/punisheranim.gif)<br/>
-![punisher background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/punishermap.png)<br/>
+![punisher animation](https://bombzj.github.io/arcade-sprite-viewer/res/punisheranim.gif)<br/>
+![punisher background](https://bombzj.github.io/arcade-sprite-viewer/res/punishermap.png)<br/>
 
 * Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?punisher) to view `punisher`.
 
 ## dino
-![dino animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animdino.gif)<br/>
-![dino background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/mapdino.png)<br/>
+![dino animation](https://bombzj.github.io/arcade-sprite-viewer/res/animdino.gif)<br/>
+![dino background](https://bombzj.github.io/arcade-sprite-viewer/res/mapdino.png)<br/>
 
 * Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?dino) to view `dino`.
 
 ## varth
-![varth animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animvarth.gif)<br/>
-![varth background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/mapvarth.png)<br/>
+![varth animation](https://bombzj.github.io/arcade-sprite-viewer/res/animvarth.gif)<br/>
+![varth background](https://bombzj.github.io/arcade-sprite-viewer/res/mapvarth.png)<br/>
 
 * Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?varth) to view `varth`.
 
 ## captcomm
-![captcomm animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animcapt.gif)<br/>
-![captcomm background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/mapcapt.png)<br/>
+![captcomm animation](https://bombzj.github.io/arcade-sprite-viewer/res/animcapt.gif)<br/>
+![captcomm background](https://bombzj.github.io/arcade-sprite-viewer/res/mapcapt.png)<br/>
 
 ## wof
-![wof animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animwof.gif)<br/>
-![wof background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/mapwof.png)<br/>
+![wof animation](https://bombzj.github.io/arcade-sprite-viewer/res/animwof.gif)<br/>
+![wof background](https://bombzj.github.io/arcade-sprite-viewer/res/mapwof.png)<br/>
 
 # TODO
 * more games
