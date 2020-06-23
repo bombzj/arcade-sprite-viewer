@@ -1,5 +1,5 @@
 # NEO GEO by SNK
-* Click [here](https://github.com/bombzj/arcade-sprite-viewer/neo) to view source code.</p>
+* Click [here](https://github.com/bombzj/arcade-sprite-viewer/tree/master/neo) to view source code.</p>
 ## King of Fighters 97
 ![image kof97](https://bombzj.github.io/arcade-sprite-viewer/res/imgkof97.png)<br/>
 ![image kof97](https://bombzj.github.io/arcade-sprite-viewer/res/img2kof97.png)<br/>

@@ -1,6 +1,6 @@
 # PSIKYOSH
 * Psikyo's system using Hitachi's SH-2 CPU
-* Click [here](https://github.com/bombzj/arcade-sprite-viewer/psi) to view source code.</p>
+* Click [here](https://github.com/bombzj/arcade-sprite-viewer/tree/master/psi) to view source code.</p>
 
 ## Strikers 1945 ii
 ![1945ii animation](https://bombzj.github.io/arcade-sprite-viewer/res/anim1945ii.gif)<br/>
