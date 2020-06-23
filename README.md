@@ -5,13 +5,13 @@ An arcade game sprite / map viewer (cps1 neogeo ...)
 ![punisher animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/punisheranim.gif)<br/>
 ![dino animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animdino.gif)<br/>
 
-* Click [here](https://bombzj.github.io/arcade-sprite-viewer/?punisher) to view `punisher`.
+* Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?punisher) to view `punisher`.
 
 ## PSIKYOSH [view more](https://github.com/bombzj/arcade-sprite-viewer/tree/master/psi)
 ![1945ii animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/anim1945ii.gif)<br/>
 ![gunbird2 background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/mapgunbird2.png)<br/>
 
-* Click [here](https://bombzj.github.io/arcade-sprite-viewer/?1945ii) to view `strikers 1945ii`.
+* Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?1945ii) to view `strikers 1945ii`.
 
 ## NEOGEO [view more](https://github.com/bombzj/arcade-sprite-viewer/tree/master/neo)
 ![kof97 animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animkof97.gif)<br/>
@@ -19,7 +19,7 @@ An arcade game sprite / map viewer (cps1 neogeo ...)
 ![mslug2 background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/map3mslug2.gif)<br/>
 ![kof2000 animation](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/animkof2000.gif)<br/>
 
-* Click [here](https://bombzj.github.io/arcade-sprite-viewer/?kof97) to view `kof97`.
+* Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?kof97) to view `kof97`.
 
 ## Usage
 * m key = change mode from 1 - 6 loop

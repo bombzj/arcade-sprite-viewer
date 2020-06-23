@@ -3,12 +3,12 @@
 ![image kof97](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/imgkof97.png)<br/>
 ![image kof97](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/img2kof97.png)<br/>
 
-* Click [here](https://bombzj.github.io/arcade-sprite-viewer/?kof97) to view `kof97`.
+* Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?kof97) to view `kof97`.
 ## kof98
 ![image kof98](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/imgkof98.png)<br/>
 ![image kof98](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/img2kof98.png)<br/>
 
-* Click [here](https://bombzj.github.io/arcade-sprite-viewer/?kof98) to view `kof98`.
+* Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?kof98) to view `kof98`.
 ## mslug2
 ![mslug2 background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/mapmslug2.gif)<br/>
 ![mslug2 background](https://raw.githubusercontent.com/bombzj/arcade-sprite-viewer/master/res/map2mslug2.png)
