@@ -4,16 +4,17 @@
 ![image kof97](https://bombzj.github.io/arcade-sprite-viewer/res/imgkof97.png)<br/>
 ![image kof97](https://bombzj.github.io/arcade-sprite-viewer/res/img2kof97.png)<br/>
 
-* Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?kof97) to view `kof97`.
+* Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?kof97) to view `King of Fighters 97`.
 ## King of Fighters 98
 ![image kof98](https://bombzj.github.io/arcade-sprite-viewer/res/imgkof98.png)<br/>
 ![image kof98](https://bombzj.github.io/arcade-sprite-viewer/res/img2kof98.png)<br/>
 
-* Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?kof98) to view `kof98`.
+* Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?kof98) to view `King of Fighters 98`.
 ## Metal Slug 2
 ![mslug2 background](https://bombzj.github.io/arcade-sprite-viewer/res/mapmslug2.gif)<br/>
 ![mslug2 background](https://bombzj.github.io/arcade-sprite-viewer/res/map2mslug2.png)
 ![mslug2 animation](https://bombzj.github.io/arcade-sprite-viewer/res/animmslug2.gif)<br/>
+* Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?mslug2) to view `Metal Slug 2`.
 ## Metal Slug 3
 ![mslug3 background](https://bombzj.github.io/arcade-sprite-viewer/res/mapmslug3.gif)<br/>
 ![mslug3 background](https://bombzj.github.io/arcade-sprite-viewer/res/map2mslug3.gif)<br/>

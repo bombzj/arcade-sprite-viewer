@@ -1,6 +1,6 @@
 # CPS
 * Capcom Power System
-* Click [here](https://github.com/bombzj/arcade-sprite-viewer/tree/master/cps) to view source code.</p>
+* Click [here](https://github.com/bombzj/arcade-sprite-viewer/tree/master/cps) to view source code.
 ## Punisher
 ![punisher animation](https://bombzj.github.io/arcade-sprite-viewer/res/punisheranim.gif)<br/>
 ![punisher background](https://bombzj.github.io/arcade-sprite-viewer/res/punishermap.png)<br/>
