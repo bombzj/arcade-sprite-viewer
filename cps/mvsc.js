@@ -1,46 +1,74 @@
 "use strict"
 
-var paletteAddress = 0xB7A52;		// per level * scen = 8 * 4
-var paletteAddressIndex1 = 0x1C7268;	// for sprite, per level * scene = 8 * 10?
-var paletteAddressIndex2 = 0xBBA52;	// for scroll layer 1, seems fixed for HUD
-var paletteAddressIndex3 = 0x1C737C;	// for scroll layer 2
-var paletteAddressIndex4 = 0x8C52;
-
 // load pal from rom and oveewrite old
 function loadRomPal() {
 	var bf = new bytebuffer(romFrameData);
 	var bf2 = new bytebuffer(romFrameData);
 	
 	
-	var paletteIndex = bf.getInt(paletteAddressIndex1 + palset * 4);	// palset = level
-	var paletteIndex2 = paletteAddressIndex2;
-	var paletteIndex3 = bf.getInt(paletteAddressIndex3 + (palset * 4 + palset2) * 4);	
-	var paletteIndex4 = bf.getInt(paletteAddressIndex4 + (palset * 4 + palset2) * 4);	
-	labelInfo2.innerText = 'palset:' + palset +   ' palset2:' + palset2 + ' addr:' + paletteIndex.toString(16).toUpperCase();
+	labelInfo2.innerText = 'palset:' + palset +   ' palset2:' + palset2;
 	
-	// load sprite palette
-	bf.position(paletteIndex);
-	for(let i = 0;i < 3;i++) {
-		loadRomPalCps1(bf, i << 4)
+	// sub_A360
+	bf.position(bf.getInt(0x1B028A + palset * 4));
+	for(let i = 0;i < 0x20;i++) {
+		loadRomPalCps(bf, (i << 4) + 16 * 0x20)
+	}
+	// sub_A38E
+	bf.position(bf.getInt(0x1B02DA + palset * 4));
+	for(let i = 0;i < 0x20;i++) {
+		loadRomPalCps(bf, (i << 4) + 16 * 0x40)
+	}
+	// sub_A3BC
+	bf.position(bf.getInt(0x1B032A + palset * 4));
+	for(let i = 0;i < 0x20;i++) {
+		loadRomPalCps(bf, (i << 4) + 16 * 0x60)
 	}
 
-	// load layer 2 & 3 palette
-	bf.position(paletteIndex2);
-	for(let i = 0;i < 32;i++) {
-		loadRomPalCps1(bf, (i << 4) + 16 * 32)
+
+	// sub_A3FC
+	bf.position(0x1C7424);
+	for(let i = 0;i < 0x2;i++) {
+		loadRomPalCps(bf, (i << 4) + 16 * 0x1E)
 	}
-	
-	// load layer 2 & 3 palette
-	bf.position(paletteIndex3);
-	for(let i = 0;i < 32;i++) {
-		loadRomPalCps1(bf, (i << 4) + 2 * 16 * 32)
+	// sub_A426
+	bf.position(0x1D90A4);
+	for(let i = 0;i < 0x6;i++) {
+		loadRomPalCps(bf, (i << 4) + 16 * 0xC)
 	}
-	
-	bf.position(paletteIndex4);
-	for(let i = 0;i < 32;i++) {
-		loadRomPalCps1(bf, (i << 4) + 3 * 16 * 32)
+
+	// sub_A438
+	bf.position(bf.getInt(0x1C737C + palset * 4));
+	for(let i = 0;i < 0x5;i++) {
+		loadRomPalCps(bf, (i << 4) + 16 * 0x16)
 	}
-	
+
+
+	// sub_A426
+	bf.position(0x1C79C4);
+	for(let i = 0;i < 0x4;i++) {
+		loadRomPalCps(bf, (i << 4) + 16 * 0x12)
+	}
+
+	// sub_A426， 4 characters?
+	bf.position(bf.getInt(0x1C7268 + palset2 * 4));
+	for(let i = 0;i < 0x3;i++) {
+		loadRomPalCps(bf, (i << 4) + 16 * 0x0)
+	}
+	bf.position(bf.getInt(0x1C7268 + palset2 * 4));
+	for(let i = 0;i < 0x3;i++) {
+		loadRomPalCps(bf, (i << 4) + 16 * 0x3)
+	}
+	bf.position(bf.getInt(0x1C7268 + palset2 * 4));
+	for(let i = 0;i < 0x3;i++) {
+		loadRomPalCps(bf, (i << 4) + 16 * 0x6)
+	}
+	bf.position(bf.getInt(0x1C7268 + palset2 * 4));
+	for(let i = 0;i < 0x3;i++) {
+		loadRomPalCps(bf, (i << 4) + 16 * 0x9)
+	}
+
+	// sub_A49A
+
 
 	if(showPal)
 		drawPal();
