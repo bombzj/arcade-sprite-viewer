@@ -166,6 +166,7 @@ function refresh() {
 		clearTimeout(animTimer)
 		animTimer = null;
 	}
+	
 	if(mode < 2 || mode == 5) {
 		canvas.style.display="";
 		canvasBack.style.display="none";
@@ -178,15 +179,31 @@ function refresh() {
 	} else if(mode == 1) {
 		drawRomFrame();
 	} else if(mode == 2) {
-		labelInfo.innerHTML = 'map:' + curMap + ',' + mapScene;
-		drawMap();
+		if(typeof drawMap === 'function') {
+			labelInfo.innerHTML = 'map:' + curMap + ',' + mapScene;
+			drawMap();
+		} else {
+			labelInfo.innerHTML = '<font color="red">unsupported</font>';
+		}
 	} else if(mode == 3) {
-		labelInfo.innerHTML = 'map:' + curMap + ',' + mapScene;
-		drawMap2();
+		if(typeof drawMap2 === 'function') {
+			labelInfo.innerHTML = 'map:' + curMap + ',' + mapScene;
+			drawMap2();
+		} else {
+			labelInfo.innerHTML = '<font color="red">unsupported</font>';
+		}
 	} else if(mode == 4) {
-		drawRomFramePlayer();
+		if(typeof drawRomFramePlayer === 'function') {
+			drawRomFramePlayer();
+		} else {
+			labelInfo.innerHTML = '<font color="red">unsupported</font>';
+		}
 	} else if(mode == 5) {
-		drawAnimation();
+		if(typeof drawAnimation === 'function') {
+			drawAnimation();
+		} else {
+			labelInfo.innerHTML = '<font color="red">unsupported</font>';
+		}
 	}
 }
 
@@ -1291,8 +1308,3 @@ function getpalsets(){
 var curPlayerType;
 var curPlayerFrame;
 
-// default to prevent exception
-function drawMap() {}
-function drawMap2() {}
-function drawRomFramePlayer() {}
-function drawAnimation() {}

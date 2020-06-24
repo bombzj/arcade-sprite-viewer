@@ -217,10 +217,7 @@ function drawMap() {
 var map2Data = [
 	
 ];
-let map2Width = 16;
-let map2Height = 8;
-function drawMap2() {
-}
+
 
 function setMapTileStart(mapstart) {
 	mapScene = mapstart;

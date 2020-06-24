@@ -114,9 +114,9 @@ let mapWidth = 32;
 let mapHeight;	// default 8
 let mapGrid = 2;		// each map tile contains 4 raw tiles?
 // draw a background with tilemap
-function drawMap() {
+// function drawMap() {
 
-}
+// }
 
 
 var map2Data = [
@@ -124,8 +124,8 @@ var map2Data = [
 ];
 let map2Width = 16;
 let map2Height = 8;
-function drawMap2() {
-}
+// function drawMap2() {
+// }
 
 function setMapTileStart(mapstart) {
 	mapScene = mapstart;

@@ -60,11 +60,6 @@ var playerCB = [	// collision boxes groups for 4 players
 var animAddressIndex = 0x0B7472;
 var animAddress = [ ];
 
-// show object animation from rom address
-function drawAnimation() {
-
-}
-
 var mapData = [
 	
 ];
