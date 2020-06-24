@@ -255,7 +255,7 @@ function drawMap() {
 	var bf2 = new bytebuffer(romFrameData);
 	let addr = mapAddress[curMap] + mapScene * 12;	// mapAddressSkip
 
-	ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
+	// ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
 	var imageData = ctxBack.createImageData(gridWidth, gridHeight);
 
 	let countdown = mapScene;

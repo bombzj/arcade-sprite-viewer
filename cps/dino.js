@@ -190,7 +190,7 @@ function drawMap() {
 	var bf = new bytebuffer(romFrameData);
 	var bf2 = new bytebuffer(romFrameData);
 	var bf3 = new bytebuffer(romFrameData);
-	ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
+	// ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
 	let addr = mapAddress[curMap];
 	
 //	labelInfo.innerText = 'address:' + bf.position().toString(16).toUpperCase()
@@ -264,7 +264,7 @@ function drawMap2() {
 	let v3 = bf3.getInt();
 	bf3.position(v3);
 	
-	ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
+	// ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
 	
 	labelInfo.innerText = 'width:' + width + ' height:' + height;
 	var imageData = ctxBack.createImageData(gridWidth*2, gridHeight*2);

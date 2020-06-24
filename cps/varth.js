@@ -78,7 +78,7 @@ function drawMap() {
 	var bf = new bytebuffer(romFrameData);
 	var bf2 = new bytebuffer(romFrameData);
 	var bf3 = new bytebuffer(romFrameData);
-	ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
+	// ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
 	
 	let tileindex = 0xA4000 + curMap * 0x2000;
 	let tileaddr = bf.getInt(0x85CCA + curMap * 4);
@@ -136,7 +136,7 @@ let map2Width = 16;
 let map2Height = 8;
 function drawMap2() {
 	var bf = new bytebuffer(romFrameData);
-	ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
+	// ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
 	
 	let tileindex = 0xD8000 + curMap * 0x2000;
 	let tileaddr = bf.getInt(0x85CCA + curMap * 4);
