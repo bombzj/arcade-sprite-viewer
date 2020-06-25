@@ -23,8 +23,8 @@ var curAnim;	// current animation index
 var curAnimAct;	// current animation index
 // show object animation from rom address
 var animTimer;
-function drawAnimation(addr) {
-}
+// function drawAnimation(addr) {
+// }
 
 var mapAddress = 0x62F58;
 
@@ -90,9 +90,9 @@ function drawMap() {
 
 let map2Width = 16;
 let map2Height = 8;
-function drawMap2() {
+// function drawMap2() {
 
-}
+// }
 
 function setMapTileStart(mapstart) {
 	mapScene = mapstart;
@@ -152,7 +152,3 @@ function getRomFrame(addr, f){
 
 	return frame;
 }
-
-var playerSpriteAddress = [0x163E, 0x164E, 0x165E, 0x166E, 0x168E];
-
-var animPlayerAddr = [];
