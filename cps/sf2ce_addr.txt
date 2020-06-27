@@ -1,7 +1,21 @@
 
+ROM:000022DE                 movea.l $1A(a6),a0      ; a0 = 728f4, sprite
 
 
+ROM:00096CAC                 movea.l $1A(a1),a2      ; a2 = 728DC
+ROM:00096CB0                 movea.l 4(a2),a2        ; a2 = 7290E
 
+
+ROM:00096DF0                 move.w  d4,(a0)+        ; x
+ROM:00096DF2                 move.w  (a3)+,d4        ; a3 = 9ac44
+ROM:00096DF4                 add.w   d1,d4
+ROM:00096DF6                 andi.w  #$1FF,d4
+ROM:00096DFA                 move.w  d4,(a0)+        ; y
+ROM:00096DFC                 move.w  (a2)+,(a0)+     ; a2 = 84060, a0 = 9103a8, tile
+ROM:00096DFE                 move.w  d2,(a0)+        ; write character to gfx, palette
+
+
+[global]
 ROM:0000051C                 move.w  #$9100,($800100).l
 ROM:00000524                 move.w  #$9100,$26(a5)
 ROM:0000052A                 move.w  #$90C0,($800102).l
