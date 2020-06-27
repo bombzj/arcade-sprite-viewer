@@ -32,57 +32,6 @@ function loadRomPal() {
 	for(let i = 0;i < 0x20;i++) {
 		loadRomPalCps(bf, (i << 4) + 16 * 0x60)
 	}
-	// // sub_A3BC
-	// bf.position(bf.getInt(0x1B032A + palset * 4));
-	// for(let i = 0;i < 0x20;i++) {
-	// 	loadRomPalCps(bf, (i << 4) + 16 * 0x60)
-	// }
-
-
-	// // sub_A3FC
-	// bf.position(0x1C7424);
-	// for(let i = 0;i < 0x2;i++) {
-	// 	loadRomPalCps(bf, (i << 4) + 16 * 0x1E)
-	// }
-	// // sub_A426
-	// bf.position(0x1D90A4);
-	// for(let i = 0;i < 0x6;i++) {
-	// 	loadRomPalCps(bf, (i << 4) + 16 * 0xC)
-	// }
-
-	// // sub_A438
-	// bf.position(bf.getInt(0x1C737C + palset * 4));
-	// for(let i = 0;i < 0x5;i++) {
-	// 	loadRomPalCps(bf, (i << 4) + 16 * 0x16)
-	// }
-
-
-	// // sub_A426
-	// bf.position(0x1C79C4);
-	// for(let i = 0;i < 0x4;i++) {
-	// 	loadRomPalCps(bf, (i << 4) + 16 * 0x12)
-	// }
-
-	// sub_A426， 4 characters?
-	// bf.position(bf.getInt(0x1C7268 + palset2 * 4));
-	// for(let i = 0;i < 0x3;i++) {
-	// 	loadRomPalCps(bf, (i << 4) + 16 * 0x0)
-	// }
-	// bf.position(bf.getInt(0x1C7268 + palset2 * 4));
-	// for(let i = 0;i < 0x3;i++) {
-	// 	loadRomPalCps(bf, (i << 4) + 16 * 0x3)
-	// }
-	// bf.position(bf.getInt(0x1C7268 + palset2 * 4));
-	// for(let i = 0;i < 0x3;i++) {
-	// 	loadRomPalCps(bf, (i << 4) + 16 * 0x6)
-	// }
-	// bf.position(bf.getInt(0x1C7268 + palset2 * 4));
-	// for(let i = 0;i < 0x3;i++) {
-	// 	loadRomPalCps(bf, (i << 4) + 16 * 0x9)
-	// }
-
-	// sub_A49A
-
 
 	if(showPal)
 		drawPal();
@@ -99,8 +48,49 @@ var playerCB = [	// collision boxes groups for 4 players
 	0x100000,0x100C00,0x101800,0x102400
 ];
 
-var animAddressIndex = 0x0B7472;
-var animAddress = [ ];
+// var animAddressIndex = 0x0B7472;
+var animAddress = [
+	0x741AC, 0x2E3D2, 0x8269E, 0x73D84
+];
+
+function drawAnimation(addr) {
+	var bf = new bytebuffer(romFrameData);
+	if(!addr) {
+		addr = animAddress[curAnim];
+	}
+	if(animTimer) {
+		clearTimeout(animTimer)
+		animTimer = null;
+	}
+
+	loopDrawAnimation(addr);
+}
+
+function loopDrawAnimation(addr, offset = 0x18) {
+	animTimer = null;
+
+	var bf = new bytebuffer(romFrameData, addr);
+
+	bf.skip(2);
+	let flag = bf.getShort();
+	let addr2 = bf.getInt();
+	let frame = getRomFrame(addr2);
+
+	if(!frame) {
+		return;
+	}
+	labelInfo.innerText = 'anim:' + (addr).toString(16).toUpperCase();
+
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	drawRomFrameBase(frame);
+
+	addr += offset;
+	if(flag != 0) {
+		addr = bf.getInt(addr);
+	}
+
+	animTimer = setTimeout("loopDrawAnimation("+ addr +"," + offset+")", 200);
+}
 
 var mapData = [
 	
@@ -117,19 +107,19 @@ let mapHeight;	// default 8
 let mapGrid = 2;		// each map tile contains 4 raw tiles?
 
 // draw a background with tilemap
-function drawMap() {
+// function drawMap() {
 
-}
+// }
 
 
 var map2Data = [
 	
 ];
-let map2Width = 16;
-let map2Height = 8;
-function drawMap2() {
+// let map2Width = 16;
+// let map2Height = 8;
+// function drawMap2() {
 
-}
+// }
 
 function setMapTileStart(mapstart) {
 	mapScene = mapstart;
@@ -137,7 +127,7 @@ function setMapTileStart(mapstart) {
 }
 
 frameAddress = [
-	0x728DC, 0x823FA, 0x728F4
+	0x7690E, 0x84096, 0x76886
 ];
 
 //get frame from addr. return a frame obj
@@ -149,10 +139,8 @@ function getRomFrame(addr){
 	let frame = {
 		sprites : []
 	};
-debugger
-	bf.position(addr);
-	let addr2 = bf.getrInt(4);
-	bf2.position(addr2);
+
+	bf2.position(addr);
 	let cnt = bf2.getShort();
 	let palette = bf2.getShort();
 	let positionIndex = bf2.getShort();

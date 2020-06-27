@@ -1,4 +1,6 @@
 
+ROM:000003B2                 move.l  a0,$1A(a6)      ; load animation
+
 ROM:000022DE                 movea.l $1A(a6),a0      ; a0 = 728f4, sprite
 
 
