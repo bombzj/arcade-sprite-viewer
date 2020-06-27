@@ -72,6 +72,7 @@ function init(name) {
 			labelInfo.innerHTML = '<font color="red">Extracting...</font>';
 
 			romFrameData = chkfile(data3);
+			bfr = getrdbuf();
 
 			labelInfo.innerHTML = '';
 
@@ -128,6 +129,11 @@ xhr.open("GET", path, true);
 xhr.send();
 }
 
+var bfr;	// rom data readonly temp
+// get rom data buffer
+function getrdbuf() {
+	return new bytebuffer(romFrameData);
+}
 
 var palset;	// current palette set with 32*16 colors, per level
 var palset2;	// per scene?

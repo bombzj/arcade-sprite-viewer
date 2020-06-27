@@ -1,4 +1,29 @@
 
+ROM:000939EC                 lea     word_939FC,a0
+ROM:000939F0                 jmp     loc_3A6
+
+
+ROM:00003AC6                 movea.l character_func(pc,d6.w),a4
+ROM:00003ACA                 jmp     (a4)
+ROM:00003ACA ; ---------------------------------------------------------------------------
+ROM:00003ACC character_func: dc.l loc_4C0CA
+ROM:00003AD0                 dc.l loc_514B0
+ROM:00003AD4                 dc.l loc_57EBC
+ROM:00003AD8                 dc.l loc_5F02C
+ROM:00003ADC                 dc.l loc_65C1A
+ROM:00003AE0                 dc.l loc_6B2B0
+ROM:00003AE4                 dc.l loc_72556
+ROM:00003AE8                 dc.l loc_797D8
+ROM:00003AEC                 dc.l loc_7F742
+ROM:00003AF0                 dc.l loc_85F08
+ROM:00003AF4                 dc.l loc_89B74
+ROM:00003AF8                 dc.l loc_8E0FC
+  then load animation
+ROM:0007F74C                 move.w  word_7F75C(pc,d1.w),d1
+ROM:0007F750                 lea     word_7F75C(pc,d1.w),a0
+ROM:0007F754                 jmp     loc_3A6
+
+
 ROM:000003B2                 move.l  a0,$1A(a6)      ; load animation
 
 ROM:000022DE                 movea.l $1A(a6),a0      ; a0 = 728f4, sprite
@@ -6,6 +31,8 @@ ROM:000022DE                 movea.l $1A(a6),a0      ; a0 = 728f4, sprite
 
 ROM:00096CAC                 movea.l $1A(a1),a2      ; a2 = 728DC
 ROM:00096CB0                 movea.l 4(a2),a2        ; a2 = 7290E
+
+ROM:00096CEE                 move.b  $13(a2),d4      ; flip flag
 
 
 ROM:00096DF0                 move.w  d4,(a0)+        ; x

@@ -2,8 +2,8 @@
 
 // load pal from rom and oveewrite old
 function loadRomPal() {
-	var bf = new bytebuffer(romFrameData);
-	var bf2 = new bytebuffer(romFrameData);
+	var bf = getrdbuf();
+	var bf2 = getrdbuf();
 	
 	
 	labelInfo2.innerText = 'palset:' + palset +   ' palset2:' + palset2;
@@ -48,15 +48,14 @@ var playerCB = [	// collision boxes groups for 4 players
 	0x100000,0x100C00,0x101800,0x102400
 ];
 
-// var animAddressIndex = 0x0B7472;
 var animAddress = [
-	0x741AC, 0x2E3D2, 0x8269E, 0x73D84
+	0x939FC, //0x741AC, 0x2E3D2, 0x8269E, 0x73D84
 ];
 
 function drawAnimation(addr) {
-	var bf = new bytebuffer(romFrameData);
 	if(!addr) {
 		addr = animAddress[curAnim];
+		addr = bfr.getuShort(addr + curAnimAct * 2) + addr;
 	}
 	if(animTimer) {
 		clearTimeout(animTimer)
@@ -73,6 +72,10 @@ function loopDrawAnimation(addr, offset = 0x18) {
 
 	bf.skip(2);
 	let flag = bf.getShort();
+	// if(flag != 0 && flag != 0x8000) {
+	// 	debugger;
+	// 	return;
+	// }
 	let addr2 = bf.getInt();
 	let frame = getRomFrame(addr2);
 
@@ -85,7 +88,7 @@ function loopDrawAnimation(addr, offset = 0x18) {
 	drawRomFrameBase(frame);
 
 	addr += offset;
-	if(flag != 0) {
+	if(flag < 0) {
 		addr = bf.getInt(addr);
 	}
 
@@ -131,10 +134,10 @@ frameAddress = [
 ];
 
 //get frame from addr. return a frame obj
-function getRomFrame(addr){
-	var bf = new bytebuffer(romFrameData);
-	var bf2 = new bytebuffer(romFrameData);
-	var bf3 = new bytebuffer(romFrameData);
+function getRomFrame(addr){debugger
+	var bf = getrdbuf();
+	var bf2 = getrdbuf();
+	var bf3 = getrdbuf();
 
 	let frame = {
 		sprites : []
@@ -142,7 +145,7 @@ function getRomFrame(addr){
 
 	bf2.position(addr);
 	let cnt = bf2.getShort();
-	let palette = bf2.getShort();
+	let palette = bf2.getShort() & 0x1F;
 	let positionIndex = bf2.getShort();
 	let a5_749A = bf2.getShort();
 	let a5_7498 = bf2.getShort();
@@ -179,10 +182,25 @@ function getRomFrame(addr){
 	return frame;
 }
 
+
+var animAddressIndex = 0x3B6C;	// for each character
 var romFrames = [];		// frames that extracted from romFrameData
 //load frames data from rom
 function loadRomFrame() {
-
+	var bf = getrdbuf();
+	for(let c = 0;c < 12;c++) {
+		let animAddr = bfr.getInt(animAddressIndex + c * 4) + 4;
+		let cnt = bfr.getShort(animAddr) >> 1;
+		if(cnt > 100) {
+			cnt = 100;
+			console.log('too many animation for character ' + c);
+		}
+		for(let i = 0;i < cnt;i++) {		//36 characters
+			let addr = bfr.getShort(animAddr + i * 2) + animAddr;
+			animAddress.push(addr);	
+		}
+	}
+	
 }
 
 
