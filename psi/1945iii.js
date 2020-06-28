@@ -24,16 +24,16 @@ var curAnim;	// current animation index
 var curAnimAct;	// current animation index
 // show object animation from rom address
 var animTimer;
-function drawAnimation(addr) {
+// function drawAnimation(addr) {
 
-}
-function loopDrawAnimation(addr, offset) {
+// }
+// function loopDrawAnimation(addr, offset) {
 
-}
+// }
 
-function drawAnimationFrame(addr) {
+// function drawAnimationFrame(addr) {
 	
-}
+// }
 
 
 var mapAddress = 0x112850;
@@ -106,9 +106,9 @@ var map2Data = [
 ];
 let map2Width = 16;
 let map2Height = 8;
-function drawMap2() {
+// function drawMap2() {
 
-}
+// }
 
 function setMapTileStart(mapstart) {
 	mapScene = mapstart;
