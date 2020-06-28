@@ -145,10 +145,12 @@ function getRomFrame(addr){debugger
 
 	bf2.position(addr);
 	let cnt = bf2.getShort();
-	let palette = bf2.getShort() & 0x1F;
+	let palette = bf2.getShort();
+	let vflip = palette & 0x40;
+	let hflip = palette & 0x20
 	let positionIndex = bf2.getShort();
-	let a5_749A = bf2.getShort();
-	let a5_7498 = bf2.getShort();
+	let ax = bf2.getShort();
+	let ay = bf2.getShort();
 	let positionIndex2 = (positionIndex & 0x7F80) >> 5;
 	let addr3 = bf.getInt(0x98112 + positionIndex2);
 
@@ -162,8 +164,14 @@ function getRomFrame(addr){debugger
 			bf3.skip(4);
 			continue;
 		}
-		let x = bf3.getShort();
-		let y = bf3.getShort();
+		let x = bf3.getShort() + ax;
+		let y = bf3.getShort() + ay;
+		if(vflip) {
+			y = -y - 0x10;
+		}
+		if(hflip) {
+			x = -x - 0x10;
+		}
 
 		let sprite = {
 			x : x,
@@ -171,8 +179,8 @@ function getRomFrame(addr){debugger
 			tile : tile,
 			nx : 1,
 			ny : 1,
-			vflip : palette & 0x40,	// this tile need flip
-			hflip : palette & 0x20,	// this tile need flip
+			vflip : vflip,	// this tile need flip
+			hflip : hflip,	// this tile need flip
 			pal : palette & 0x1F,
 		};
 	
