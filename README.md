@@ -6,25 +6,25 @@ An arcade game sprite viewer / map viewer (cps1 neogeo etc.)
 BTW. CPS & NEOGEO both use 68k but PSIKYOSH uses SH-2 which is far more difficult to read.
 * Click [here](https://github.com/bombzj/arcade-sprite-viewer) to view source code.</p>
 
-## CPS [view more](https://bombzj.github.io/arcade-sprite-viewer/cps)
-![punisher animation](https://bombzj.github.io/arcade-sprite-viewer/res/punisheranim.gif)<br/>
-![dino animation](https://bombzj.github.io/arcade-sprite-viewer/res/animdino.gif)<br/>
+## CPS [view more](https://asv.bombzj.com/cps)
+![punisher animation](https://asv.bombzj.com/res/punisheranim.gif)<br/>
+![dino animation](https://asv.bombzj.com/res/animdino.gif)<br/>
 
-* Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?punisher) to view `Punisher`.
+* Click [here](https://asv.bombzj.com/viewer.html?punisher) to view `Punisher`.
 
-## PSIKYOSH [view more](https://bombzj.github.io/arcade-sprite-viewer/psi)
-![1945ii animation](https://bombzj.github.io/arcade-sprite-viewer/res/anim1945ii.gif)<br/>
-![gunbird2 background](https://bombzj.github.io/arcade-sprite-viewer/res/mapgunbird2.png)<br/>
+## PSIKYOSH [view more](https://asv.bombzj.com/psi)
+![1945ii animation](https://asv.bombzj.com/res/anim1945ii.gif)<br/>
+![gunbird2 background](https://asv.bombzj.com/res/mapgunbird2.png)<br/>
 
-* Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?1945ii) to view `Strikers 1945ii`.
+* Click [here](https://asv.bombzj.com/viewer.html?1945ii) to view `Strikers 1945ii`.
 
-## NEO GEO [view more](https://bombzj.github.io/arcade-sprite-viewer/neo)
-![kof97 animation](https://bombzj.github.io/arcade-sprite-viewer/res/animkof97.gif)<br/>
-![kof98 animation](https://bombzj.github.io/arcade-sprite-viewer/res/animkof98.gif)<br/>
-![mslug2 background](https://bombzj.github.io/arcade-sprite-viewer/res/map3mslug2.gif)<br/>
-![kof2000 animation](https://bombzj.github.io/arcade-sprite-viewer/res/animkof2000.gif)<br/>
+## NEO GEO [view more](https://asv.bombzj.com/neo)
+![kof97 animation](https://asv.bombzj.com/res/animkof97.gif)<br/>
+![kof98 animation](https://asv.bombzj.com/res/animkof98.gif)<br/>
+![mslug2 background](https://asv.bombzj.com/res/map3mslug2.gif)<br/>
+![kof2000 animation](https://asv.bombzj.com/res/animkof2000.gif)<br/>
 
-* Click [here](https://bombzj.github.io/arcade-sprite-viewer/viewer.html?kof97) to view `King of Fighters 97`.
+* Click [here](https://asv.bombzj.com/viewer.html?kof97) to view `King of Fighters 97`.
 
 ## Usage
 * m key = change mode from 1 - 6 loop
