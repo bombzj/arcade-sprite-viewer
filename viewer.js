@@ -179,6 +179,7 @@ function refresh() {
 	} else {
 		canvas.style.display="none";
 		canvasBack.style.display="";
+		ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
 	}
 	if(mode == 0) {
 		drawTiles();
