@@ -27,6 +27,10 @@
 ![wof animation](https://bombzj.github.io/arcade-sprite-viewer/res/animwof.gif)<br/>
 ![wof background](https://bombzj.github.io/arcade-sprite-viewer/res/mapwof.png)<br/>
 
+## Street Fighter II Champion Edition
+![sf2ce animation](https://bombzj.github.io/arcade-sprite-viewer/res/animsf2ce.gif)<br/>
+![sf2ce background](https://bombzj.github.io/arcade-sprite-viewer/res/mapsf2ce.png)<br/>
+
 # TODO
 * more games
 * update palette set accordingly
