@@ -1,6 +1,7 @@
 # CPS
 * Capcom Power System
 * Click [here](https://github.com/bombzj/arcade-sprite-viewer/tree/master/cps) to view source code.
+
 ## Punisher
 ![punisher animation](https://asv.bombzj.com/res/punisheranim.gif)<br/>
 ![punisher background](https://asv.bombzj.com/res/punishermap.png)<br/>
@@ -34,3 +35,4 @@
 # TODO
 * more games
 * update palette set accordingly
+* where is MVSC's object ram?

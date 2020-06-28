@@ -1,5 +1,6 @@
 # NEO GEO by SNK
 * Click [here](https://github.com/bombzj/arcade-sprite-viewer/tree/master/neo) to view source code.
+
 ## King of Fighters 97
 ![image kof97](https://asv.bombzj.com/res/imgkof97.png)<br/>
 ![image kof97](https://asv.bombzj.com/res/img2kof97.png)<br/>
@@ -27,6 +28,7 @@
 # TODO
 * kof background
 * how to use dark bit in colors
+* why metal slug uses 1M space to transform color
 
 # Reference
 * [NeoGeo Sprite graphics format](https://wiki.neogeodev.org/index.php?title=Sprite_graphics_format)
