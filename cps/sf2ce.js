@@ -125,7 +125,7 @@ function drawMap() {
 		let scry = py * 16 * 16;
 
 		let ind = bf.getShort();
-		if(px < mapAddressSkip || mapAddressSkip + mapAddressSkip >= 4) {
+		if(px < mapAddressSkip || px - mapAddressSkip > 2) {
 			continue;
 		}
 
@@ -174,7 +174,7 @@ function drawMap2() {
 		let scry = py * 16 * 16;
 
 		let ind = bf.getShort();
-		if(px < mapAddressSkip || mapAddressSkip + mapAddressSkip >= 4) {
+		if(px < mapAddressSkip || px - mapAddressSkip > 2) {
 			continue;
 		}
 
