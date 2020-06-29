@@ -131,8 +131,8 @@ xhr.send();
 
 var bfr;	// rom data readonly temp
 // get rom data buffer
-function getrdbuf() {
-	return new bytebuffer(romFrameData);
+function getrdbuf(pos) {
+	return new bytebuffer(romFrameData, pos);
 }
 
 var palset;	// current palette set with 32*16 colors, per level

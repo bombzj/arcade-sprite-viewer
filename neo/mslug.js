@@ -9,7 +9,8 @@ function loadRomPal() {
 	var bf = getrdbuf();
 
 	// mslugPalette(0x78FFC);
-	// mslugPalette(0x7902E);
+	mslugPalette(0x9B4);
+	// mslugPalette(0x9FA);
 	mslugPalette(palsetAddress[palset]);
 
 	// palette_empty = 0x60
@@ -38,32 +39,44 @@ function loadRomPal() {
 }
 
 function mslugPalette(addr) {
-	var bf = getrdbuf();
+	var bf = getrdbuf(addr);
 	var bf2 = getrdbuf();
 
 	for(let p = 0;p < 0x100;p++) {
-		let idx2 = bf.getuShort(addr);		// write to
+		let idx2 = bf.getuShort();		// write to
 		if(idx2 == 0xFFFF) {
 			break;
 		}
-		let idx = bf.getShort(addr + 2);		// write from
-		idx <<= 5;
-		let addr2 = 0x200000 + idx;
+		let idx = bf.getShort();		// write from
+		idx <<= 6;
+		let addr2 = 0x14E00 + idx;
 		bf2.position(addr2);
 
-		let to = idx2 * 0x10;
+		let to = (idx2 & 0xFF) * 0x10;
 		palData[to] = 0;
-		bf2.skip(2);
+		bf2.skip(4);
 
 		for(let i = 0;i < 15;i++) {
-			let dt = bf2.getuShort() << 1;
-			let addr3 = 0x2F30 + dt;		
-			let color = bf.getuShort(addr3);
+			let color = colorTransform(bf2);
 			palData[i + to + 1] = neo2rgb(color);
 		}
-		addr += 6;
 	}
+}
 
+function colorTransform(bf) {debugger
+	let r = bf.get();
+	let g = bf.get();
+	let b = bf.get();
+	bf.skip();
+
+	let r2 = r - bfr.get(bfr.getInt(0x12F30 + (r << 2)) + 0x1F);
+	let g2 = g - bfr.get(bfr.getInt(0x12F30 + (g << 2)) + 0x1F);
+	let b2 = b - bfr.get(bfr.getInt(0x12F30 + (b << 2)) + 0x1F);
+
+	let color = (r << 10) | (g << 5) | (b & 0x1F);
+	
+	let addr3 = 0x2F30 + (color << 1);
+	return bfr.getuShort(addr3)
 }
 
 var palette_empty = 0x60;
