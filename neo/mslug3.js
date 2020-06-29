@@ -21,7 +21,7 @@ var palsetAddress = [
 
 // load pal from rom and oveewrite old
 function loadRomPal() {
-	var bf = new bytebuffer(romFrameData);
+	var bf = getrdbuf();
 
 	mslugPalette(0x4626);		// ROM:000046CE
 	mslugPalette(0x46A8);		// ROM:0000470E
@@ -56,14 +56,12 @@ function loadRomPal() {
 }
 
 function mslugPalette(addr) {
-	var bf = new bytebuffer(romFrameData);
-
 	for(let p = 0;p < 0x100;p++) {
-		let idx2 = bf.getuShort(addr);		// write to
+		let idx2 = bfr.getuShort(addr);		// write to
 		if(idx2 == 0xFFFF) {
 			break;
 		}
-		let idx = bf.getShort(addr + 2);
+		let idx = bfr.getShort(addr + 2);
 
 		mslugPaletteBase(idx, idx2 * 0x10)
 
@@ -81,8 +79,7 @@ function mslugPalette2(addr) {
 
 function mslugPaletteBase(idx, to) {
 	var rombase = unscramble(0x0904);
-	var bf = new bytebuffer(romFrameData);
-	var bf2 = new bytebuffer(romFrameData);
+	var bf2 = getrdbuf();
 
 	idx <<= 5;
 	let addr2 = 0x200000 + idx + rombase;
@@ -97,7 +94,7 @@ function mslugPaletteBase(idx, to) {
 			dt -= 0x10000;
 		}
 		let addr3 = 0x220000 + dt + rombase;		
-		let color = bf.getuShort(addr3);
+		let color = bfr.getuShort(addr3);
 		palData[i + to + 1] = neo2rgb(color);
 	}
 
@@ -124,7 +121,7 @@ var animTimer;
 function drawAnimation(addr) {
 	animCB = null;
 //	let addr = animAddress[curAnim];
-	var bf = new bytebuffer(romFrameData);
+	var bf = getrdbuf();
 	if(!addr) {
 		addr = animAddress[curAnim];
 		if(typeof addr !== 'number') {
@@ -251,8 +248,8 @@ function drawMap() {
 	palset = curMap;
 	loadRomPal();
 
-	var bf = new bytebuffer(romFrameData);
-	var bf2 = new bytebuffer(romFrameData);
+	var bf = getrdbuf();
+	var bf2 = getrdbuf();
 	let addr = mapAddress[curMap] + mapScene * 12;	// mapAddressSkip
 
 	// ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
@@ -338,8 +335,8 @@ frameAddress = [		// bp 331C get D4
 
 // get frame from addr. return a frame obj
 function getRomFrame(addr, f) {
-	var bf = new bytebuffer(romFrameData);
-	var bf2 = new bytebuffer(romFrameData);
+	var bf = getrdbuf();
+	var bf2 = getrdbuf();
 	let frame = {
 		sprites: [],
 	};
@@ -408,8 +405,8 @@ var palmap = [
 
 var levelAddress = 0xECE2C;	// all level data begin here
 function loadRomFrame() {
-	var bf = new bytebuffer(romFrameData);
-	var bf2 = new bytebuffer(romFrameData);
+	var bf = getrdbuf();
+	var bf2 = getrdbuf();
 	
 	// for(let i = 0;i < 21;i++) {
 	// 	let addr = bf.getInt(0x120280 + i * 4);

@@ -1,37 +1,37 @@
 "use strict"
 
 var palsetAddress = [
-	0x53272, 0x545D4, 0xC8374, 0xCAEAA, 0x55482, 0x566CA, 0x57CEC, 0x545D4, 0x4E226, 0x545D4
+	
 ];
 
 // load pal from rom and oveewrite old
 function loadRomPal() {
 	var bf = getrdbuf();
 
-	mslugPalette(0x78FFC);
-	mslugPalette(0x7902E);
+	// mslugPalette(0x78FFC);
+	// mslugPalette(0x7902E);
 	mslugPalette(palsetAddress[palset]);
 
-	palette_empty = 0x60
+	// palette_empty = 0x60
 
-	var playerPalette = 0x90E54;
+	// var playerPalette = 0x90E54;
 
-	mslugPalette2(bf.getuShort(playerPalette));
-	mslugPalette2(bf.getuShort(playerPalette + 2));
-	mslugPalette2(bf.getuShort(playerPalette + 4));
-	mslugPalette2(bf.getuShort(playerPalette + 6));
+	// mslugPalette2(bf.getuShort(playerPalette));
+	// mslugPalette2(bf.getuShort(playerPalette + 2));
+	// mslugPalette2(bf.getuShort(playerPalette + 4));
+	// mslugPalette2(bf.getuShort(playerPalette + 6));
 
-	mslugPalette2(0x125);
-	mslugPalette2(0x3BE);
+	// mslugPalette2(0x125);
+	// mslugPalette2(0x3BE);
 
-	mslugPalette2(0x7A);
-	mslugPalette2(0x7C);
-	mslugPalette2(0x7E);
-	mslugPalette2(0x80);
+	// mslugPalette2(0x7A);
+	// mslugPalette2(0x7C);
+	// mslugPalette2(0x7E);
+	// mslugPalette2(0x80);
 
-	mslugPalette2(0x38D);
-	mslugPalette2(0x3AA);
-	mslugPalette2(0x200);
+	// mslugPalette2(0x38D);
+	// mslugPalette2(0x3AA);
+	// mslugPalette2(0x200);
 	
 	if(showPal)
 		drawPal();
@@ -57,11 +57,8 @@ function mslugPalette(addr) {
 
 		for(let i = 0;i < 15;i++) {
 			let dt = bf2.getuShort() << 1;
-			if(dt > 0x8000) {	// signed because ROM:000809EE    move.w  (a3,d0.w),(a4)+
-				dt -= 0x10000;
-			}
-			let addr3 = 0x214000 + dt;		
-			let color = bfr.getuShort(addr3);
+			let addr3 = 0x2F30 + dt;		
+			let color = bf.getuShort(addr3);
 			palData[i + to + 1] = neo2rgb(color);
 		}
 		addr += 6;
@@ -293,12 +290,13 @@ var palmap = [
 ];
 
 function loadRomFrame() {
-	// var bf = getrdbuf();
+	var bf = getrdbuf();
 	
-	// for(let i = 0;i < 21;i++) {
-	// 	let addr = bf.getInt(0x120280 + i * 4);
-	// 	frameAddress.push(addr);
-	// 	// if(palmap[i])
-	// 	// 	spritePaletteMap.set(addr, palmap[i]);
-	// }
+	for(let i = 0;i < 14;i++) {
+		let addr = bf.getInt(0x916C8 + i * 8);
+		if(bfr.getShort(addr + 6) == 0xA) {
+			palsetAddress.push(addr + 8);
+		}
+		
+	}
 }
