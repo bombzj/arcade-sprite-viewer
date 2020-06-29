@@ -1,0 +1,11 @@
+[palette]
+ROM:000916C8 level_data:     dc.l unk_91782          ; DATA XREF: sub_43562+C↑o
+ROM:000916CC                 dc.l unk_91748
+ROM:000916D0                 dc.l unk_92034
+ROM:000916D4                 dc.l unk_91FFA
+ROM:000916D8                 dc.l unk_9256E
+ROM:000916DC                 dc.l unk_92534
+ROM:000916E0                 dc.l unk_92BD2
+ROM:000916E4                 dc.l unk_92B98
+ROM:000916E8                 dc.l unk_932F8
+ROM:000916EC                 dc.l unk_932BE
