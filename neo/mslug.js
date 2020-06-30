@@ -49,7 +49,7 @@ function mslugPalette(addr) {
 		}
 		let idx = bf.getShort();		// write from
 		idx <<= 6;
-		let addr2 = 0x14E00 + idx;
+		let addr2 = 0x1CE00 + idx;
 		bf2.position(addr2);
 
 		let to = (idx2 & 0xFF) * 0x10;
@@ -63,7 +63,7 @@ function mslugPalette(addr) {
 	}
 }
 
-function colorTransform(bf) {debugger
+function colorTransform(bf) {
 	let r = bf.get();
 	let g = bf.get();
 	let b = bf.get();
@@ -122,20 +122,20 @@ var curAnim;	// current animation index
 var curAnimAct;	// current animation index
 // show object animation from rom address
 var animTimer;
-function drawAnimation(addr) {
-//	let addr = animAddress[curAnim];
-	var bf = getrdbuf();
-	if(!addr)
-		addr = animAddress[curAnim];
+// function drawAnimation(addr) {
+// //	let addr = animAddress[curAnim];
+// 	var bf = getrdbuf();
+// 	if(!addr)
+// 		addr = animAddress[curAnim];
 
-	if(animTimer) {
-		clearTimeout(animTimer)
-		animTimer = null;
-	}
+// 	if(animTimer) {
+// 		clearTimeout(animTimer)
+// 		animTimer = null;
+// 	}
 	
 
-	loopDrawAnimation(addr);
-}
+// 	loopDrawAnimation(addr);
+// }
 function loopDrawAnimation(addr, offset = 0xA) {
 	animTimer = null;
 
@@ -168,7 +168,7 @@ function drawAnimationFrame(addr, c = ctx, offx = 128, offy = 160, cbbase = 0x10
 
 
 var mapAddress = [
-	0x531BA, 0x54574, 0xC82AC, 0xCAC6A, 0x55452, 0x56638, 0x58BD6, 0x549A2, 0x4E1D0, 0xC7A5A
+	0x91940, 0x921F2
 ];
 var map2Address = 0x1923A;	// layer 2 background
 
@@ -191,22 +191,21 @@ function drawMap() {
 	var imageData = ctxBack.createImageData(gridWidth, gridHeight);
 
 	bf.position(addr);
-	let addr2 = bf.getInt();
-	let addr3 = bf.getInt();
-	let x = bf.getShort();
+	let w = bf.getShort();
 	let h = bf.getShort();
-
+	let addr2 = bf.getInt();
+	
 	labelInfo.innerText += ' height:'+h;
 
 	bf2.position(addr2);
 	bf2.skip(4 * h * mapAddressSkip);
-
-	for(let i = 0;i < 32;i++) {
+	let imax = Math.min(w - mapAddressSkip, 34);
+	for(let i = 0;i < imax;i++) {
 		for(let j = 0;j < h;j++) {
 			let tile = bf2.getuShort();
 			let pal = bf2.get();
 			let flag = bf2.get();
-			tile += flag & 0xF0;
+			tile += (flag & 0xF0) << 12;
 			let a8 = flag & 0b1000;	// 8 frame auto animation
 			let a4 = flag & 0b0100;	// 4 frame auto animation
 			if(a8) {

@@ -1,3 +1,24 @@
+[background]
+ROM:00043B94                 lea     6(a1),a1        ; background data
+  then
+ROM:00051C08 bg_draw2:                               ; CODE XREF: sub_43DF4↑p
+ROM:00051C08                 movea.l $E(a0),a1
+ROM:00051C0C                 move.w  4(a0),d0
+ROM:00051C10                 move.w  8(a0),d1
+  then
+ROM:00051DE2 bg_draw:                                ; CODE XREF: bg_draw2+6A↑p
+ROM:00051DE2                                         ; sub_51C82+60↑p ...
+ROM:00051DE2                 andi.l  #$FFFF,d4
+ROM:00051DE8                 andi.l  #$FFFF,d5
+ROM:00051DEE                 move.w  2(a1),d6
+
+
+ROM:00091940                 dc.w $78                ; bg1, width
+ROM:00091942                 dc.w $12                ; height
+ROM:00091944                 dc.l unk_A18A8
+
+
+
 [palette]
 ROM:000916C8 level_data:     dc.l unk_91782          ; DATA XREF: sub_43562+C↑o
 ROM:000916CC                 dc.l unk_91748

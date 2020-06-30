@@ -196,7 +196,7 @@ function drawMap() {
 			let tile = bf2.getuShort();
 			let pal = bf2.get();
 			let flag = bf2.get();
-			tile += flag & 0xF0;
+			tile += (flag & 0xF0) << 12;
 			let a8 = flag & 0b1000;	// 8 frame auto animation
 			let a4 = flag & 0b0100;	// 4 frame auto animation
 			if(a8) {
