@@ -11,15 +11,21 @@
 ![image kof98](https://asv.bombzj.com/res/img2kof98.png)<br/>
 
 * Click [here](https://asv.bombzj.com/viewer.html?kof98) to view `King of Fighters 98`.
+
+## Metal Slug
+![mslug background](https://asv.bombzj.com/res/mapmslug.gif)<br/>
+
 ## Metal Slug 2
 ![mslug2 background](https://asv.bombzj.com/res/mapmslug2.gif)<br/>
 ![mslug2 background](https://asv.bombzj.com/res/map2mslug2.png)
 ![mslug2 animation](https://asv.bombzj.com/res/animmslug2.gif)<br/>
 * Click [here](https://asv.bombzj.com/viewer.html?mslug2) to view `Metal Slug 2`.
+
 ## Metal Slug 3
 ![mslug3 background](https://asv.bombzj.com/res/mapmslug3.gif)<br/>
 ![mslug3 background](https://asv.bombzj.com/res/map2mslug3.gif)<br/>
-![mslug3 animation](https://asv.bombzj.com/res/animmslug3.gif)<br/>
+![mslug3 animation](https://asv.bombzj.com/res/animmslug3.gif)
+
 ## King of Fighters 2000
 ![kof2000 animation](https://asv.bombzj.com/res/animkof2000.gif)<br/>
 ![kof2000 animation](https://asv.bombzj.com/res/anim2kof2000.gif)<br/>
