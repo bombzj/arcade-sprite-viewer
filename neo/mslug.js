@@ -168,7 +168,7 @@ function drawAnimationFrame(addr, c = ctx, offx = 128, offy = 160, cbbase = 0x10
 
 
 var mapAddress = [
-	0x91940, 0x921F2
+	// 0x91940, 0x921F2, 0x92728, 0x92D94
 ];
 var map2Address = 0x1923A;	// layer 2 background
 
@@ -303,12 +303,48 @@ var palmap = [
 
 function loadRomFrame() {
 	var bf = getrdbuf();
-	
+	var paletteAddr;
 	for(let i = 0;i < 14;i++) {
 		let addr = bf.getInt(0x916C8 + i * 8);
-		if(bfr.getShort(addr + 6) == 0xA) {
-			palsetAddress.push(addr + 8);
+		// if(bfr.getShort(addr + 6) == 0xA) {
+		// 	palsetAddress.push(addr + 8);
+		// }
+		bf.position(addr);
+		for(let j = 0;j < 100;j++) {
+			let func = bf.getShort();
+			if(func == 0xA) {
+				paletteAddr = bf.position();
+				for(let j = 0;j < 0x100;j++) {
+					if(bf.getuShort() == 0xFFFF) {
+						break;
+					}
+					bf.skip(2);
+				}
+			} else if(func == 0x0) {
+				let bgAddr = bf.position() + 4;
+				palsetAddress.push(paletteAddr);
+				mapAddress.push(bgAddr);
+				bf.skip(0x14);
+			} else if(func == 0x3 || func == 0x10 || func == 0x9 || func == 0x5 || func == 0x7 || func == 0x8) {
+				bf.skip(4);
+			} else if(func == 0xC || func == 0x13 || func == 0x12) {
+				bf.skip(2);
+			} else if(func == 0x6) {
+				bf.skip(16);
+			} else if(func == 0x14) {
+				bf.skip(14);
+			} else if(func == 0xF || func == 0x1) {
+				bf.skip(10);
+			} else if(func == 0x11) {
+				bf.skip(8);
+			} else if(func == 0x4) {
+				bf.skip(6);
+			} else if(func == 0xd) {
+				bf.skip(12);
+			} else {
+				console.log('unknown level func 0x' + func.toString(16) + ' at 0x' + bf.position().toString(16));
+				break;
+			}
 		}
-		
 	}
 }
