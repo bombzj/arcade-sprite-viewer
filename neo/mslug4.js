@@ -1,22 +1,6 @@
 "use strict"
 
 var palsetAddress = [
-	0x2E152, 0x2E152, 0x2E152, 
-	// 0x2E67E, 0x2E67E, 0x2E67E, 
-	// 0x2E85C, 0x2E85C,
-	// 0xF7126, 0xF7126,			// level 2
-	// 0x2E94C, 0x2E94C,
-	// 0x2EB38,
-	// 0x287EE, 0x287EE,			// level 3
-	// 0x2ED16, 0x2ED16,
-	// 0x2F09C, 0x2F09C, 0x2F09C,
-	// 0x337D6,
-	// 0x2F41C, 0x2F41C, 0x2F41C,
-	// 0x2F672, 0x2F672,
-	// 0x2FA26, 0x2FA26, 0x2FA26,
-	// 0x2FDAC, 0x2FDAC, 0x2FDAC,	// level 4
-	// 0x3627A, 0x3627A,
-	//0x545D4, 0xC8374, 0xCAEAA, 0x55482, 0x566CA, 0x57CEC, 0x545D4, 0x4E226, 0x545D4
 ];
 
 // load pal from rom and oveewrite old
@@ -78,11 +62,10 @@ function mslugPalette2(addr) {
 }
 
 function mslugPaletteBase(idx, to) {
-	var rombase = unscramble(0x0904);
 	var bf2 = getrdbuf();
 
 	idx <<= 5;
-	let addr2 = 0x200000 + idx + rombase;
+	let addr2 = 0x200000 + idx;
 	bf2.position(addr2);
 
 	palData[to] = 0;
@@ -93,7 +76,7 @@ function mslugPaletteBase(idx, to) {
 		if(dt > 0x8000) {	// signed because ROM:000809EE    move.w  (a3,d0.w),(a4)+
 			dt -= 0x10000;
 		}
-		let addr3 = 0x220000 + dt + rombase;		
+		let addr3 = 0x227BA4 + dt;		
 		let color = bfr.getuShort(addr3);
 		palData[i + to + 1] = neo2rgb(color);
 	}
@@ -108,11 +91,6 @@ function movetoTile(tile) {
 
 var animAddress = [
 	[0x3D69A6,0x9D0], [0x37B9C6,0x9D0], 0x3968C0, [0x396D10,0x38D], [0x396DE0,0x38D], 0x396E64, 0x396ECA, 0x3c6164,
-	[0x3B3A5C,0x8A9,0xB2F52] , [0x3B3682,0x8A9,0xB2F52], [0x3b4218,0x8A8],
-	0x3d7786, 0x3dab1e, 0x3c6618,
-	0x37ae5e, 0x37c696, 0x3b66f8, 0x37c418, 0x38d8ca,
-	[0x321868,0x855], [0x32001a,0x855], [0x328788,0x855],
-	0x3db0ee
 ];
 var curAnim;	// cur	rent animation index
 var curAnimAct;	// current animation index
@@ -218,24 +196,7 @@ function drawAnimationFrame(addr, c = ctx, offx = 128, offy = 160, cbbase = 0x10
 
 
 var mapAddress = [
-	0x2E014, 0x2E05E, 0x2E0A8,	// level 1
-	// 0x2E560, 0x2E5BE, 0x2E622,
-	// 0x2E806, 0x2E82E,
-	// 0xF6FD2, 0xF7052,			// level 2
-	// 0x2E912, 0x2E92C,
-	// 0x2EB0E,
-	// 0x287B4, 0x287CE,			// level 3
-	// 0x2ECCE, 0x2ECE8,
-	// 0x2EF04, 0x2EF50, 0x2EFBE,
-	// 0x337A8,
-	// 0x2F3C8, 0x2F3E2, 0x2F3FC,
-	// 0x2F56C, 0x2F5EC,
-	// 0x2F98E, 0x2F9CA, 0x2F9E4,
-	// 0x2FCBC, 0x2FBF8, 0x2FD34,	// level 4
-	// 0x36238, 0x3625A,			// level 5
-	//0x54574, 0xC82AC, 0xCAC6A, 0x55452, 0x56638, 0x58BD6, 0x549A2, 0x4E1D0, 0xC7A5A
 ];
-var map2Address = 0x1923A;	// layer 2 background
 
 let mapWidth = 32;
 let mapHeight;	// default 8
@@ -265,7 +226,7 @@ function drawMap() {
 			let tmp1 = bf.getShort();
 			nextbg = bf.getShort();
 		} else if(func == 0x4) {
-			saveaddr = bf.position();
+			saveaddr = bf.position();debugger
 			addr2 = bf.getShort();
 			offset = bf.getuShort();
 			bf.skip(4);
@@ -285,10 +246,11 @@ function drawMap() {
 	}
 
 
-	
-	addr2 = (addr2 << 3) + 0x1002;
-	let page = bf.getuShort(addr2);	// memory page
-	let addr3 = bf.getInt(addr2 + 2) + unscramble(page);
+	debugger
+	addr2 <<= 3;
+	addr2 += 2 + 0x2cc;	// memory page
+	let page = bfr.getShort(addr2);
+	let addr3 = bf.getInt(addr2 + 2) + (page - 1) * 0x100000;
 
 	if(h > 0x100) {	// too 
 		debugger;
@@ -476,39 +438,4 @@ function loadRomFrame() {
 		}
 	}
 	maxMap = mapAddress.length;
-}
-
-
-function unscramble(sel) {
-	var bankoffset =
-	[
-		0x000000, 0x020000, 0x040000, 0x060000, // 00
-		0x070000, 0x090000, 0x0b0000, 0x0d0000, // 04
-		0x0e0000, 0x0f0000, 0x120000, 0x130000, // 08
-		0x140000, 0x150000, 0x180000, 0x190000, // 12
-		0x1a0000, 0x1b0000, 0x1e0000, 0x1f0000, // 16
-		0x200000, 0x210000, 0x240000, 0x250000, // 20
-		0x260000, 0x270000, 0x2a0000, 0x2b0000, // 24
-		0x2c0000, 0x2d0000, 0x300000, 0x310000, // 28
-		0x320000, 0x330000, 0x360000, 0x370000, // 32
-		0x380000, 0x390000, 0x3c0000, 0x3d0000, // 36
-		0x400000, 0x410000, 0x440000, 0x450000, // 40
-		0x460000, 0x470000, 0x4a0000, 0x4b0000, // 44
-		0x4c0000, // rest not used?
-	];
-
-	// unscramble bank number
-	let data =
-		(BIT(sel, 14) << 0)+
-		(BIT(sel, 12) << 1)+
-		(BIT(sel, 15) << 2)+
-		(BIT(sel,  6) << 3)+
-		(BIT(sel,  3) << 4)+
-		(BIT(sel,  9) << 5);
-
-	return -0x100000 + bankoffset[data];
-}
-
-function BIT(sel, n) {
-	return (sel >> n) & 1;
 }

@@ -235,7 +235,6 @@ var mapAddress = [
 	// 0x36238, 0x3625A,			// level 5
 	//0x54574, 0xC82AC, 0xCAC6A, 0x55452, 0x56638, 0x58BD6, 0x549A2, 0x4E1D0, 0xC7A5A
 ];
-var map2Address = 0x1923A;	// layer 2 background
 
 let mapWidth = 32;
 let mapHeight;	// default 8
