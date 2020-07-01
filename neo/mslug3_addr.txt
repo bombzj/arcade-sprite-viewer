@@ -87,6 +87,10 @@ ROM:000ECE38                 dc.l off_EC5CC
 ROM:000ECE3C                 dc.l unk_EC87C
 ROM:000ECE40                 dc.l unk_ECAAA
 
+func1_list for parsing top level data like 0xEC23E
+func2_list for parsing level background data like 0x2E394
+func3_list for parsing level background image data like 0x2E014
+
 ROM:000ED1CC func1_list:                             ; CODE XREF: ROM:000ED1C6↑j
 ROM:000ED1CC                 jmp     loc_ED1D0(pc,d0.w)
 ROM:000ED1D0 loc_ED1D0:                              ; CODE XREF: ROM:func1_list↑j

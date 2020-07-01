@@ -459,9 +459,9 @@ function loadRomFrame() {
 					bf2.skip(2);
 				} else if(func == 0x14 || func == 0x18) {
 					bf2.skip(6);
-				} else if(func == 0x0 || func == 0x30 || func == 0x4C || func == 0x38) {
+				} else if(func == 0x0 || func == 0x30 || func == 0x38) {
 					bf2.skip(8);
-				} else if(func == 0x8 || func == 0x10 || func == 0x44 || func == 0xC || func == 0x1C) {
+				} else if(func == 0x8 || func == 0x10 || func == 0x4C || func == 0x44 || func == 0xC || func == 0x1C) {
 					bf2.skip(4);
 				} else {
 					labelInfo.innerText = 'unknown func 0x' + func.toString(16).toUpperCase() + ' at ' +
