@@ -26,6 +26,9 @@
 ![mslug3 background](https://asv.bombzj.com/res/map2mslug3.gif)<br/>
 ![mslug3 animation](https://asv.bombzj.com/res/animmslug3.gif)
 
+## Metal Slug 4
+![mslug4 background](https://asv.bombzj.com/res/mapmslug4.gif)
+
 ## King of Fighters 2000
 ![kof2000 animation](https://asv.bombzj.com/res/animkof2000.gif)<br/>
 ![kof2000 animation](https://asv.bombzj.com/res/anim2kof2000.gif)<br/>
