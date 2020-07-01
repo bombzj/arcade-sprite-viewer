@@ -403,7 +403,7 @@ var palmap = [
 
 ];
 
-var levelAddress = 0xECE2C;	// all level data begin here
+var levelAddress = 0xB96DC;	// all level data begin here
 function loadRomFrame() {
 	var bf = getrdbuf();
 	var bf2 = getrdbuf();
