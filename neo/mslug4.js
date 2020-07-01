@@ -39,7 +39,7 @@ function loadRomPal() {
 		drawPal();
 }
 
-function mslugPalette(addr) {
+function mslugPalette(addr) {debugger
 	for(let p = 0;p < 0x100;p++) {
 		let idx2 = bfr.getuShort(addr);		// write to
 		if(idx2 == 0xFFFF) {
@@ -65,7 +65,7 @@ function mslugPaletteBase(idx, to) {
 	var bf2 = getrdbuf();
 
 	idx <<= 5;
-	let addr2 = 0x200000 + idx;
+	let addr2 = 0x200004 + idx;	// ROM:000A5FC8                 lea     (a3,d0.l),a6    ; a6 = 200004
 	bf2.position(addr2);
 
 	palData[to] = 0;
@@ -226,7 +226,7 @@ function drawMap() {
 			let tmp1 = bf.getShort();
 			nextbg = bf.getShort();
 		} else if(func == 0x4) {
-			saveaddr = bf.position();debugger
+			saveaddr = bf.position();
 			addr2 = bf.getShort();
 			offset = bf.getuShort();
 			bf.skip(4);
@@ -246,7 +246,6 @@ function drawMap() {
 	}
 
 
-	debugger
 	addr2 <<= 3;
 	addr2 += 2 + 0x2cc;	// memory page
 	let page = bfr.getShort(addr2);

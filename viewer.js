@@ -1053,7 +1053,7 @@ window.addEventListener("keydown", function (event) {
 
 
 window.addEventListener("keyup", function (event) {
-	console.log("key = " + event.key);
+	// console.log("key = " + event.key);
 	delete pressed[event.keyCode];
 }, false);
 

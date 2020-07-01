@@ -1,0 +1,8 @@
+[palette]
+similar to mslug3 without memory page scrambling, use page number directly
+
+ROM:0000D780                 lsl.l   #5,d0
+ROM:0000D782                 lea     (a0,d0.w),a0
+ROM:0000D786                 bsr.w   palette_load
+
+ROM:000A5FC8                 lea     (a3,d0.l),a6    ; a6 = 200004
