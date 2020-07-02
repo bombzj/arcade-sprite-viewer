@@ -9,7 +9,7 @@ function loadRomPal() {
 
 	mslugPalette(0xE7B58);		// ROM:000046CE
 	mslugPalette(0xE7BDA);		// ROM:0000470E
-	let addr = palsetAddress[palset];debugger
+	let addr = palsetAddress[palset];
 	if(typeof addr !== 'number') {
 		for(let addr2 of addr) {
 			mslugPalette(addr2);
@@ -236,7 +236,6 @@ function drawMap() {
 			saveaddr = bf.position();
 			addr2 = bf.getShort();
 			offset = bf.getuShort();
-			bf.skip(4);
 			w = bf.getShort();
 			h = bf.getShort();
 			let tmp1 = bf.getInt();
@@ -252,11 +251,10 @@ function drawMap() {
 		}
 	}
 
-
-	addr2 <<= 3;
-	addr2 += 2 + 0x2cc;	// memory page
-	let page = bfr.getShort(addr2);
-	let addr3 = bf.getInt(addr2 + 2) + (page - 1) * 0x100000;
+debugger
+	addr2 <<= 2;
+	addr2 += 0x200008;	// ROM:00018440                 movea.l ($200004).l,a2
+	let addr3 = bfr.getInt(addr2) + 4;
 
 	if(h > 0x100) {	// too 
 		debugger;
