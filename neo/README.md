@@ -28,6 +28,11 @@
 
 ## Metal Slug 4
 ![mslug4 background](https://asv.bombzj.com/res/mapmslug4.gif)
+* Click [here](https://asv.bombzj.com/viewer.html?mslug4) to view `Metal Slug 4`.
+
+## Metal Slug 5
+![mslug4 background](https://asv.bombzj.com/res/mapmslug5.gif)
+* Click [here](https://asv.bombzj.com/viewer.html?mslug5) to view `Metal Slug 5`.
 
 ## King of Fighters 2000
 ![kof2000 animation](https://asv.bombzj.com/res/animkof2000.gif)<br/>
