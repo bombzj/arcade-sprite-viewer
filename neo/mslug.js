@@ -167,25 +167,25 @@ function drawAnimationFrame(addr, c = ctx, offx = 128, offy = 160, cbbase = 0x10
 }
 
 
-var mapAddress = [
+var bgAddress = [
 	// 0x91940, 0x921F2, 0x92728, 0x92D94
 ];
-var map2Address = 0x1923A;	// layer 2 background
+var bg2Address = 0x1923A;	// layer 2 background
 
-let mapWidth = 32;
-let mapHeight;	// default 8
-let mapGrid = 2;		// each map tile contains 4 raw tiles?
+let bgWidth = 32;
+let bgHeight;	// default 8
+let bgGrid = 2;		// each map tile contains 4 raw tiles?
 // draw a background with tilemap
 
 var autoAnim = 0;
 
-function drawMap() {
-	palset = curMap;
+function drawbg() {
+	palset = curbg;
 	loadRomPal();
 
 	var bf = getrdbuf();
 	var bf2 = getrdbuf();
-	let addr = mapAddress[curMap] + mapScene * 12;	// mapAddressSkip
+	let addr = bgAddress[curbg] + bgScene * 12;	// bgAddressSkip
 
 	// ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
 	var imageData = ctxBack.createImageData(gridWidth, gridHeight);
@@ -198,8 +198,8 @@ function drawMap() {
 	labelInfo.innerText += ' height:'+h;
 
 	bf2.position(addr2);
-	bf2.skip(4 * h * mapAddressSkip);
-	let imax = Math.min(w - mapAddressSkip, 34);
+	bf2.skip(4 * h * bgAddressSkip);
+	let imax = Math.min(w - bgAddressSkip, 34);
 	for(let i = 0;i < imax;i++) {
 		for(let j = 0;j < h;j++) {
 			let tile = bf2.getuShort();
@@ -215,7 +215,7 @@ function drawMap() {
 			}
 			drawTilesBase(imageData, tile, 1, 1, pal, 16, false, (flag & 0x2), (flag & 0x1), false);
 
-			ctxBack.putImageData(imageData, i * gridHeight, j * gridWidth - mapAddressSkipY * 32);
+			ctxBack.putImageData(imageData, i * gridHeight, j * gridWidth - bgAddressSkipY * 32);
 		}
 	}
 
@@ -228,8 +228,8 @@ var map2Data = [
 ];
 
 
-function setMapTileStart(mapstart) {
-	mapScene = mapstart;
+function setMapTileStart(bgstart) {
+	bgScene = bgstart;
 	refresh();
 }
 
@@ -323,7 +323,7 @@ function loadRomFrame() {
 			} else if(func == 0x0) {
 				let bgAddr = bf.position() + 4;
 				palsetAddress.push(paletteAddr);
-				mapAddress.push(bgAddr);
+				bgAddress.push(bgAddr);
 				bf.skip(0x14);
 			} else if(func == 0x3 || func == 0x10 || func == 0x9 || func == 0x5 || func == 0x7 || func == 0x8) {
 				bf.skip(4);

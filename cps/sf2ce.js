@@ -98,38 +98,38 @@ function loopDrawAnimation(addr, offset = 0x18) {
 var mapData = [
 	
 ];
-var mapAddress = 0x120000;
+var bgAddress = 0x120000;
 var mapIndexes = 0xA38C8;
 
-var map2Address;	// layer 2 background
+var bg2Address;	// layer 2 background
 
 
-let mapWidth = 32;
-let mapHeight;	// default 8
-let mapGrid = 2;		// each map tile contains 4 raw tiles?
+let bgWidth = 32;
+let bgHeight;	// default 8
+let bgGrid = 2;		// each map tile contains 4 raw tiles?
 
 // draw a background with tilemap
-function drawMap() {
-	palset = curMap;
+function drawbg() {
+	palset = curbg;
 	loadRomPal();
 	var bf = getrdbuf();
 	var bf2 = getrdbuf();
 	var imageData = ctxBack.createImageData(gridWidth, gridHeight);
 
-	let indexlist = bfr.getInt(mapIndexes + curMap * 4);
+	let indexlist = bfr.getInt(mapIndexes + curbg * 4);
 	bf.position(indexlist);
 	for(let p = 0;p < 8;p++) {
 		let px = p & 0x3;
 		let py = p >> 2;
-		let scrx = (px - mapAddressSkip) * 16 * 16;
+		let scrx = (px - bgAddressSkip) * 16 * 16;
 		let scry = py * 16 * 16;
 
 		let ind = bf.getShort();
-		if(px < mapAddressSkip || px - mapAddressSkip > 2) {
+		if(px < bgAddressSkip || px - bgAddressSkip > 2) {
 			continue;
 		}
 
-		let addr = mapAddress + (ind << 10);
+		let addr = bgAddress + (ind << 10);
 		bf2.position(addr);
 
 		for(let i=0;i<16;i++) {
@@ -156,29 +156,29 @@ function drawMap() {
 var map2Data = [
 	
 ];
-var map2Address = 0x118000;
+var bg2Address = 0x118000;
 var map2Indexes = 0xA3918;
-function drawMap2() {
-	palset = curMap;
+function drawbg2() {
+	palset = curbg;
 	loadRomPal();
 	var bf = getrdbuf();
 	var bf2 = getrdbuf();
 	var imageData = ctxBack.createImageData(gridWidth * 2, gridHeight * 2);
 
-	let indexlist = bfr.getInt(map2Indexes + curMap * 4);
+	let indexlist = bfr.getInt(map2Indexes + curbg * 4);
 	bf.position(indexlist);
 	for(let p = 0;p < 8;p++) {
 		let px = p & 0x3;
 		let py = p >> 2;
-		let scrx = (px - mapAddressSkip) * 16 * 16;
+		let scrx = (px - bgAddressSkip) * 16 * 16;
 		let scry = py * 16 * 16;
 
 		let ind = bf.getShort();
-		if(px < mapAddressSkip || px - mapAddressSkip > 2) {
+		if(px < bgAddressSkip || px - bgAddressSkip > 2) {
 			continue;
 		}
 
-		let addr = map2Address + (ind << 8);
+		let addr = bg2Address + (ind << 8);
 		bf2.position(addr);
 
 
@@ -201,8 +201,8 @@ function drawMap2() {
 	}
 }
 
-function setMapTileStart(mapstart) {
-	mapScene = mapstart;
+function setMapTileStart(bgstart) {
+	bgScene = bgstart;
 	refresh();
 }
 

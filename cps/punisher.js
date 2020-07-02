@@ -145,36 +145,36 @@ function drawCB(bf, c = ctx, offx = 128, offy = 160) {
 }
 
 
-var mapAddress = 0xA8F5E;
+var bgAddress = 0xA8F5E;
 
-let mapWidth = 32;
-let mapHeight;	// default 8
-let mapGrid = 2;		// each map tile contains 4 raw tiles?
+let bgWidth = 32;
+let bgHeight;	// default 8
+let bgGrid = 2;		// each map tile contains 4 raw tiles?
 
 // draw a background with tilemap
-function drawMap() {
+function drawbg() {
 	var bf = new bytebuffer(romFrameData);
 	var bf2 = new bytebuffer(romFrameData);
 	var bf3 = new bytebuffer(romFrameData);
 	// ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
 	
-	let tileindex = bf.getInt(mapAddress + curMap * 8);
-	let tileaddr = bf.getInt(mapAddress + curMap * 8 + 4);
-	let bigindex = bf.getInt(0xA990C + curMap * 4);
+	let tileindex = bf.getInt(bgAddress + curbg * 8);
+	let tileaddr = bf.getInt(bgAddress + curbg * 8 + 4);
+	let bigindex = bf.getInt(0xA990C + curbg * 4);
 	
 //	labelInfo.innerText = 'address:' + bf.position().toString(16).toUpperCase()
-//			+ ' 2x2tile address:' + mapTileAddress[curMap].toString(16).toUpperCase();
+//			+ ' 2x2tile address:' + mapTileAddress[curbg].toString(16).toUpperCase();
 	var imageData = ctxBack.createImageData(gridWidth, gridHeight);
 
 	var height = 2;
 	bf3.position(bigindex);
 	
 	let startscr=0;
-//	for(let scr=0;scr<6 + mapAddressSkip * 2;scr++) {
+//	for(let scr=0;scr<6 + bgAddressSkip * 2;scr++) {
 	let scenecount = bf3.getr(-2) / 2;
 	let scenelength = bf3.getr(-1);
 	labelInfo.innerHTML += ',size:' + scenecount+','+scenelength;
-	bf3.skip(mapAddressSkip * 2 * scenecount + mapScene * 2);
+	bf3.skip(bgAddressSkip * 2 * scenecount + bgScene * 2);
 
 	for(let scr=0;scr<4;scr++) {
 		
@@ -182,7 +182,7 @@ function drawMap() {
 			bf3.skip(2 * (scenecount-1))
 		
 		let scrTile = bf3.get();
-//		if(scr<mapAddressSkip * 2)
+//		if(scr<bgAddressSkip * 2)
 //			continue;
 //		
 
@@ -195,8 +195,8 @@ function drawMap() {
 			for(let j=0;j<8;j++) {
 				let maptile=bf.getShort();
 				bf2.position(maptile + tileaddr);
-				for(let gi=0;gi<mapGrid;gi++)
-					for(let gj=0;gj<mapGrid;gj++) {
+				for(let gi=0;gi<bgGrid;gi++)
+					for(let gj=0;gj<bgGrid;gj++) {
 						
 						let tile = bf2.getShort();
 						let flag = bf2.get();
@@ -208,7 +208,7 @@ function drawMap() {
 							drawTilesBase(imageData, tile, 1, 1, (pal & 0x1F) + 0x40, 16, false, (pal & 0x40), (pal & 0x20), hide);
 						} else 
 							drawTilesBase(imageData, tile, 1, 1, (pal & 0x1F) + 0x40, 16, false, (pal & 0x40), (pal & 0x20));
-						ctxBack.putImageData(imageData, scrx + (j*mapGrid+gj)%32 * gridHeight, scry + (i*mapGrid+gi) * gridWidth);
+						ctxBack.putImageData(imageData, scrx + (j*bgGrid+gj)%32 * gridHeight, scry + (i*bgGrid+gi) * gridWidth);
 					}
 			}
 		}
@@ -217,30 +217,30 @@ function drawMap() {
 
 }
 
-var map2Address = 0xA9D4A;	// layer 2 background
-function drawMap2() {
+var bg2Address = 0xA9D4A;	// layer 2 background
+function drawbg2() {
 	var bf = new bytebuffer(romFrameData);
 	var bf2 = new bytebuffer(romFrameData);
 	var bf3 = new bytebuffer(romFrameData);
 	// ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
 	
-	let tileindex = bf.getInt(map2Address + curMap * 8);
-	let tileaddr = bf.getInt(map2Address + curMap * 8 + 4);
-	let bigindex = bf.getInt(0xA9934 + curMap * 4);
+	let tileindex = bf.getInt(bg2Address + curbg * 8);
+	let tileaddr = bf.getInt(bg2Address + curbg * 8 + 4);
+	let bigindex = bf.getInt(0xA9934 + curbg * 4);
 	
 //	labelInfo.innerText = 'address:' + bf.position().toString(16).toUpperCase()
-//			+ ' 2x2tile address:' + mapTileAddress[curMap].toString(16).toUpperCase();
+//			+ ' 2x2tile address:' + mapTileAddress[curbg].toString(16).toUpperCase();
 	var imageData = ctxBack.createImageData(gridWidth*2, gridHeight*2);
 
 	var height = 2;
 	bf3.position(bigindex);
 	
 	let startscr=0;
-//	for(let scr=0;scr<6 + mapAddressSkip * 2;scr++) {
+//	for(let scr=0;scr<6 + bgAddressSkip * 2;scr++) {
 	let scenecount = bf3.getr(-2) / 2;
 	let scenelength = bf3.getr(-1);
 	labelInfo.innerHTML += ',size:' + scenecount+','+scenelength;
-	bf3.skip(mapAddressSkip * 2 * scenecount + mapScene * 2);
+	bf3.skip(bgAddressSkip * 2 * scenecount + bgScene * 2);
 
 	for(let scr=0;scr<4;scr++) {
 		
@@ -248,7 +248,7 @@ function drawMap2() {
 			bf3.skip(2 * (scenecount-1))
 		
 		let scrTile = bf3.get();
-//		if(scr<mapAddressSkip * 2)
+//		if(scr<bgAddressSkip * 2)
 //			continue;
 //		
 
@@ -261,8 +261,8 @@ function drawMap2() {
 			for(let j=0;j<4;j++) {
 				let maptile=bf.getShort();
 				bf2.position(maptile + tileaddr);
-				for(let gi=0;gi<mapGrid;gi++)
-					for(let gj=0;gj<mapGrid;gj++) {
+				for(let gi=0;gi<bgGrid;gi++)
+					for(let gj=0;gj<bgGrid;gj++) {
 						
 						let tile = bf2.getShort();
 						let flag = bf2.get();
@@ -274,7 +274,7 @@ function drawMap2() {
 							drawTilesBase(imageData, tile, 1, 1, (pal & 0x1F) + 0x60, 32, false, (pal & 0x40), (pal & 0x20), hide);
 						} else 
 							drawTilesBase(imageData, tile, 1, 1, (pal & 0x1F) + 0x60, 32, false, (pal & 0x40), (pal & 0x20));
-						ctxBack.putImageData(imageData, scrx + (j*mapGrid+gj)%32 * gridHeight*2, scry + (i*mapGrid+gi) * gridWidth*2);
+						ctxBack.putImageData(imageData, scrx + (j*bgGrid+gj)%32 * gridHeight*2, scry + (i*bgGrid+gi) * gridWidth*2);
 					}
 			}
 		}
@@ -285,8 +285,8 @@ function drawMap2() {
 
 }
 
-function setMapTileStart(mapstart) {
-	mapScene = mapstart;
+function setMapTileStart(bgstart) {
+	bgScene = bgstart;
 	refresh();
 }
 

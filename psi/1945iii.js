@@ -36,24 +36,24 @@ var animTimer;
 // }
 
 
-var mapAddress = 0x112850;
-var map2Address = 0x1923A;	// layer 2 background
+var bgAddress = 0x112850;
+var bg2Address = 0x1923A;	// layer 2 background
 
-let mapWidth = 32;
-let mapHeight;	// default 8
-let mapGrid = 2;		// each map tile contains 4 raw tiles?
+let bgWidth = 32;
+let bgHeight;	// default 8
+let bgGrid = 2;		// each map tile contains 4 raw tiles?
 // draw a background with tilemap
-function drawMap() {
+function drawbg() {
 	var bf = new bytebuffer(romFrameData);
 	var bf2 = new bytebuffer(romFrameData);
 	var bf3 = new bytebuffer(romFrameData);
 	ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
 	
-	let tileindex = bf.getInt(mapAddress + curMap * 16 + 4);
-	let tileaddr = bf.getInt(mapAddress + curMap * 16 + 8);
-	let bigindex = bf.getInt(mapAddress + curMap * 16);
+	let tileindex = bf.getInt(bgAddress + curbg * 16 + 4);
+	let tileaddr = bf.getInt(bgAddress + curbg * 16 + 8);
+	let bigindex = bf.getInt(bgAddress + curbg * 16);
 	
-	let addr = bf.getInt(mapAddress + curMap * 4);
+	let addr = bf.getInt(bgAddress + curbg * 4);
 	if(!(addr & 0x25000000))
 		debugger;
 	addr = addr & 0xFFFFF | 0x100000;
@@ -74,7 +74,7 @@ function drawMap() {
 		debugger;
 	
 //	labelInfo.innerText = 'address:' + bf.position().toString(16).toUpperCase()
-//			+ ' 2x2tile address:' + mapTileAddress[curMap].toString(16).toUpperCase();
+//			+ ' 2x2tile address:' + mapTileAddress[curbg].toString(16).toUpperCase();
 	var imageData = ctxBack.createImageData(gridWidth, gridHeight);
 
 	for(let i=0;i<h;i++) {
@@ -94,7 +94,7 @@ function drawMap() {
 				drawTilesBase(imageData, tile, 1, 1, (pal), 16, false, false, false);
 			else
 				drawTilesBase(imageData, tile, 1, 1, (pal), 16, false, false, false, 0, 256);
-			ctxBack.putImageData(imageData, (i-mapAddressSkip * 4) * gridWidth, j * gridHeight);
+			ctxBack.putImageData(imageData, (i-bgAddressSkip * 4) * gridWidth, j * gridHeight);
 
 		}
 	}
@@ -104,14 +104,14 @@ function drawMap() {
 var map2Data = [
 	
 ];
-let map2Width = 16;
-let map2Height = 8;
-// function drawMap2() {
+let bg2Width = 16;
+let bg2Height = 8;
+// function drawbg2() {
 
 // }
 
-function setMapTileStart(mapstart) {
-	mapScene = mapstart;
+function setMapTileStart(bgstart) {
+	bgScene = bgstart;
 	refresh();
 }
 

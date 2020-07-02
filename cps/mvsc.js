@@ -91,19 +91,19 @@ var animAddress = [ ];
 var mapData = [
 	
 ];
-var mapAddress = [	// real map
+var bgAddress = [	// real map
 	
 ]
 
-var map2Address;	// layer 2 background
+var bg2Address;	// layer 2 background
 
 
-let mapWidth = 32;
-let mapHeight;	// default 8
-let mapGrid = 2;		// each map tile contains 4 raw tiles?
+let bgWidth = 32;
+let bgHeight;	// default 8
+let bgGrid = 2;		// each map tile contains 4 raw tiles?
 
 // draw a background with tilemap
-function drawMap() {
+function drawbg() {
 
 }
 
@@ -111,14 +111,14 @@ function drawMap() {
 var map2Data = [
 	0x2313E,	0x2315C,	0x2317A,	0x23184,	0x231A2,	0x231B6,	0x231D4,	0x231FC
 ];
-let map2Width = 16;
-let map2Height = 8;
-function drawMap2() {
+let bg2Width = 16;
+let bg2Height = 8;
+function drawbg2() {
 
 }
 
-function setMapTileStart(mapstart) {
-	mapScene = mapstart;
+function setMapTileStart(bgstart) {
+	bgScene = bgstart;
 	refresh();
 }
 

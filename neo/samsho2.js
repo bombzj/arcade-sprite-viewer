@@ -95,14 +95,14 @@ function drawAnimationFrame(addr, c = ctx, offx = 128, offy = 160, cbbase = 0x10
 }
 
 
-var mapAddress = 0x112850;
-var map2Address = 0x1923A;	// layer 2 background
+var bgAddress = 0x112850;
+var bg2Address = 0x1923A;	// layer 2 background
 
-let mapWidth = 32;
-let mapHeight;	// default 8
-let mapGrid = 2;		// each map tile contains 4 raw tiles?
+let bgWidth = 32;
+let bgHeight;	// default 8
+let bgGrid = 2;		// each map tile contains 4 raw tiles?
 // draw a background with tilemap
-function drawMap() {
+function drawbg() {
 
 }
 
@@ -110,13 +110,13 @@ function drawMap() {
 var map2Data = [
 	
 ];
-let map2Width = 16;
-let map2Height = 8;
-function drawMap2() {
+let bg2Width = 16;
+let bg2Height = 8;
+function drawbg2() {
 }
 
-function setMapTileStart(mapstart) {
-	mapScene = mapstart;
+function setMapTileStart(bgstart) {
+	bgScene = bgstart;
 	refresh();
 }
 

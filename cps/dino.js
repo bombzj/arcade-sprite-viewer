@@ -164,7 +164,7 @@ function drawCB(bf, c = ctx, offx = 128, offy = 160) {
 var mapData = [
 	0x215AC, 0x215CA, 0x215E8, 0x215F2, 0x21610, 0x21624, 0x21642, 0x2166A
 ];
-var mapAddress = [	// real map
+var bgAddress = [	// real map
 	0x138FC8,0x139AC8,0x13BAC8,0x13BDC8,0x13DDC8,0x13FDC8,0x141DC8,0x143DC8
 ]
 var mapTileAddress = [	// map tiles set for real map to index, by 2x2 unit
@@ -178,26 +178,26 @@ var mapTileAddress = [	// map tiles set for real map to index, by 2x2 unit
 	0x172158,
 //	0x108000,0x123A28,0x147DC8	???
 ];
-var map2Address = 0x177288;	// layer 2 background
+var bg2Address = 0x177288;	// layer 2 background
 
 
-let mapWidth = 32;
-let mapHeight;	// default 8
-let mapGrid = 2;		// each map tile contains 4 raw tiles?
+let bgWidth = 32;
+let bgHeight;	// default 8
+let bgGrid = 2;		// each map tile contains 4 raw tiles?
 
 // draw a background with tilemap
-function drawMap() {
+function drawbg() {
 	var bf = new bytebuffer(romFrameData);
 	var bf2 = new bytebuffer(romFrameData);
 	var bf3 = new bytebuffer(romFrameData);
 	// ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
-	let addr = mapAddress[curMap];
+	let addr = bgAddress[curbg];
 	
 //	labelInfo.innerText = 'address:' + bf.position().toString(16).toUpperCase()
-//			+ ' 2x2tile address:' + mapTileAddress[curMap].toString(16).toUpperCase();
+//			+ ' 2x2tile address:' + mapTileAddress[curbg].toString(16).toUpperCase();
 	var imageData = ctxBack.createImageData(gridWidth, gridHeight);
 	
-	bf3.position(mapData[curMap] + mapScene * 10);
+	bf3.position(mapData[curbg] + bgScene * 10);
 	let width = bf3.get();
 	let height = bf3.get();
 	if(width > 20)
@@ -210,7 +210,7 @@ function drawMap() {
 	let startscr=0;
 	for(let scr=0;scr<width * height;scr++) {
 		let scrTile = bf3.getShort();
-		if(scr<mapAddressSkip * height)
+		if(scr<bgAddressSkip * height)
 			continue;
 
 		let scrx = Math.floor(startscr / height) * 256;
@@ -221,9 +221,9 @@ function drawMap() {
 		for(let i=0;i<8;i++) {
 			for(let j=0;j<8;j++) {
 				let maptile=bf.getShort();
-				bf2.position(maptile*4*4 + mapTileAddress[curMap]);
-				for(let gi=0;gi<mapGrid;gi++)
-					for(let gj=0;gj<mapGrid;gj++) {
+				bf2.position(maptile*4*4 + mapTileAddress[curbg]);
+				for(let gi=0;gi<bgGrid;gi++)
+					for(let gj=0;gj<bgGrid;gj++) {
 						let tile = bf2.getShort();
 						let flag = bf2.get();
 						let pal = bf2.get();
@@ -234,7 +234,7 @@ function drawMap() {
 							drawTilesBase(imageData, tile, 1, 1, (pal & 0x1F) + 0x40, 16, false, (pal & 0x40), (pal & 0x20), hide);
 						} else 
 							drawTilesBase(imageData, tile, 1, 1, (pal & 0x1F) + 0x40, 16, false, (pal & 0x40), (pal & 0x20));
-						ctxBack.putImageData(imageData, scrx + (i*mapGrid+gi) * gridWidth, scry + (j*mapGrid+gj) * gridHeight);
+						ctxBack.putImageData(imageData, scrx + (i*bgGrid+gi) * gridWidth, scry + (j*bgGrid+gj) * gridHeight);
 					}
 			}
 		}
@@ -248,13 +248,13 @@ function drawMap() {
 var map2Data = [
 	0x2313E,	0x2315C,	0x2317A,	0x23184,	0x231A2,	0x231B6,	0x231D4,	0x231FC
 ];
-let map2Width = 16;
-let map2Height = 8;
-function drawMap2() {
+let bg2Width = 16;
+let bg2Height = 8;
+function drawbg2() {
 	var bf = new bytebuffer(romFrameData);
 	var bf3 = new bytebuffer(romFrameData);
 
-	bf3.position(map2Data[curMap] + mapScene * 10);
+	bf3.position(map2Data[curbg] + bgScene * 10);
 	let width = bf3.get();
 	let height = bf3.get();
 	if(width > 20)
@@ -272,13 +272,13 @@ function drawMap2() {
 	let startscr=0;
 	for(let scr=0;scr<width * height;scr++) {
 		let scrTile = bf3.getShort();
-		if(scr<mapAddressSkip * height)
+		if(scr<bgAddressSkip * height)
 			continue;
 
 		let scrx = Math.floor(startscr / height) * 256;
 		let scry = (height - startscr % height - 1) * 256;
 		
-		bf.position(map2Address + scrTile *128 * 2);
+		bf.position(bg2Address + scrTile *128 * 2);
 		
 		for(let i=0;i<8;i++) {
 			for(let j=0;j<8;j++) {
@@ -297,8 +297,8 @@ function drawMap2() {
 
 }
 
-function setMapTileStart(mapstart) {
-	mapScene = mapstart;
+function setMapTileStart(bgstart) {
+	bgScene = bgstart;
 	refresh();
 }
 

@@ -217,7 +217,7 @@ function drawAnimationFrame(addr, c = ctx, offx = 128, offy = 160, cbbase = 0x10
 }
 
 
-var mapAddress = [
+var bgAddress = [
 	0x2E014, 0x2E05E, 0x2E0A8,	// level 1
 	// 0x2E560, 0x2E5BE, 0x2E622,
 	// 0x2E806, 0x2E82E,
@@ -236,25 +236,25 @@ var mapAddress = [
 	//0x54574, 0xC82AC, 0xCAC6A, 0x55452, 0x56638, 0x58BD6, 0x549A2, 0x4E1D0, 0xC7A5A
 ];
 
-let mapWidth = 32;
-let mapHeight;	// default 8
-let mapGrid = 2;		// each map tile contains 4 raw tiles?
+let bgWidth = 32;
+let bgHeight;	// default 8
+let bgGrid = 2;		// each map tile contains 4 raw tiles?
 // draw a background with tilemap
 
 var autoAnim = 0;
 
-function drawMap() {
-	palset = curMap;
+function drawbg() {
+	palset = curbg;
 	loadRomPal();
 
 	var bf = getrdbuf();
 	var bf2 = getrdbuf();
-	let addr = mapAddress[curMap] + mapScene * 12;	// mapAddressSkip
+	let addr = bgAddress[curbg] + bgScene * 12;	// bgAddressSkip
 
 	// ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
 	var imageData = ctxBack.createImageData(gridWidth, gridHeight);
 
-	let countdown = mapScene;
+	let countdown = bgScene;
 	let addr2, offset, w, h, saveaddr;	// save addr for display
 	let nextbg;	// next background in the same scene
 	bf.position(addr);
@@ -297,9 +297,9 @@ function drawMap() {
 	labelInfo.innerText += ' height:'+h+' addr:' + saveaddr.toString(16).toUpperCase();
 
 	bf2.position(addr3 + offset);
-	bf2.skip(4 * h * mapAddressSkip);
+	bf2.skip(4 * h * bgAddressSkip);
 
-	let imax = Math.min(w - mapAddressSkip, 34);
+	let imax = Math.min(w - bgAddressSkip, 34);
 	for(let i = 0;i < imax;i++) {
 		for(let j = 0;j < h;j++) {
 			let tile = bf2.getuShort();
@@ -315,15 +315,15 @@ function drawMap() {
 			}
 			drawTilesBase(imageData, tile, 1, 1, pal, 16, false, (flag & 0x2), (flag & 0x1), false);
 
-			ctxBack.putImageData(imageData, i * gridHeight, j * gridWidth - mapAddressSkipY * 32);
+			ctxBack.putImageData(imageData, i * gridHeight, j * gridWidth - bgAddressSkipY * 32);
 		}
 	}
 
 	autoAnim++;
 }
 
-function setMapTileStart(mapstart) {
-	mapScene = mapstart;
+function setMapTileStart(bgstart) {
+	bgScene = bgstart;
 	refresh();
 }
 
@@ -416,7 +416,7 @@ function loadRomFrame() {
 
 	// load level data to palette and map
 	// palsetAddress = [];
-	// mapAddress = [];
+	// bgAddress = [];
 	for(let s = 0;s < 5;s++) {
 		let sceneAddr = bf.getInt(levelAddress + s * 4);	// all scenes are linked together
 		bf.position(sceneAddr + 2);
@@ -454,7 +454,7 @@ function loadRomFrame() {
 					let x = bf2.getShort();
 					let bg = bf2.getInt();
 					palsetAddress.push(palette);
-					mapAddress.push(bg);
+					bgAddress.push(bg);
 				} else if(func == 0x34 || func == 0x40 || func == 0x3C || func == 0x48 || func == 0x20) {
 					bf2.skip(2);
 				} else if(func == 0x14 || func == 0x18) {
@@ -474,7 +474,7 @@ function loadRomFrame() {
 			bf.position(nextScene);
 		}
 	}
-	maxMap = mapAddress.length;
+	maxbg = bgAddress.length;
 }
 
 

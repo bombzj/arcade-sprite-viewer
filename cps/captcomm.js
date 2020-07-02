@@ -119,11 +119,11 @@ function drawCB(bf, c = ctx, offx = 128, offy = 160) {
 }
 
 
-var mapAddress = 0x10DC70;
+var bgAddress = 0x10DC70;
 
-let mapWidth = 32;
-let mapHeight;	// default 8
-let mapGrid = 2;		// each map tile contains 4 raw tiles?
+let bgWidth = 32;
+let bgHeight;	// default 8
+let bgGrid = 2;		// each map tile contains 4 raw tiles?
 
 var mapdata = [
 	[16, 6, 1, 5],	// width, height, init x, init y
@@ -137,8 +137,8 @@ var mapdata = [
 	[1, 1, 1, 0],
 ];
 // draw a background with tilemap
-function drawMap() {
-	palset = curMap;
+function drawbg() {
+	palset = curbg;
 	loadRomPal();
 
 	var bf = new bytebuffer(romFrameData);
@@ -146,7 +146,7 @@ function drawMap() {
 	var bf3 = new bytebuffer(romFrameData);
 	ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
 	
-	let bigindex = bf.getInt(0x1DE0A + curMap * 4);
+	let bigindex = bf.getInt(0x1DE0A + curbg * 4);
 	
 	var imageData = ctxBack.createImageData(gridWidth, gridHeight);
 
@@ -155,12 +155,12 @@ function drawMap() {
 	
 	let startscr=0;
 
-	let w = mapdata[curMap][0];
-	let h = mapdata[curMap][1];
+	let w = mapdata[curbg][0];
+	let h = mapdata[curbg][1];
 
-	bf3.skip(mapdata[curMap][3] * w * 2);
-	bf3.skip(mapdata[curMap][2] * 2);
-	bf3.skip(mapAddressSkip * 2);
+	bf3.skip(mapdata[curbg][3] * w * 2);
+	bf3.skip(mapdata[curbg][2] * 2);
+	bf3.skip(bgAddressSkip * 2);
 	for(let scr=0;scr<6;scr++) {
 		
 		if(scr == 2 || scr == 4) {	// jump to next row
@@ -175,7 +175,7 @@ function drawMap() {
 		let scrx = (scr % 2) * 256;
 		let scry = (scr >> 1) * 256;
 
-		bf.position(mapAddress + (scrTile << 10));
+		bf.position(bgAddress + (scrTile << 10));
 	
 		for(let i=0;i<16;i++) {
 			for(let j=0;j<16;j++) {
@@ -197,9 +197,9 @@ function drawMap() {
 
 }
 
-var map2Address = 0x13A470;	// layer 2 background
-function drawMap2() {
-	// palset = curMap;
+var bg2Address = 0x13A470;	// layer 2 background
+function drawbg2() {
+	// palset = curbg;
 	// loadRomPal();
 
 	var bf = new bytebuffer(romFrameData);
@@ -209,19 +209,19 @@ function drawMap2() {
 	
 	var imageData = ctxBack.createImageData(gridWidth * 2, gridHeight * 2);
 
-	let bigindex = bf.getInt(0x1E20E + curMap * 4);
+	let bigindex = bf.getInt(0x1E20E + curbg * 4);
 
 	var height = 2;
 	bf3.position(bigindex);
 	
 	let startscr=0;
 
-	let w = mapdata[curMap][0];
-	let h = mapdata[curMap][1];
+	let w = mapdata[curbg][0];
+	let h = mapdata[curbg][1];
 
-	// bf3.skip(mapdata[curMap][3] * w * 2);
-	// bf3.skip(mapdata[curMap][2] * 2);
-	bf3.skip(mapAddressSkip * 2);
+	// bf3.skip(mapdata[curbg][3] * w * 2);
+	// bf3.skip(mapdata[curbg][2] * 2);
+	bf3.skip(bgAddressSkip * 2);
 	for(let scr=0;scr<2;scr++) {
 		
 		// if(scr == 2 || scr == 4) {	// jump to next row
@@ -236,7 +236,7 @@ function drawMap2() {
 		let scrx = (scr % 2) * 256;
 		let scry = (scr >> 1) * 256;
 
-		bf.position(map2Address + (scrTile << 10));
+		bf.position(bg2Address + (scrTile << 10));
 	
 		for(let i=0;i<8;i++) {
 			for(let j=0;j<8;j++) {
@@ -258,8 +258,8 @@ function drawMap2() {
 
 }
 
-function setMapTileStart(mapstart) {
-	mapScene = mapstart;
+function setMapTileStart(bgstart) {
+	bgScene = bgstart;
 	refresh();
 }
 

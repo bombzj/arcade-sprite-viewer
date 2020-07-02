@@ -45,9 +45,9 @@ var mainImageData = null;
 var mode;		// 0 = tile mode, 1 = rom frame mode
 var curRomFrame;
 var curRomFrame2 = 0;		// if more than one frames together
-var curMap;
+var curbg;
 var romName;
-var maxMap = 100;
+var maxbg = 100;
 
 function init(name) {
 	romName = name;
@@ -187,16 +187,16 @@ function refresh() {
 	} else if(mode == 1) {
 		drawRomFrame();
 	} else if(mode == 2) {
-		if(typeof drawMap === 'function') {
-			labelInfo.innerHTML = 'map:' + curMap + ',' + mapScene;
-			drawMap();
+		if(typeof drawbg === 'function') {
+			labelInfo.innerHTML = 'map:' + curbg + ',' + bgScene;
+			drawbg();
 		} else {
 			labelInfo.innerHTML = '<font color="red">unsupported</font>';
 		}
 	} else if(mode == 3) {
-		if(typeof drawMap2 === 'function') {
-			labelInfo.innerHTML = 'map:' + curMap + ',' + mapScene;
-			drawMap2();
+		if(typeof drawbg2 === 'function') {
+			labelInfo.innerHTML = 'map:' + curbg + ',' + bgScene;
+			drawbg2();
 		} else {
 			labelInfo.innerHTML = '<font color="red">unsupported</font>';
 		}
@@ -226,15 +226,15 @@ var curAnimAct;	// current animation index
 // show object animation from rom address
 var animTimer;
 
-var mapScene = 0;
-var mapAddressSkip = 0;
-var mapAddressSkipY = 0;
+var bgScene = 0;
+var bgAddressSkip = 0;
+var bgAddressSkipY = 0;
 
 var hideBackground = false;
 
 
-function setMapTileStart(mapstart) {
-	mapScene = mapstart;
+function setMapTileStart(bgstart) {
+	bgScene = bgstart;
 	refresh();
 }
 
@@ -738,9 +738,9 @@ window.addEventListener("keydown", function (event) {
 	switch(event.key) {
 		case 'ArrowUp':
 			if(event.shiftKey) {	// move background
-				mapAddressSkipY--;
-				if(mapAddressSkipY <0)
-					mapAddressSkipY=0
+				bgAddressSkipY--;
+				if(bgAddressSkipY <0)
+					bgAddressSkipY=0
 			} else if(event.ctrlKey) {	// change palette
 				palset-=1;
 				if(palset < 0)
@@ -757,12 +757,12 @@ window.addEventListener("keydown", function (event) {
 						curRomFrame = 0;
 					curRomFrame2=0;
 				} else if(mode == 2 || mode == 3) {
-					curMap--;
-					if(curMap < 0)
-						curMap = 0;
-					mapScene=0;
-					mapAddressSkip=0;
-					mapAddressSkipY=0;
+					curbg--;
+					if(curbg < 0)
+						curbg = 0;
+					bgScene=0;
+					bgAddressSkip=0;
+					bgAddressSkipY=0;
 				} else if(mode == 4) {
 					curPlayerFrame--;
 					if(curPlayerFrame < 0)
@@ -782,7 +782,7 @@ window.addEventListener("keydown", function (event) {
 			
 		case 'ArrowDown':
 			if(event.shiftKey) {	// move background
-				mapAddressSkipY++;
+				bgAddressSkipY++;
 			} else if(event.ctrlKey) {	// change palette
 				palset++;
 				if(palset >= maxPalSet)
@@ -797,13 +797,13 @@ window.addEventListener("keydown", function (event) {
 						curRomFrame = frameAddress.length-1;
 					curRomFrame2=0;
 				} else if(mode == 2 || mode == 3) {
-					//if(curMap < mapTileAddress.length - 1) {
-					curMap++;
-					if(curMap >= maxMap)
-						curMap = maxMap;
-					mapScene=0;
-					mapAddressSkip=0;
-					mapAddressSkipY=0;
+					//if(curbg < mapTileAddress.length - 1) {
+					curbg++;
+					if(curbg >= maxbg)
+						curbg = maxbg;
+					bgScene=0;
+					bgAddressSkip=0;
+					bgAddressSkipY=0;
 					//}
 				} else if(mode == 4) {
 					curPlayerFrame++;
@@ -848,9 +848,9 @@ window.addEventListener("keydown", function (event) {
 				}
 			} else {
 				if(mode == 2 || mode == 3) {
-					mapAddressSkip--;
-					if(mapAddressSkip <0) {
-						mapAddressSkip=0
+					bgAddressSkip--;
+					if(bgAddressSkip <0) {
+						bgAddressSkip=0
 					}
 				} else if(mode == 5) {
 					palsetSpr--;
@@ -871,7 +871,7 @@ window.addEventListener("keydown", function (event) {
 				}
 			} else {
 				if(mode == 2 || mode == 3) {
-					mapAddressSkip++;
+					bgAddressSkip++;
 				} else if(mode == 5) {
 					palsetSpr++;
 				} else {
@@ -883,9 +883,9 @@ window.addEventListener("keydown", function (event) {
 		
 		case 'ArrowLeft':
 			if(event.shiftKey) {	// move background
-				mapAddressSkip--;
-				if(mapAddressSkip <0)
-					mapAddressSkip=0
+				bgAddressSkip--;
+				if(bgAddressSkip <0)
+					bgAddressSkip=0
 			} else if(event.ctrlKey) {	// change palette
 				palset2--;
 				if(palset2<0)
@@ -901,11 +901,11 @@ window.addEventListener("keydown", function (event) {
 					if(curRomFrame2 < 0)
 						curRomFrame2 = 0;
 				} else if(mode == 2 || mode == 3) {
-					mapScene--;
-					if(mapScene<0)
-						mapScene=0;
-					mapAddressSkip=0;
-					mapAddressSkipY=0;
+					bgScene--;
+					if(bgScene<0)
+						bgScene=0;
+					bgAddressSkip=0;
+					bgAddressSkipY=0;
 				} else if(mode == 4) {
 					curPlayerType--;
 					if(curPlayerType < 0)
@@ -922,7 +922,7 @@ window.addEventListener("keydown", function (event) {
 			
 		case 'ArrowRight':
 			if(event.shiftKey) {	// move background
-				mapAddressSkip++;
+				bgAddressSkip++;
 			} else if(event.ctrlKey) {	// change palette
 				palset2++;
 				loadRomPal();
@@ -932,9 +932,9 @@ window.addEventListener("keydown", function (event) {
 				} else if(mode == 1) {
 					curRomFrame2++;
 				} else if(mode == 2 || mode == 3) {
-					mapScene++;
-					mapAddressSkip=0;
-					mapAddressSkipY=0;
+					bgScene++;
+					bgAddressSkip=0;
+					bgAddressSkipY=0;
 				} else if(mode == 4) {
 					curPlayerType++;
 					if(curPlayerType >= playerSpriteAddress.length)
@@ -1194,9 +1194,9 @@ function loadStatus() {
 	curframe = (undefined != s.curframe) ? s.curframe : 0;
 	mode = (undefined != s.mode) ? s.mode : 0;
 	curRomFrame = (undefined != s.curRomFrame) ? s.curRomFrame : 0;
-	curMap = (undefined != s.curMap) ? s.curMap : 0;
-	mapScene = (undefined != s.mapScene) ? s.mapScene : 0;
-	mapHeight = (undefined != s.mapHeight) ? s.mapHeight : 8;
+	curbg = (undefined != s.curbg) ? s.curbg : 0;
+	bgScene = (undefined != s.bgScene) ? s.bgScene : 0;
+	bgHeight = (undefined != s.bgHeight) ? s.bgHeight : 8;
 	palset = (undefined != s.palset) ? s.palset : 0;
 	palset2 = (undefined != s.palset2) ? s.palset2 : 0;
 	curPlayerFrame = (undefined != s.curPlayerFrame) ? s.curPlayerFrame : 0;
@@ -1221,9 +1221,9 @@ function saveStatus() {
 		totalframe		: totalframe,
 		mode			: mode,
 		curRomFrame		: curRomFrame,
-		curMap			: curMap,
-		mapHeight		: mapHeight,
-		mapScene		: mapScene,
+		curbg			: curbg,
+		bgHeight		: bgHeight,
+		bgScene		: bgScene,
 		palset			: palset,
 		palset2			: palset2,
 		curPlayerFrame	: curPlayerFrame,
