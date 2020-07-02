@@ -262,7 +262,7 @@ function drawbg() {
 
 	labelInfo.innerText += ' height:'+h+' addr:' + saveaddr.toString(16).toUpperCase();
 
-	bf2.position(addr3 + offset);
+	bf2.position(addr3);
 	bf2.skip(4 * h * bgAddressSkip);
 
 	let imax = Math.min(w - bgAddressSkip, 34);
