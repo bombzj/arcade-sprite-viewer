@@ -138,6 +138,7 @@ function getrdbuf(pos) {
 var palset;	// current palette set with 32*16 colors, per level
 var palset2;	// per scene?
 var palsetSpr;	// palset for sprite (neogeo)
+var curpalpage = 0;	// current palette page to display
 var maxPalSet = 50;
 
 var showPal;
@@ -156,7 +157,7 @@ function drawPal() {
 		
 		for(let i=0;i<16;i++) {
 			for(let j=0;j<32;j++) {
-				var palBase = (j * 16 + i) + 16 * 32 * p;
+				var palBase = ((j + curpalpage) * 16 + i) + 16 * 32 * p;
 				let color = palData[palBase];
 				color = (color & 0xFF) << 16 | (color & 0xFF00) | (color & 0xFF0000) >> 16;	// raw data color is bgr, not rgb
 			    ctx2.fillStyle = '#' + color.toString(16).padStart(6, '0');
@@ -836,29 +837,48 @@ window.addEventListener("keydown", function (event) {
 		break;
 		
 		case ',':
-			if(mode == 2 || mode == 3) {
-				mapAddressSkip--;
-				if(mapAddressSkip <0) {
-					mapAddressSkip=0
+			if(event.ctrlKey) {
+				if(showPal) {
+					curpalpage-=0x40;
+					if(curpalpage < 0) {
+						curpalpage = 0;
+					}
+					ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+					loadRomPal();
 				}
-			} else if(mode == 5) {
-				palsetSpr--;
 			} else {
-				if(curPal > 0)
-					curPal--
+				if(mode == 2 || mode == 3) {
+					mapAddressSkip--;
+					if(mapAddressSkip <0) {
+						mapAddressSkip=0
+					}
+				} else if(mode == 5) {
+					palsetSpr--;
+				} else {
+					if(curPal > 0)
+						curPal--
+				}
+				refresh();
 			}
-			refresh();
 		break;
 			
 		case '.':
-			if(mode == 2 || mode == 3) {
-				mapAddressSkip++;
-			} else if(mode == 5) {
-				palsetSpr++;
+			if(event.ctrlKey) {
+				if(showPal) {
+					curpalpage+=0x40;
+					ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+					loadRomPal();
+				}
 			} else {
-				curPal++;
+				if(mode == 2 || mode == 3) {
+					mapAddressSkip++;
+				} else if(mode == 5) {
+					palsetSpr++;
+				} else {
+					curPal++;
+				}
+				refresh();
 			}
-			refresh();
 		break;
 		
 		case 'ArrowLeft':

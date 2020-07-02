@@ -9,7 +9,15 @@ function loadRomPal() {
 
 	mslugPalette(0xE7B58);		// ROM:000046CE
 	mslugPalette(0xE7BDA);		// ROM:0000470E
-	// mslugPalette(palsetAddress[palset]);
+	let addr = palsetAddress[palset];debugger
+	if(typeof addr !== 'number') {
+		for(let addr2 of addr) {
+			mslugPalette(addr2);
+		}
+	} else {
+		mslugPalette(addr);
+	}
+	
 
 	palette_empty = paletted_start;	// dynamic palette
 
@@ -62,10 +70,11 @@ function mslugPalette2(addr) {
 }
 
 function mslugPaletteBase(idx, to) {
+	console.log('palette to=' + (to.toString(16)>>4));
 	var bf2 = getrdbuf();
 
 	idx <<= 5;
-	let addr2 = 0x12BD12 + idx;	// ROM:000A5FC8                 lea     (a3,d0.l),a6    ; a6 = 200004
+	let addr2 = 0x12BD12 + idx;
 	bf2.position(addr2);
 
 	palData[to] = 0;
@@ -78,11 +87,8 @@ function mslugPaletteBase(idx, to) {
 		}
 		let addr3 = 0x15CB52 + dt;		
 		let color = bfr.getuShort(addr3);
-		console.log('0x' + color.toString(16))
 		palData[i + to + 1] = neo2rgb(color);
 	}
-
-	palette_empty++;
 }
 
 function movetoTile(tile) {
@@ -395,7 +401,7 @@ function loadRomFrame() {
 			let dataaddr = bf.getInt();
 			bf2.position(dataaddr);
 	
-			let palette;
+			let palette = [];
 			for(let j = 0;j < 100;j++) {
 				let func = bf2.getShort();
 				if(func == -1) {
@@ -412,7 +418,8 @@ function loadRomFrame() {
 					}
 					bf2.skip(4);
 				} else if(func == 0x4) {
-					palette = bf2.getInt();
+					let pa = bf2.getShort() * 4 + 0x2003D0 - 0x100000;
+					palette.push(bfr.getInt(pa) - 0x100000);
 				} else if(func == 0x24) {
 					let x = bf2.getShort();
 					let bg = bf2.getInt();
@@ -437,5 +444,6 @@ function loadRomFrame() {
 			bf.position(nextScene);
 		}
 	}
+	console.log('background loaded: ' + mapAddress.length);
 	maxMap = mapAddress.length;
 }
