@@ -70,7 +70,6 @@ function mslugPalette2(addr) {
 }
 
 function mslugPaletteBase(idx, to) {
-	console.log('palette to=' + (to.toString(16)>>4));
 	var bf2 = getrdbuf();
 
 	idx <<= 5;

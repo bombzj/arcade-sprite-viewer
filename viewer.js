@@ -68,40 +68,63 @@ function init(name) {
 
 	loadData('rom/' + name + '.gfx', function (data2) {
 		labelInfo.innerHTML = '<font color="red">Downloading rom...</font>';
-		loadData('rom/' + name, function (data3) {
+		let arr = new Uint32Array(data2, 0, 400);
+		if(arr[0] == 0x05267234) {
 			labelInfo.innerHTML = '<font color="red">Extracting...</font>';
+			let start = 0;
+			for(let i = 1;i < 100;i++) {
+				if(arr[i] == 0) {
+					start = i + 1;
+					break;
+				}
+			}
 
-			romFrameData = chkfile(data3);
-			bfr = getrdbuf();
+			let alldata = pako.inflate(new Uint8Array(data2, start * 4)).buffer;
+			gfxData = new Uint8Array(alldata, 0, arr[1]);
+			romFrameData = new Uint8Array(alldata, arr[1], arr[2]);
+			initviewer();
+		} else {
+			loadData('rom/' + name, function (data3) {
+				labelInfo.innerHTML = '<font color="red">Extracting...</font>';
+	
+				if(new Uint32Array(data3, 0, 1)[0] == 0x8088B1F) {
+					romFrameData = pako.inflate(data3);
+				} else {
+					romFrameData = new Uint8Array(data3);
+				}
+				initviewer();
+	
+			}, function() {
+				labelInfo.innerHTML = '<font color="red">Rom not found</font>';
+			});
 
-			labelInfo.innerHTML = '';
+			if(arr[0] == 0x8088B1F) {
+				gfxData = pako.inflate(data2);
+			} else {
+				gfxData = new Uint8Array(data2);
+			}
+		}
 
-			// initial frames info from local storage
-			loadStatus();
-			loadFrame();
-			loadRomFrame();
 
-			loadRomPal();
-			refresh();
-		}, function() {
-			labelInfo.innerHTML = '<font color="red">Rom not found</font>';
-		});
-
-		gfxData = chkfile(data2);
 	}, function() {
 		labelInfo.innerHTML = '<font color="red">Gfx not found</font>';
 	});
 
 }
 
-function chkfile(data) {
-	let arr = new Uint32Array(data, 0, 1);
-	if(arr[0] == 0x8088B1F) {
-		var inflator = pako.Inflate();
-		inflator.push(data, true);
-		return inflator.result;
-	}
-	return new Uint8Array(data);
+
+function initviewer() {
+	bfr = getrdbuf();
+
+	labelInfo.innerHTML = '';
+
+	// initial frames info from local storage
+	loadStatus();
+	loadFrame();
+	loadRomFrame();
+
+	loadRomPal();
+	refresh();
 }
 
 // empty function, needs to be replaced
