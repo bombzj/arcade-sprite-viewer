@@ -29,8 +29,8 @@ function loadRomPal() {
 
 	palette_empty = paletted_start;	// dynamic palette
 
-	// mslugPalette2(0x8A9);
-	// mslugPalette2(0x8AB);
+	mslugPalette2(0x8A9);
+	mslugPalette2(0x8AB);
 
 	// var playerPalette = 0x90E54;
 
