@@ -1,10 +1,10 @@
 <meta name="google-site-verification" content="c0XDkWOd2V_c74sAGyck5d1YfR3l1-Xkc-oQkGo2Y30" />
 
 # arcade-sprite-viewer
-An arcade game sprite viewer / map viewer (cps1 neogeo etc.)
+An arcade game sprite viewer / map viewer with hitbox (cps1 neogeo etc.)
 * Images are assembled by putting together serials of tiles that extracted from rom data. Currently it only supports a few games, Metal Slug, King of Fighters, Punisher, Dinosaur & Cadillacs, Gunbird, Warth, etc.
 BTW. CPS & NEOGEO both use 68k but PSIKYOSH uses SH-2 which is far more difficult to read.
-* Click [here](https://github.com/bombzj/arcade-sprite-viewer) to view source code.</p>
+* Click [here](https://github.com/bombzj/arcade-sprite-viewer) to view source code.
 
 ## CPS [view more](https://asv.bombzj.com/cps)
 ![punisher animation](https://asv.bombzj.com/res/punisheranim.gif)<br/>
@@ -26,21 +26,23 @@ BTW. CPS & NEOGEO both use 68k but PSIKYOSH uses SH-2 which is far more difficul
 
 * Click [here](https://asv.bombzj.com/viewer.html?kof97) to view `King of Fighters 97`.
 
+* [Full Game List](https://asv.bombzj.com/list.html)
+
 ## Usage
 * m key = change mode from 1 - 6 loop
 * ctrl + arrow keys = change palette set to level/scene
 * mode 1 (tiles)
   * arrow keys/page up/down = move tiles
-  * \[ / \] change tile set
-  * , / . change palette
+  * \[ / \] key = change tile set
+  * , / . key = change palette
 * mode 2 (sprites)
   * arrow up/down = change set of sprites
   * arrow left/right = change sprite
 * mode 3/4 (background layer)
   * arrow up/down = change level
   * arrow left/right = change scene of level
-  * , / . = move map left/right
-  * c show collision box (if found)
+  * , / . key = move map left/right
+  * c key = show hitbox / collision box (if found)
 * mode 5 (player animation) unfinished
 * mode 6 (animation) if any
   * arrow up/down = change set of animations
