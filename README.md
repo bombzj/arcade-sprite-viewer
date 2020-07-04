@@ -1,5 +1,3 @@
-<meta name="google-site-verification" content="c0XDkWOd2V_c74sAGyck5d1YfR3l1-Xkc-oQkGo2Y30" />
-
 # arcade-sprite-viewer
 An arcade game sprite viewer / map viewer with hitbox (cps1 neogeo etc.)
 * Images are assembled by putting together serials of tiles that extracted from rom data. Currently it only supports a few games, Metal Slug, King of Fighters, Punisher, Dinosaur & Cadillacs, Gunbird, Warth, etc.
