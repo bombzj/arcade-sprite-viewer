@@ -434,11 +434,3 @@ function loadRomFrame() {
 }
 
 
-function setFramePos(pos) {
-	if(pos >= 0) {
-		curRomFrame = parseInt(pos);
-		refresh();
-	}
-}
-
-

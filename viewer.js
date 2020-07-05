@@ -196,7 +196,23 @@ function refresh() {
 		clearTimeout(animTimer)
 		animTimer = null;
 	}
-	
+	if(mode == 1) {
+		inputsprite.style.display="";
+	} else {
+		inputsprite.style.display="none";
+	}
+	if(mode == 5) {
+		inputanim.style.display="";
+	} else {
+		inputanim.style.display="none";
+	}
+	if(mode == 0) {
+		seltile.style.display="";
+		inputtile.style.display="";
+	} else {
+		seltile.style.display="none";
+		inputtile.style.display="none";
+	}
 	if(mode < 2 || mode == 5) {
 		canvas.style.display="";
 		canvasBack.style.display="none";
@@ -485,7 +501,18 @@ function drawTilesBase(image, startTile, w, h, pal, srcw, gridline = false, vfli
 	}
 }
 
+canvas.addEventListener("mouseout", function(event) {
+	if(mode != 0) {
+		return;
+	}
+	seltile.style.left=-100;
+	seltile.style.top=-100;
+});
+
 canvas.addEventListener("mousemove", function(event) {
+	if(mode != 0) {
+		return;
+	}
 
 	var x = event.offsetX/scale;
 	var y = event.offsetY/scale;

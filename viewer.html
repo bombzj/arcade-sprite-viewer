@@ -2,6 +2,7 @@
 
 <head>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Arcade Viewer</title>
 	<link rel="shortcut icon" type="image/x-icon" href="res/favicon.ico">
 	<style>
@@ -31,22 +32,13 @@
 		style="position:absolute;width:34px;height:34px;border:2px solid red;left:520px;top:0px;pointer-events: none;">
 	</div>
 
-	<div style="position:absolute;left:550px;top:600px;">
-		x=<span id="labelx"></span>,
-		y=<span id="labely"></span>,
-		tile=<input id="labeltn" size="4" onchange="movetoTile(parseInt(this.value,16));this.blur();"></span>,
-		pal=<span id="labelpal"></span>,
-		maptile=<input size="5" onchange="setMapTileStart(parseInt(this.value, 16));this.blur();">
-		anim=<input size="5" id="anim" onchange='drawAnimation(parseInt(this.value, 16));this.blur();'>
-	</div>
-
 	<div id="moving"
 		style="position:absolute;margin:0px;border:0px;padding:0px;width:64;height:64;top:0px;left:550px;pointer-events:none;display:none;">
 		<canvas id="canvas3" width="64" height="64"
 			style="position:absolute;margin:0px;padding:0px;width:64;height:64;"></canvas>
 	</div>
 
-	<div id="pages" style="position:absolute;left:550px;top:550px;mouse:pointer;">
+	<div id="pages" style="position:absolute;left:550px;top:550px;cursor:pointer;">
 		<div style="display:none;">
 			<div id="framePrev" style="border:1px solid black;padding:2px;float:left;"
 				onmouseover="this.style.background='yellow';" onmouseout="this.style.background='';">Prev</div>
@@ -56,7 +48,7 @@
 			<a style="margin-left:10px;padding:2px;border:1px solid black;" id="downloadAnchorElem"
 				href="javascript:void(0)" onclick="downloadJson()">Download</a>
 		</div>
-		<select id="comboMode" onchange="switchmode(this.selectedIndex);this.blur();">
+		mode=<select id="comboMode" onchange="switchmode(this.selectedIndex);this.blur();">
 			<option value ="0">tiles</option>
 			<option value ="1">sprite</option>
 			<option value="2">bg layer</option>
@@ -64,8 +56,13 @@
 			<option value="4">player</option>
 			<option value="5">animation</option>
 		</select>
-		frame=<input id="nFrame" size="5" onchange="drawRomFrame(parseInt(this.value, 16));this.blur();">
-		hex=<input id="hexFrame" size="5" onchange="setFramePos(parseInt(this.value, 16)/4);this.blur();">
+		<span id="inputsprite" style="display:none">sprite=<input id="nFrame" size="5" onchange="drawRomFrame(parseInt(this.value, 16));this.blur();"></span>
+		<span id="inputanim" style="display:none">animation=<input size="5" id="anim" onchange='drawAnimation(parseInt(this.value, 16));this.blur();'></span>
+		<span id="inputtile" style="display:none">
+			x=<span id="labelx"></span>,
+			y=<span id="labely"></span>,
+			tile=<input id="labeltn" size="4" onchange="movetoTile(parseInt(this.value,16));this.blur();">
+		</span>
 	</div>
 
 	<div id="labelInfo" style="position:absolute;left:550px;top:520px;"></div>
