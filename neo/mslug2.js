@@ -177,40 +177,15 @@ function drawbg() {
 	var bf2 = getrdbuf();
 	let addr = bgAddress[curbg] + bgScene * 12;	// bgAddressSkip
 
-	// ctxBack.clearRect(0, 0, canvasBack.width, canvasBack.height);
-	var imageData = ctxBack.createImageData(gridWidth, gridHeight);
-
 	bf.position(addr);
 	let addr2 = bf.getInt();
 	let addr3 = bf.getInt();
-	let x = bf.getShort();
+	let w = bf.getShort();
 	let h = bf.getShort();
 
 	labelInfo.innerText += ' height:'+h;
 
-	bf2.position(addr2);
-	bf2.skip(4 * h * bgAddressSkip);
-
-	for(let i = 0;i < 32;i++) {
-		for(let j = 0;j < h;j++) {
-			let tile = bf2.getuShort();
-			let pal = bf2.get();
-			let flag = bf2.get();
-			tile += (flag & 0xF0) << 12;
-			let a8 = flag & 0b1000;	// 8 frame auto animation
-			let a4 = flag & 0b0100;	// 4 frame auto animation
-			if(a8) {
-				tile += (autoAnim & 0x7);
-			} else if(a4) {
-				tile += (autoAnim & 0x3);
-			}
-			drawTilesBase(imageData, tile, 1, 1, pal, 16, false, (flag & 0x2), (flag & 0x1), false);
-
-			ctxBack.putImageData(imageData, i * gridHeight, j * gridWidth - bgAddressSkipY * 32);
-		}
-	}
-
-	autoAnim++;
+	drawbgbasemslug(addr2, w, h);
 }
 
 
