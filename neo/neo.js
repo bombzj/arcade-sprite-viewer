@@ -43,8 +43,6 @@ var autoAnim = 0;
 
 // mslug draw background
 function drawbgbasemslug(addr, w, h) {
-	labelInfo.innerText += ' '+ w + 'x' + h;
-
 	var bf2 = getrdbuf();
 	bf2.position(addr);
 	bf2.skip(4 * h * bgAddressSkip);

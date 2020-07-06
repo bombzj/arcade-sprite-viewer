@@ -288,7 +288,7 @@ function drawbg() {
 		return;
 	}
 
-	labelInfo.innerText += ' addr:' + saveaddr.toString(16).toUpperCase();
+	labelInfo.innerText += ' '+ w + 'x' + h + ' addr:' + saveaddr.toString(16).toUpperCase();
 
 	drawbgbasemslug(addr3 + offset, w, h);
 }

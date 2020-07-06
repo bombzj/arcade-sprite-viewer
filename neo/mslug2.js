@@ -181,7 +181,7 @@ function drawbg() {
 	let w = bf.getShort();
 	let h = bf.getShort();
 
-	labelInfo.innerText += ' addr:' + addr.toString(16).toUpperCase();
+	labelInfo.innerText += ' '+ w + 'x' + h + ' addr:' + addr.toString(16).toUpperCase();
 
 	drawbgbasemslug(addr2, w, h);
 }

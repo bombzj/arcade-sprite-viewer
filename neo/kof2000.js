@@ -6,13 +6,10 @@ var paletteAddress = 0x3C77F0;
 function loadRomPal() {
 	var bf = new bytebuffer(romFrameData);
 
-	// load sprite palette
-	
-	for(let p = 0;p < 8;p++) {
-		bf.position(paletteAddress + p * 0x400);
-		for(let i = 0;i < 32;i++) {
-			loadRomPalNeo(bf, (i << 4) + p * 16 * 32);
-		}
+	// load background palette
+	bf.position(paletteAddress);
+	for(let i = 0;i < 0x100;i++) {
+		loadRomPalNeo(bf, i << 4);
 	}
 
 	// load character palette
@@ -105,16 +102,28 @@ function loopDrawAnimation(base, addr, offset) {
 }
 
 
-var bgAddress = 0x112850;
+var bgAddress = [
+
+];
 var bg2Address = 0x1923A;	// layer 2 background
 
 let bgWidth = 32;
 let bgHeight;	// default 8
 let bgGrid = 2;		// each map tile contains 4 raw tiles?
 // draw a background with tilemap
-// function drawbg() {
+function drawbg() {
+	var bf = getrdbuf();
+	var bf2 = getrdbuf();
+	let addr = bgAddress[curbg];
 
-// }
+	bf.position(addr);
+	let w = bf.getShort();
+	let h = bf.getShort();
+
+	labelInfo.innerText += ' '+ w + 'x' + h + ' addr:'+addr.toString(16).toUpperCase();
+
+	drawbgbasemslug(bf.position() + 4, w, h);
+}
 
 
 var map2Data = [
