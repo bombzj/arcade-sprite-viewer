@@ -106,16 +106,64 @@ function loopDrawAnimation(base, addr, offset) {
 }
 
 
-var bgAddress = 0x112850;
+var bgAddress = [
+	0xBBF66, 0xBCB6E, 0xBD776, 0xBDC3E, 0xBDF96, 0xBDD06, 0xBEB9E, 0xBEC26, 0xBDE4E, 0xBFCE6, 0xBF0DE,
+	0xC08EE, 0xC44F6, 0xC80FE, 0xC8906,
+	0xCC50E, 0xCCD16, 0xCD91E, 0xCF576, 0xCE96E, 0xD017E, 0xD4C92, 0xDAB12, 0xD9D8A,
+	0xDBFA2, 0xDCBAA, 0xDD7B2,
+];
 var bg2Address = 0x1923A;	// layer 2 background
 
 let bgWidth = 32;
 let bgHeight;	// default 8
 let bgGrid = 2;		// each map tile contains 4 raw tiles?
 // draw a background with tilemap
-// function drawbg() {
+function drawbg() {
+	var bf = getrdbuf();
+	var bf2 = getrdbuf();
+	let addr = bgAddress[curbg];
 
-// }
+
+	bf.position(addr);
+	let w = bf.getShort();
+	let h = bf.getShort();
+
+	labelInfo.innerText += ' addr:'+addr.toString(16).toUpperCase();
+
+	drawbgbasemslug(bf.position() + 4, w, h);
+	// bf2.position(bf.position() + 4);
+	// bf2.skip(4 * h * bgAddressSkip);
+	// var animated = false;
+
+	// var imageData = ctxBack.createImageData(gridWidth, gridHeight);
+
+	// let imax = Math.min(w - bgAddressSkip, 34);
+	// for(let i = 0;i < imax;i++) {
+	// 	for(let j = 0;j < h;j++) {
+	// 		let tile = bf2.getuShort();
+	// 		let pal = bf2.get();
+	// 		let flag = bf2.get();
+	// 		tile += (flag & 0xF0) << 12;
+	// 		let a8 = flag & 0b1000;	// 8 frame auto animation
+	// 		let a4 = flag & 0b0100;	// 4 frame auto animation
+	// 		if(a8) {
+	// 			tile += (autoAnim & 0x7);
+	// 			animated = true;
+	// 		} else if(a4) {
+	// 			tile += (autoAnim & 0x3);
+	// 			animated = true;
+	// 		}
+	// 		drawTilesBase(imageData, tile, 1, 1, pal, 16, false, (flag & 0x2), (flag & 0x1), false);
+
+	// 		ctxBack.putImageData(imageData, i * gridHeight, j * gridWidth - bgAddressSkipY * 32);
+	// 	}
+	// }
+
+	// autoAnim++;
+	// if(animated) {
+	// 	animTimer = setTimeout("drawbgbasemslug("+ addr +"," + w+"," + h+")", 200);
+	// }
+}
 
 
 var map2Data = [
