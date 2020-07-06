@@ -167,8 +167,6 @@ let bgHeight;	// default 8
 let bgGrid = 2;		// each map tile contains 4 raw tiles?
 // draw a background with tilemap
 
-var autoAnim = 0;
-
 function drawbg() {
 	palset = curbg;
 	loadRomPal();
@@ -183,7 +181,7 @@ function drawbg() {
 	let w = bf.getShort();
 	let h = bf.getShort();
 
-	labelInfo.innerText += ' height:'+h;
+	labelInfo.innerText += ' addr:' + addr.toString(16).toUpperCase();
 
 	drawbgbasemslug(addr2, w, h);
 }
