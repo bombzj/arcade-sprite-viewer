@@ -1,8 +1,8 @@
 "use strict"
 
 var paletteAddress = 0x3D77F0;
-var palettebgindex = 0x47D8;
-var palettebg2index = 0x4788;
+var palettebgindex = 0x47D8;		// ROM:00004720    lea     unk_47D8,a0
+var palettebg2index = 0x4788;		// ROM:0000467E    lea     unk_4788,a0
 // load pal from rom and oveewrite old
 function loadRomPal() {
 	var bf = getrdbuf();
@@ -23,7 +23,7 @@ function loadRomPal() {
 		loadRomPalNeo(bf, (i + start) << 4);
 	}
 
-	// load ?? palette
+	// load background palette
 	bf2.position(palettebg2index + palset * 8);
 	offset = bf2.getShort();
 	start = bf2.getShort();
@@ -54,24 +54,24 @@ var curAnimAct;	// current animation index
 // show object animation from rom address
 var animTimer;
 function drawAnimation() {
-	//	let addr = animAddress[curAnim];
-		var bf = getrdbuf();
-	
-		let aaddr = bf.getInt(0x300002 + curAnim * 4) + 0x100000;	// animation address
-		aaddr = bf.getInt(aaddr + curAnimAct * 4);
-	
-		if(!palsetSpr) {
-			palsetSpr = palmap[curAnim] * 2;
-			palset2 = palsetSpr;
-		}
-		// load character palette
-		bf.position(paletteAddress + palsetSpr * 0x200);
-		for(let i = 0;i < 0x20;i++) {
-			loadRomPalNeo(bf, (i + 0x10 << 4));
-		}
-	
-		loopDrawAnimation(aaddr + 0x100000, 0, 0x6);
+//	let addr = animAddress[curAnim];
+	var bf = getrdbuf();
+
+	let aaddr = bf.getInt(0x300002 + curAnim * 4) + 0x100000;	// animation address
+	aaddr = bf.getInt(aaddr + curAnimAct * 4);
+
+	if(!palsetSpr) {
+		palsetSpr = palmap[curAnim] * 2;
+		palset2 = palsetSpr;
 	}
+	// load character palette
+	bf.position(paletteAddress + palsetSpr * 0x200);
+	for(let i = 0;i < 0x20;i++) {
+		loadRomPalNeo(bf, (i + 0x10 << 4));
+	}
+
+	loopDrawAnimation(aaddr + 0x100000, 0, 0x6);
+}
 
 function loopDrawAnimation(base, addr, offset) {
 	animTimer = null;

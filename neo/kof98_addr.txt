@@ -10,6 +10,8 @@ PALETTES        equ $400000   ;Palette RAM
 palette = palatte base + palette in sprite
 palette data store together, loading process depends on selected characters & scene
 
+ROM:000042E8                 lea     off_4462,a0    // bg palette index
+
 [sprite]
 pointer at $3C(a4) of object data
 
