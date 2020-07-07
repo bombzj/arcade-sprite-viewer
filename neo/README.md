@@ -6,9 +6,11 @@
 ![image kof97](https://asv.bombzj.com/res/img2kof97.png)<br/>
 
 * Click [here](https://asv.bombzj.com/viewer.html?kof97) to view `King of Fighters 97`.
+
 ## King of Fighters 98
 ![image kof98](https://asv.bombzj.com/res/imgkof98.png)<br/>
 ![image kof98](https://asv.bombzj.com/res/img2kof98.png)<br/>
+![kof98 background](https://asv.bombzj.com/res/bgkof98.gif)<br/>
 
 * Click [here](https://asv.bombzj.com/viewer.html?kof98) to view `King of Fighters 98`.
 
