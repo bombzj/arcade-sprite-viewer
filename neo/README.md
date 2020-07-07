@@ -4,6 +4,7 @@
 ## King of Fighters 97
 ![image kof97](https://asv.bombzj.com/res/imgkof97.png)<br/>
 ![image kof97](https://asv.bombzj.com/res/img2kof97.png)<br/>
+![kof97 background](https://asv.bombzj.com/res/bgkof97.gif)<br/>
 
 * Click [here](https://asv.bombzj.com/viewer.html?kof97) to view `King of Fighters 97`.
 
