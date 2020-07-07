@@ -303,7 +303,7 @@ function drawRomFrame(addr, offx = 128, offy = 160) {
 			let p = spritePaletteMap.get(addr);
 			if(p >= 0){
 				// switch to proper palset
-				palset = p;
+				palset2 = p;
 				loadRomPal();
 			}
 			preaddr = addr;
@@ -850,7 +850,7 @@ window.addEventListener("keydown", function (event) {
 					//if(curbg < mapTileAddress.length - 1) {
 					curbg++;
 					if(curbg >= maxbg)
-						curbg = maxbg;
+						curbg = maxbg - 1;
 					bgScene=0;
 					bgAddressSkip=0;
 					bgAddressSkipY=0;
@@ -902,7 +902,7 @@ window.addEventListener("keydown", function (event) {
 					if(bgAddressSkip <0) {
 						bgAddressSkip=0
 					}
-				} else if(mode == 5) {
+				} else if(mode == 5 || mode == 1) {
 					palsetSpr--;
 				} else {
 					if(curPal > 0)
@@ -922,7 +922,7 @@ window.addEventListener("keydown", function (event) {
 			} else {
 				if(mode == 2 || mode == 3) {
 					bgAddressSkip++;
-				} else if(mode == 5) {
+				} else if(mode == 5 || mode == 1) {
 					palsetSpr++;
 				} else {
 					curPal++;

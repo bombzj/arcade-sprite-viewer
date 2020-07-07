@@ -503,7 +503,7 @@ function loadRomFrame() {
 		let addr = bf.getInt(animAddress + i * 4);
 		frameAddress.push(addr);
 		if(palmap[i])
-			spritePaletteMap.set(addr, palmap[i]);
+			spritePaletteMap.set(addr, palmap[i] * 2);
 	}
 	maxPalSet = 500;
 }

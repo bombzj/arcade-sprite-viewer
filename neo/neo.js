@@ -1,10 +1,12 @@
 "use strict"
 // seems only for kof
 function loadRomPalNeo(bf, to) {
-	for(let c = 0;c < 16;c++) {
+	bf.skip(2);
+	palData[to] = 0;
+	for(let c = 0;c < 15;c++) {
 		let color = bf.getShort();
 		
-		palData[c + to] = neo2rgb(color);
+		palData[c + to + 1] = neo2rgb(color);
 	}
 }
 
