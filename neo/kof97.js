@@ -82,7 +82,7 @@ function loopDrawAnimation(base, addr, offset) {
 	var bf = new getrdbuf(addr);
 
 	for(let i = 0;i < 5;i++) {
-		let flag = bf.gets(base + addr);debugger
+		let flag = bf.gets(base + addr);
 		if(flag >= 0) {
 			break;
 		}

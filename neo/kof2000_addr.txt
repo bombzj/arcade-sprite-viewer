@@ -1,0 +1,20 @@
+[background]
+
+
+ROM:0008D142                 move.w  (a3)+,$AE(a1)   ; $AE = memory page like E15C, E148
+ROM:0008D146                 move.l  (a3)+,$C2(a1)   ; bg data
+ROM:0008D14A                 move.l  (a3)+,$36(a1)
+
+
+
+
+ROM:00009944                 movea.l (a4),a0
+ROM:00009946                 move.w  $AE(a4),d0
+ROM:0000994A loc_994A:                               ; CODE XREF: ROM:0000994E↓j
+ROM:0000994A                 tst.w   d0
+ROM:0000994C                 bne.s   loc_9950
+ROM:0000994E                 bra.s   loc_994A
+ROM:00009950 ; ---------------------------------------------------------------------------
+ROM:00009950 loc_9950:                               ; CODE XREF: ROM:0000994C↑j
+ROM:00009950                 move.w  d0,(word_2FFFEC).l
+ROM:00009956                 jsr     (a0)            ; to 8d2d0

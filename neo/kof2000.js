@@ -1,23 +1,45 @@
 "use strict"
 
-var paletteAddress = 0x3C77F0;
+var paletteAddress = 0x1C77F0;
+var palettebgindex = 0x34FE;		// ROM:00003494    lea     unk_34FE,a0
+var palettebg2index = 0x34A6;		// ROM:000033F4    lea     unk_34A6,a0
 
 // load pal from rom and oveewrite old
 function loadRomPal() {
 	var bf = new bytebuffer(romFrameData);
 
-	// load background palette
+	// load character palette
 	bf.position(paletteAddress);
-	for(let i = 0;i < 0x100;i++) {
-		loadRomPalNeo(bf, i << 4);
+	for(let i = 0;i < 0x10;i++) {
+		loadRomPalNeo(bf, (i << 4));
+	}
+
+	// load background palette
+	var bf2 = getrdbuf(palettebgindex + palset * 8);
+	let offset = bf2.getShort();
+	let start = bf2.getShort();
+	let cnt = bf2.getShort() + 1;
+	bf.position(paletteAddress + (offset << 5));
+	for(let i = 0;i < cnt;i++) {
+		loadRomPalNeo(bf, (i + start) << 4);
+	}
+
+	// load background palette
+	bf2.position(palettebg2index + palset * 8);
+	offset = bf2.getShort();
+	start = bf2.getShort();
+	cnt = bf2.getShort() + 1;
+	bf.position(paletteAddress + (offset << 5));
+	for(let i = 0;i < cnt;i++) {
+		loadRomPalNeo(bf, (i + start) << 4);
 	}
 
 	// load character palette
-	bf.position(paletteAddress + palset * 0x400);
-	for(let i = 16;i < 32;i++) {
-		loadRomPalNeo(bf, (i << 4));
+	bf.position(paletteAddress + palset2 * 0x200);
+	for(let i = 0;i < 0x20;i++) {
+		loadRomPalNeo(bf, (i + 0x10 << 4));
 	}
-	
+
 	if(showPal)
 		drawPal();
 }
@@ -27,26 +49,30 @@ function movetoTile(tile) {
 	refresh()
 }
 
-var animAddress = 0x238000;
+var animAddress = 0x338000;
 var curAnim;	// current animation index
 var curAnimAct;	// current animation index
 // show object animation from rom address
 var animTimer;
 function drawAnimation() {
-	//	let addr = animAddress[curAnim];
-		var bf = new bytebuffer(romFrameData);
-	debugger
-		let aaddr = bf.getInt(0x400002 + curAnim * 4) + 0x200000;	// animation address
-		aaddr = bf.getInt(aaddr + curAnimAct * 4);
-	
-	
-		palset = palmap[curAnim];
-		if(palset) {
-			loadRomPal();
-		}
-	
-		loopDrawAnimation(aaddr + 0x200000, 0, 0x6);
+//	let addr = animAddress[curAnim];
+	var bf = new bytebuffer(romFrameData);
+
+	let aaddr = bf.getInt(0x200002 + curAnim * 4);	// animation address
+	aaddr = bf.getInt(aaddr + curAnimAct * 4);
+
+	if(!palsetSpr) {
+		palsetSpr = palmap[curAnim] * 2;
+		palset2 = palsetSpr;
 	}
+	// load character palette
+	bf.position(paletteAddress + palsetSpr * 0x200);
+	for(let i = 0;i < 0x20;i++) {
+		loadRomPalNeo(bf, (i + 0x10 << 4));
+	}
+	
+	loopDrawAnimation(aaddr, 0, 0x6);
+}
 
 function loopDrawAnimation(base, addr, offset) {
 	animTimer = null;
@@ -54,7 +80,7 @@ function loopDrawAnimation(base, addr, offset) {
 	var bf = new bytebuffer(romFrameData, addr);
 
 	for(let i = 0;i < 5;i++) {
-		let flag = bf.gets(base + addr);debugger
+		let flag = bf.gets(base + addr);
 		if(flag >= 0) {
 			break;
 		}
@@ -76,14 +102,14 @@ function loopDrawAnimation(base, addr, offset) {
 	}
 	let stepframe = bf.getuShort(base + addr + 2);
 
-	let paddr = bf.getInt(0x200002 + curAnim * 4);	// position info & pointer to image
+	let paddr = bf.getInt(0x200002 + curAnim * 4 + 0x100000) + 0x100000;	// position info & pointer to image
 	bf.position(paddr + stepframe * 6);
 
 	let x = bf.getShort();
 	let y = bf.getShort();
 	let af = bf.getShort();		// sprite offset
 
-	let addr2 = bf.getInt(animAddress + curAnim * 4);
+	let addr2 = bf.getInt(animAddress + curAnim * 4) + 0x100000;
 
 	let frame = getRomFrame(addr2, af);
 	if(!frame) {
@@ -103,8 +129,9 @@ function loopDrawAnimation(base, addr, offset) {
 
 
 var bgAddress = [
-
+	0xD0A62
 ];
+
 var bg2Address = 0x1923A;	// layer 2 background
 
 let bgWidth = 32;
@@ -114,7 +141,10 @@ let bgGrid = 2;		// each map tile contains 4 raw tiles?
 function drawbg() {
 	var bf = getrdbuf();
 	var bf2 = getrdbuf();
-	let addr = bgAddress[curbg];
+	// let addr = bgAddress[curbg];
+	let addr = 0xD87E8 + curbg * 0x10;
+	let bank = unscramble(bfr.getShort(addr));debugger
+	addr = bfr.getInt(addr + 2) + bank;
 
 	bf.position(addr);
 	let w = bf.getShort();
@@ -199,12 +229,12 @@ function getRomFrame(addr, f) {
 
 
 	} else {
-
+debugger
 		// draw by 6022
 		if(f >= 0) {	// use frameAddress and has multiple frames
-			addr = bf.getInt(addr + f * 4);
+			addr = bf.getInt(addr + f * 4) + 0x100000;
 		}
-		frame.info = 
+
 		bf.position(addr);
 		
 		let palette = bf.get();
@@ -500,10 +530,51 @@ function loadRomFrame() {
 	var bf = new bytebuffer(romFrameData);
 	
 	for(let i = 0;i < 40;i++) {
-		let addr = bf.getInt(animAddress + i * 4);
+		let addr = bf.getInt(animAddress + i * 4) + 0x100000;
 		frameAddress.push(addr);
 		if(palmap[i])
 			spritePaletteMap.set(addr, palmap[i] * 2);
 	}
 	maxPalSet = 500;
+}
+
+// unused
+function unscramble(sel) {
+	var bankoffset =
+	[
+		0x000000, 0x100000, 0x200000, 0x300000, // 00
+		0x3f7800, 0x4f7800, 0x3ff800, 0x4ff800, // 04
+		0x407800, 0x507800, 0x40f800, 0x50f800, // 08
+		0x416800, 0x516800, 0x41d800, 0x51d800, // 12
+		0x424000, 0x524000, 0x523800, 0x623800, // 16
+		0x526000, 0x626000, 0x528000, 0x628000, // 20
+		0x52a000, 0x62a000, 0x52b800, 0x62b800, // 24
+		0x52d000, 0x62d000, 0x52e800, 0x62e800, // 28
+		0x618000, 0x619000, 0x61a000, 0x61a800, // 32
+	];
+
+	// unscramble bank number
+	let data =
+		(BIT(sel, 15) << 0)+
+		(BIT(sel, 14) << 1)+
+		(BIT(sel,  7) << 2)+
+		(BIT(sel,  3) << 3)+
+		(BIT(sel, 10) << 4)+
+		(BIT(sel,  5) << 5);
+
+	return -0x100000 + bankoffset[data];
+}
+function calc(sel) {
+	let data =
+	(BIT(sel, 15) << 0)+
+	(BIT(sel, 14) << 1)+
+	(BIT(sel,  7) << 2)+
+	(BIT(sel,  3) << 3)+
+	(BIT(sel, 10) << 4)+
+	(BIT(sel,  5) << 5);
+	return data.toString(2) + ' from ' + sel.toString(2);
+}
+
+function BIT(sel, n) {
+	return (sel >> n) & 1;
 }
