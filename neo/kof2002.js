@@ -1,21 +1,53 @@
 "use strict"
 
-var paletteAddress = 0x1C77F0;
-var palettebgindex = 0x34FE;		// ROM:00003494    lea     unk_34FE,a0
-var palettebg2index = 0x34A6;		// ROM:000033F4    lea     unk_34A6,a0
+var paletteAddress = 0x486B62;
+var palettebgindex = 0xB17EA;		
+var palettebg2index = 0xB1842;		
 
 // load pal from rom and oveewrite old
 function loadRomPal() {
 	var bf = new bytebuffer(romFrameData);
 
 	// load basic palette
-	bf.position(paletteAddress);
-	for(let i = 0;i < 0x10;i++) {
-		loadRomPalNeo(bf, (i << 4));
-	}
+	kofloadpal(0xB21E2);
+	let addr = bfr.getShort(0xB20F8 + palset * 0x10) + 0xB20F8;
+	kofloadpal(addr);
 
-	// load background palette
-	var bf2 = getrdbuf(palettebgindex + palset * 8);
+	// load ??? palette
+	kofloadpal2(0xB17EA + palset * 8);	// ROM:0000330E                 lea     (unk_B17EA).l,a0
+
+	kofloadpal2(0xB1842);	// ROM:00003322                 lea     (unk_B1842).l,a0
+
+	addr = bfr.getShort(0xB2018 + palset * 0x10) + 0xB2018;
+	kofloadpal2(addr);	// ROM:000032F0                 lea     (unk_B2018).l,a0
+
+	// // load character palette
+	// bf.position(paletteAddress + palset2 * 0x200);
+	// for(let i = 0;i < 0x20;i++) {
+	// 	loadRomPalNeo(bf, (i + 0x10 << 4));
+	// }
+
+	if(showPal)
+		drawPal();
+}
+
+function kofloadpal(addr) {
+	var bf = getrdbuf();
+	var bf2 = getrdbuf(addr);
+	for(let p = 0;p < 0x100;p++) {
+		let from = bf2.getShort();
+		if(from == -1) {
+			break;
+		}
+		let to = bf2.getShort();
+		bf.position(paletteAddress + (from << 5));
+		loadRomPalNeo(bf, to << 4);
+	}
+}
+
+function kofloadpal2(addr) {
+	let bf = getrdbuf();
+	let bf2 = getrdbuf(addr);
 	let offset = bf2.getShort();
 	let start = bf2.getShort();
 	let cnt = bf2.getShort() + 1;
@@ -23,25 +55,6 @@ function loadRomPal() {
 	for(let i = 0;i < cnt;i++) {
 		loadRomPalNeo(bf, (i + start) << 4);
 	}
-
-	// load background palette
-	bf2.position(palettebg2index + palset * 8);
-	offset = bf2.getShort();
-	start = bf2.getShort();
-	cnt = bf2.getShort() + 1;
-	bf.position(paletteAddress + (offset << 5));
-	for(let i = 0;i < cnt;i++) {
-		loadRomPalNeo(bf, (i + start) << 4);
-	}
-
-	// load character palette
-	bf.position(paletteAddress + palset2 * 0x200);
-	for(let i = 0;i < 0x20;i++) {
-		loadRomPalNeo(bf, (i + 0x10 << 4));
-	}
-
-	if(showPal)
-		drawPal();
 }
 
 function movetoTile(tile) {
@@ -541,44 +554,4 @@ function loadRomFrame() {
 			spritePaletteMap.set(addr, palmap[i] * 2);
 	}
 	maxPalSet = 500;
-}
-
-function unscramble(sel) {
-	var bankoffset =
-	[
-		0x000000, 0x100000, 0x200000, 0x300000, // 00
-		0x3f7800, 0x4f7800, 0x3ff800, 0x4ff800, // 04
-		0x407800, 0x507800, 0x40f800, 0x50f800, // 08
-		0x416800, 0x516800, 0x41d800, 0x51d800, // 12
-		0x424000, 0x524000, 0x523800, 0x623800, // 16
-		0x526000, 0x626000, 0x528000, 0x628000, // 20
-		0x52a000, 0x62a000, 0x52b800, 0x62b800, // 24
-		0x52d000, 0x62d000, 0x52e800, 0x62e800, // 28
-		0x618000, 0x619000, 0x61a000, 0x61a800, // 32
-	];
-
-	// unscramble bank number
-	let data =
-		(BIT(sel, 15) << 0)+
-		(BIT(sel, 14) << 1)+
-		(BIT(sel,  7) << 2)+
-		(BIT(sel,  3) << 3)+
-		(BIT(sel, 10) << 4)+
-		(BIT(sel,  5) << 5);
-
-	return -0x100000 + bankoffset[data];
-}
-function calc(sel) {
-	let data =
-	(BIT(sel, 15) << 0)+
-	(BIT(sel, 14) << 1)+
-	(BIT(sel,  7) << 2)+
-	(BIT(sel,  3) << 3)+
-	(BIT(sel, 10) << 4)+
-	(BIT(sel,  5) << 5);
-	return data.toString(2) + ' from ' + sel.toString(2);
-}
-
-function BIT(sel, n) {
-	return (sel >> n) & 1;
 }

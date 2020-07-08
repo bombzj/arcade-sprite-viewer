@@ -7,7 +7,7 @@ var palettebg2index = 0x4788;		// ROM:0000467E    lea     unk_4788,a0
 function loadRomPal() {
 	var bf = getrdbuf();
 
-	// load character palette
+	// load basic palette
 	bf.position(paletteAddress);
 	for(let i = 0;i < 0x10;i++) {
 		loadRomPalNeo(bf, (i << 4));
