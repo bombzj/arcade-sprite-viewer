@@ -142,15 +142,20 @@ function drawbg() {
 	var bf = getrdbuf();
 	var bf2 = getrdbuf();
 	// let addr = bgAddress[curbg];
-	let addr = 0xD87E8 + curbg * 0x10;
-	let bank = unscramble(bfr.getShort(addr));debugger
+	let addr = 0xD87E8 + curbg * 0x10;debugger
+	labelInfo.innerText += ' addr:'+addr.toString(16).toUpperCase();
+	let bank = unscramble(bfr.getuShort(addr)) - 0x100000;
 	addr = bfr.getInt(addr + 2) + bank;
 
 	bf.position(addr);
 	let w = bf.getShort();
 	let h = bf.getShort();
 
-	labelInfo.innerText += ' '+ w + 'x' + h + ' addr:'+addr.toString(16).toUpperCase();
+	labelInfo.innerText += ' '+ w + 'x' + h;
+	if(w > 0x50 || h > 0x30) {
+		debugger;
+		return;
+	}
 
 	drawbgbasemslug(bf.position() + 4, w, h);
 }

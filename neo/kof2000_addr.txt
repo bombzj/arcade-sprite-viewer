@@ -18,3 +18,24 @@ ROM:00009950 ; -----------------------------------------------------------------
 ROM:00009950 loc_9950:                               ; CODE XREF: ROM:0000994C↑j
 ROM:00009950                 move.w  d0,(word_2FFFEC).l
 ROM:00009956                 jsr     (a0)            ; to 8d2d0
+
+
+
+ROM:0008D156 bg_draw:                                ; DATA XREF: bg_load_all+7A↑o
+ROM:0008D156                 move.b  $D2(a4),d0
+ROM:0008D15A                 cmpi.b  #$20,d0 ; ' '
+ROM:0008D15E                 bls.w   loc_8D1E8
+ROM:0008D162                 move.w  $D6(a4),d0
+ROM:0008D166                 moveq   #$20,d1 ; ' '
+ROM:0008D168                 movea.l $C2(a4),a0
+ROM:0008D16C                 jsr     (bg_load).l     ; a0 = bg data
+ROM:0008D172                 move.l  #0,$A4(a4)
+ROM:0008D17A                 move.l  #$1C00000,$A8(a4)
+ROM:0008D182                 jsr     (bg_write).l
+
+
+bg_load
+ROM:000074EC                 move.l  (a0,d1.l),(a2)+ ; write to ram
+
+bg_write
+ROM:00007512                 bsr.w   sub_7F40        ; write to gfx
