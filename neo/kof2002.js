@@ -16,7 +16,7 @@ function loadRomPal() {
 	kofloadpal(addr);
 
 	// load background palette
-	kofloadpal2(0xB15AA + palset * 8);
+	kofloadpal2(0xB15AA + (palset << 6));
 
 	// load ??? palette
 	kofloadpal2(0xB17EA + palset * 8);	// ROM:0000330E                 lea     (unk_B17EA).l,a0
