@@ -76,7 +76,7 @@ function drawAnimation() {
 //	let addr = animAddress[curAnim];
 	var bf = new bytebuffer(romFrameData);
 
-	let aaddr = bf.getInt(0x200002 + curAnim * 4 + 0x100000);	// animation address
+	let aaddr = bf.getInt(0x200002 + curAnim * 4 + 0x100000) + 0x100000;	// animation address
 	aaddr = bf.getInt(aaddr + curAnimAct * 4) + 0x100000;
 
 	if(!palsetSpr) {
@@ -544,15 +544,15 @@ function getRomFrame(addr, f) {
 var animPlayerAddr = [];
 
 var palmap = [
-	8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,
-	27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,
-	46,47,48,49,50,51,52,53,54
+	8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,
+	42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,
+	72,74,76,78,80,82,84,86,88,90,92,94,96,98,100,
 ];
 
 function loadRomFrame() {
 	var bf = new bytebuffer(romFrameData);
 	
-	for(let i = 0;i < 47;i++) {
+	for(let i = 0;i < 42;i++) {
 		let addr = bf.getInt(animAddress + i * 4);
 		frameAddress.push(addr);
 		if(palmap[i])

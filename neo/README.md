@@ -43,6 +43,7 @@
 ![kof2000 background](https://asv.bombzj.com/res/bgkof2000.gif)<br/>
 
 ## King of Fighters 2002
+![kof2002 animation](https://asv.bombzj.com/res/animkof2002.gif)<br/>
 ![kof2002 background](https://asv.bombzj.com/res/bgkof2002.gif)<br/>
 
 # TODO
