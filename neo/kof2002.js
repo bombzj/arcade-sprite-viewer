@@ -1,17 +1,22 @@
 "use strict"
 
-var paletteAddress = 0x486B62;
-var palettebgindex = 0xB17EA;		
-var palettebg2index = 0xB1842;		
+var paletteAddress = 0x486B62;	
 
 // load pal from rom and oveewrite old
 function loadRomPal() {
 	var bf = new bytebuffer(romFrameData);
 
 	// load basic palette
-	kofloadpal(0xB21E2);
+	bf.position(paletteAddress);
+	for(let i = 0;i < 0x10;i++) {
+		loadRomPalNeo(bf, (i << 4));
+	}
+	// kofloadpal(0xB21E2);
 	let addr = bfr.getShort(0xB20F8 + palset * 0x10) + 0xB20F8;
 	kofloadpal(addr);
+
+	// load background palette
+	kofloadpal2(0xB15AA + palset * 8);
 
 	// load ??? palette
 	kofloadpal2(0xB17EA + palset * 8);	// ROM:0000330E                 lea     (unk_B17EA).l,a0
@@ -22,10 +27,10 @@ function loadRomPal() {
 	kofloadpal2(addr);	// ROM:000032F0                 lea     (unk_B2018).l,a0
 
 	// // load character palette
-	// bf.position(paletteAddress + palset2 * 0x200);
-	// for(let i = 0;i < 0x20;i++) {
-	// 	loadRomPalNeo(bf, (i + 0x10 << 4));
-	// }
+	bf.position(paletteAddress + palset2 * 0x200);
+	for(let i = 0;i < 0x20;i++) {
+		loadRomPalNeo(bf, (i + 0x10 << 4));
+	}
 
 	if(showPal)
 		drawPal();
@@ -142,9 +147,17 @@ function loopDrawAnimation(base, addr, offset) {
 
 
 var bgAddress = [
-	0xD0A62
+	0x2BF750, 0x2C0358, 0x2C0F60, 0x2C1B68, 0x2C2110, 0x2C26B8,
+	0x2C2C60, 0x2C5078, 0x2C3868, 0x2C5900,
+	0x2C7154, 0x2C956C, 
+	0x2CB5F0, 0x2CCE00,
+	0x2CDE40, 0x2CEA48, 0x2CEFA0,
+	0x2CF128, 0x2D1540,
+	0x2D1FE4, 0x2D2BEC, 0x2D38F4,
+	0x2D4EE8, 0x2D57F0,
+	0x2D6660, 0x2D7268,
 ];
-
+maxbg = bgAddress.length;
 var bg2Address = 0x1923A;	// layer 2 background
 
 let bgWidth = 32;
@@ -154,22 +167,17 @@ let bgGrid = 2;		// each map tile contains 4 raw tiles?
 function drawbg() {
 	var bf = getrdbuf();
 	var bf2 = getrdbuf();
-	// let addr = bgAddress[curbg];
-	let addr = 0xD87E8 + curbg * 0x10;debugger
-	labelInfo.innerText += ' addr:'+addr.toString(16).toUpperCase();
-	let bank = unscramble(bfr.getuShort(addr)) - 0x100000;
-	addr = bfr.getInt(addr + 2) + bank;
+	let addr = bgAddress[curbg] - 0x100000;
 
 	bf.position(addr);
 	let w = bf.getShort();
 	let h = bf.getShort();
 
-	labelInfo.innerText += ' '+ w + 'x' + h;
+	labelInfo.innerText += ' '+ w + 'x' + h + ' addr:'+addr.toString(16).toUpperCase();
 	if(w > 0x50 || h > 0x30) {
 		debugger;
 		return;
-	}
-
+	}debugger
 	drawbgbasemslug(bf.position() + 4, w, h);
 }
 

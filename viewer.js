@@ -59,7 +59,7 @@ function init(name) {
 	for(let i = 0;i < 16;i++) {
 		for(let c = 0;c < 256;c++) {	// copy a page with 16 palettes, each palette contains 16 colors
 				let dp = c + i * 16 * 16;
-				palData[dp] = c << 16 | c | 0xFF000000;
+				palData[dp] = c << 20 | c | 0xFF000000;
 		}
 	}
 
