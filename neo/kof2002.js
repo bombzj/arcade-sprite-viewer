@@ -67,7 +67,7 @@ function movetoTile(tile) {
 	refresh()
 }
 
-var animAddress = 0x338000;
+var animAddress = 0x200002;
 var curAnim;	// current animation index
 var curAnimAct;	// current animation index
 // show object animation from rom address
@@ -76,8 +76,8 @@ function drawAnimation() {
 //	let addr = animAddress[curAnim];
 	var bf = new bytebuffer(romFrameData);
 
-	let aaddr = bf.getInt(0x200002 + curAnim * 4);	// animation address
-	aaddr = bf.getInt(aaddr + curAnimAct * 4);
+	let aaddr = bf.getInt(0x200002 + curAnim * 4 + 0x100000);	// animation address
+	aaddr = bf.getInt(aaddr + curAnimAct * 4) + 0x100000;
 
 	if(!palsetSpr) {
 		palsetSpr = palmap[curAnim] * 2;
@@ -120,14 +120,14 @@ function loopDrawAnimation(base, addr, offset) {
 	}
 	let stepframe = bf.getuShort(base + addr + 2);
 
-	let paddr = bf.getInt(0x200002 + curAnim * 4 + 0x100000) + 0x100000;	// position info & pointer to image
+	let paddr = bf.getInt(0x200002 + curAnim * 4 + 0x200000) + 0x200000;	// position info & pointer to image
 	bf.position(paddr + stepframe * 6);
 
 	let x = bf.getShort();
 	let y = bf.getShort();
 	let af = bf.getShort();		// sprite offset
 
-	let addr2 = bf.getInt(animAddress + curAnim * 4) + 0x100000;
+	let addr2 = bf.getInt(animAddress + curAnim * 4);
 
 	let frame = getRomFrame(addr2, af);
 	if(!frame) {
@@ -211,7 +211,6 @@ function getRomFrame(addr, f) {
 	
 
 	if(addr < 0x100000) {
-		// draw by $8544
 		if(f >= 0) {	// use frameAddress and has multiple frames
 			let offset = bf.getShort(addr + 2);
 	
@@ -255,10 +254,8 @@ function getRomFrame(addr, f) {
 
 
 	} else {
-debugger
-		// draw by 6022
 		if(f >= 0) {	// use frameAddress and has multiple frames
-			addr = bf.getInt(addr + f * 4) + 0x100000;
+			addr = bf.getInt(addr + f * 4) + 0x000000;
 		}
 
 		bf.position(addr);
@@ -555,8 +552,8 @@ var palmap = [
 function loadRomFrame() {
 	var bf = new bytebuffer(romFrameData);
 	
-	for(let i = 0;i < 40;i++) {
-		let addr = bf.getInt(animAddress + i * 4) + 0x100000;
+	for(let i = 0;i < 47;i++) {
+		let addr = bf.getInt(animAddress + i * 4);
 		frameAddress.push(addr);
 		if(palmap[i])
 			spritePaletteMap.set(addr, palmap[i] * 2);

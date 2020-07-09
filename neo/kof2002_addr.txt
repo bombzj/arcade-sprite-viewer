@@ -1,0 +1,14 @@
+[palette]
+
+ROM:0000323E palette_load_bg3:                       ; CODE XREF: ROM:000A94AA↓p
+ROM:0000323E                                         ; ROM:000A9BFC↓p ...
+ROM:0000323E                 lsl.w   #6,d0
+ROM:00003240                 lea     (unk_B15AA).l,a0
+ROM:00003246                 adda.w  d0,a0
+ROM:00003248                 moveq   #0,d0
+ROM:0000324A                 move.b  $27A2(a5),d0
+ROM:0000324E                 lsl.w   #3,d0
+ROM:00003250                 adda.w  d0,a0
+ROM:00003252                 move.w  (a0)+,d1
+ROM:00003254                 move.w  (a0)+,d2
+ROM:00003256                 move.w  (a0)+,d3
