@@ -4,25 +4,26 @@ An arcade game sprite viewer / background image viewer with hitbox data (cps1 ne
 BTW. CPS & NEOGEO both use 68k but PSIKYOSH uses SH-2 which is far more difficult to read.
 * Click [here](https://github.com/bombzj/arcade-sprite-viewer) to view source code.
 
-## CPS [view more](https://asv.bombzj.com/cps/)
+## NEOGEO [view more games](https://asv.bombzj.com/neo/)
+![kof97 animation](https://asv.bombzj.com/res/animkof97.gif)
+![kof98 animation](https://asv.bombzj.com/res/animkof98.gif)
+![kof98 background](https://asv.bombzj.com/res/bgkof98.gif)<br/>
+![mslug2 background](https://asv.bombzj.com/res/map3mslug2.gif)<br/>
+![kof2000 animation](https://asv.bombzj.com/res/animkof2000.gif)<br/>
+
+* Click [here](https://asv.bombzj.com/viewer.html?kof97) to view `King of Fighters 97`.
+
+## CPS [view more games](https://asv.bombzj.com/cps/)
 ![punisher animation](https://asv.bombzj.com/res/punisheranim.gif)<br/>
 ![dino animation](https://asv.bombzj.com/res/animdino.gif)<br/>
 
 * Click [here](https://asv.bombzj.com/viewer.html?punisher) to view `Punisher`.
 
-## PSIKYOSH [view more](https://asv.bombzj.com/psi/)
+## PSIKYOSH [view more games](https://asv.bombzj.com/psi/)
 ![1945ii animation](https://asv.bombzj.com/res/anim1945ii.gif)<br/>
 ![gunbird2 background](https://asv.bombzj.com/res/mapgunbird2.png)<br/>
 
 * Click [here](https://asv.bombzj.com/viewer.html?1945ii) to view `Strikers 1945ii`.
-
-## NEO GEO [view more](https://asv.bombzj.com/neo/)
-![kof97 animation](https://asv.bombzj.com/res/animkof97.gif)<br/>
-![kof98 animation](https://asv.bombzj.com/res/animkof98.gif)<br/>
-![mslug2 background](https://asv.bombzj.com/res/map3mslug2.gif)<br/>
-![kof2000 animation](https://asv.bombzj.com/res/animkof2000.gif)<br/>
-
-* Click [here](https://asv.bombzj.com/viewer.html?kof97) to view `King of Fighters 97`.
 
 * [Full Game List](https://asv.bombzj.com/list.html)
 
