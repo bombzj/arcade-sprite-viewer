@@ -7,20 +7,22 @@ BTW. CPS & NEOGEO both use 68k but PSIKYOSH uses SH-2 which is far more difficul
 ## NEOGEO [view more games](https://asv.bombzj.com/neo/)
 ![kof97 animation](https://asv.bombzj.com/res/animkof97.gif)
 ![kof98 animation](https://asv.bombzj.com/res/animkof98.gif)
+![kof2000 animation](https://asv.bombzj.com/res/animkof2000.gif)<br/>
 ![kof98 background](https://asv.bombzj.com/res/bgkof98.gif)<br/>
 ![mslug2 background](https://asv.bombzj.com/res/map3mslug2.gif)<br/>
-![kof2000 animation](https://asv.bombzj.com/res/animkof2000.gif)<br/>
 
 * Click [here](https://asv.bombzj.com/viewer.html?kof97) to view `King of Fighters 97`.
 
 ## CPS [view more games](https://asv.bombzj.com/cps/)
-![punisher animation](https://asv.bombzj.com/res/punisheranim.gif)<br/>
+![punisher animation](https://asv.bombzj.com/res/punisheranim.gif)
 ![dino animation](https://asv.bombzj.com/res/animdino.gif)<br/>
+![captcomm background](https://asv.bombzj.com/res/mapcapt.png)<br/>
 
 * Click [here](https://asv.bombzj.com/viewer.html?punisher) to view `Punisher`.
 
 ## PSIKYOSH [view more games](https://asv.bombzj.com/psi/)
-![1945ii animation](https://asv.bombzj.com/res/anim1945ii.gif)<br/>
+![1945ii animation](https://asv.bombzj.com/res/anim1945ii.gif)
+![gunbird2 animation](https://asv.bombzj.com/res/animgunbird2.gif)<br/>
 ![gunbird2 background](https://asv.bombzj.com/res/mapgunbird2.png)<br/>
 
 * Click [here](https://asv.bombzj.com/viewer.html?1945ii) to view `Strikers 1945ii`.
