@@ -77,7 +77,7 @@ function loopDrawAnimation(base, addr, offset) {
 	animTimer = null;
 
 	var bf = getrdbuf(addr);
-
+	var cbs = [];
 	for(let i = 0;i < 5;i++) {
 		let flag = bf.gets(base + addr);
 		if(flag >= 0) {
@@ -90,10 +90,21 @@ function loopDrawAnimation(base, addr, offset) {
 		} else if(flag == 1) {
 			addr -= 6;
 			continue;
-		} else if(flag == 2) {
-
+		} else if(flag == 2) {	// hitbox & effect
+			bf.position(base + addr + 1);
+			let effect = bf.get();
+			let x = bf.gets();
+			let y = bf.gets();
+			let x2 = bf.gets();
+			let y2 = bf.gets();
+			cbs.push({
+				x:x,
+				y:y,
+				x2,x2,
+				y2:y2
+			})
 		} else if(flag == 3) {
-	
+
 		} else {
 
 		}
@@ -118,7 +129,17 @@ function loopDrawAnimation(base, addr, offset) {
 	labelInfo.innerText = 'anim:' + (base + addr).toString(16).toUpperCase();
 
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	drawRomFrameBase(frame, undefined, 128 + x, 160 + y);
+	let offx = 128;
+	let offy = 160;
+	drawRomFrameBase(frame, undefined, offx + x, offy + y);
+
+	if(showCB) {
+		// draw collision box
+		for(let c of cbs) {
+			ctx.strokeStyle = 'green';
+			ctx.strokeRect(c.x + offx - c.x2, c.y + offy - c.y2, c.x2 * 2, c.y2 * 2);
+		}
+	}
 
 
 	addr += offset;
