@@ -113,7 +113,7 @@ function loopDrawAnimation(base, addr, offset) {
 
 	let addr2 = bf.getInt(animAddress + curAnim * 4);
 
-	let frame = getRomFrame(addr2, af);
+	let frame = getRomFrame(addr2, af & 0x3FF);
 	if(!frame) {
 		return;
 	}

@@ -69,16 +69,25 @@ function drawAnimation() {
 	for(let i = 0;i < 0x20;i++) {
 		loadRomPalNeo(bf, (i + 0x10 << 4));
 	}
-
-	loopDrawAnimation(aaddr + 0x100000, 0, 0x6);
+	animVars.offx = 128;
+	animVars.offy = 160;
+	animVars.cbs = [];
+	loopDrawAnimation(aaddr + 0x100000, 0);
 }
 
-function loopDrawAnimation(base, addr, offset) {
+var animVars = {};
+var typecolor = ['red',	// attack
+		 'green',	// head
+		 'orange',	// body	
+		  'blue'
+		];
+
+function loopDrawAnimation(base, addr) {
 	animTimer = null;
 
 	var bf = getrdbuf(addr);
-	var cbs = [];
-	for(let i = 0;i < 5;i++) {
+	let cbs = animVars.cbs;
+	for(let i = 0;i < 10;i++) {
 		let flag = bf.gets(base + addr);
 		if(flag >= 0) {
 			break;
@@ -93,27 +102,35 @@ function loopDrawAnimation(base, addr, offset) {
 		} else if(flag == 2) {	// hitbox & effect
 			bf.position(base + addr + 1);
 			let effect = bf.get();
+			let type = effect & 0x3;
+			effect >>= 2;
 			let x = bf.gets();
 			let y = bf.gets();
 			let x2 = bf.gets();
 			let y2 = bf.gets();
-			cbs.push({
-				x:x,
-				y:y,
-				x2,x2,
-				y2:y2
-			})
+			cbs[type] = {
+				x	:	x,
+				y	:	y,
+				x2	:	x2,
+				y2	:	y2,
+				type : type,
+				effect : effect
+			};
 		} else if(flag == 3) {
 
+		} else if(flag == 4) {	// move delta x y
+			animVars.offx += bf.getShort(base + addr + 2);debugger
+			animVars.offy += bf.getShort(base + addr + 4);
 		} else {
 
 		}
 		addr += 6;
 	}
+	let lapse = bf.gets(base + addr) + 1;
 	let stepframe = bf.getuShort(base + addr + 2);
-
+debugger
 	let paddr = bf.getInt(0x200002 + curAnim * 4);	// position info & pointer to image
-	bf.position(paddr + stepframe * 6);
+	bf.position(paddr + stepframe * 6);debugger
 
 	let x = bf.getShort();
 	let y = bf.getShort();
@@ -121,7 +138,7 @@ function loopDrawAnimation(base, addr, offset) {
 
 	let addr2 = bf.getInt(animAddress + curAnim * 4);
 
-	let frame = getRomFrame(addr2, af);
+	let frame = getRomFrame(addr2, af & 0x3FF);		// 613E       andi.w  #$3FF,d6
 	if(!frame) {
 		return;
 	}
@@ -129,22 +146,24 @@ function loopDrawAnimation(base, addr, offset) {
 	labelInfo.innerText = 'anim:' + (base + addr).toString(16).toUpperCase();
 
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	let offx = 128;
-	let offy = 160;
+	let offx = animVars.offx;
+	let offy = animVars.offy;
 	drawRomFrameBase(frame, undefined, offx + x, offy + y);
 
 	if(showCB) {
 		// draw collision box
 		for(let c of cbs) {
-			ctx.strokeStyle = 'green';
-			ctx.strokeRect(c.x + offx - c.x2, c.y + offy - c.y2, c.x2 * 2, c.y2 * 2);
+			if(c) {
+				ctx.strokeStyle = typecolor[c.type];
+				ctx.strokeRect(c.x + offx - c.x2, c.y + offy - c.y2, c.x2 * 2, c.y2 * 2);
+			}
 		}
 	}
 
 
-	addr += offset;
+	addr += 6;
 
-	animTimer = setTimeout("loopDrawAnimation("+ base +"," + addr +"," + offset+")", 200);
+	animTimer = setTimeout("loopDrawAnimation("+ base +"," + addr +")", 200 * lapse);
 }
 
 
