@@ -2,10 +2,10 @@
 
 |NEO GEO|palette|sprite |animation  |background |hitbox |
 |-      |-      |-      |-          |-          |-      |
-| [King of Fighters 97](https://asv.bombzj.com/viewer.html?kof97)   |☑ |☑ |☑ |☑ |   |
-| [King of Fighters 98](https://asv.bombzj.com/viewer.html?kof98)   |☑ |☑ |☑ |☑ |   |
-| [King of Fighters 2000](https://asv.bombzj.com/viewer.html?kof2000)   |☑ |☑ |☑ |☑ |   |
-| [King of Fighters 2002](https://asv.bombzj.com/viewer.html?kof2002)   |☑ |☑ |☑ |☑ |   |
+| [King of Fighters 97](https://asv.bombzj.com/viewer.html?kof97)   |☑ |☑ |☑ |☑ |☑ |
+| [King of Fighters 98](https://asv.bombzj.com/viewer.html?kof98)   |☑ |☑ |☑ |☑ |☑ |
+| [King of Fighters 2000](https://asv.bombzj.com/viewer.html?kof2000)   |☑ |☑ |☑ |☑ |☑ |
+| [King of Fighters 2002](https://asv.bombzj.com/viewer.html?kof2002)   |☑ |☑ |☑ |☑ |☑ |
 | [Metal Slug: Super Vehicle-001](https://asv.bombzj.com/viewer.html?mslug)   |☑ | | |☑ | |
 | [Metal Slug 2](https://asv.bombzj.com/viewer.html?mslug2)   |☑ |☑ |☑ |☑ |☑ |
 | [Metal Slug 3](https://asv.bombzj.com/viewer.html?mslug3)   |☑ |☑ |☑ |☑ |☑ |
