@@ -124,6 +124,12 @@ function initviewer() {
 	loadRomFrame();
 
 	loadRomPal();
+	if(dblAnim) {
+		canvas.style = `width:544px;height:800px;`;
+	} else {
+		canvas.style = `width:272px;height:400px;`;
+	}
+	
 	refresh();
 }
 
@@ -166,6 +172,7 @@ var maxPalSet = 50;
 
 var showPal;
 var showCB;
+var dblAnim;	// double size image
 
 function movetoTile(tile) {
 	curStartTile = tile;
@@ -880,10 +887,14 @@ window.addEventListener("keydown", function (event) {
 		break;
 
 		case '=':
+			dblAnim = true;
 			canvas.style = `width:544px;height:800px;`;
+			saveStatus();
 		break;
 		case '-':
+			dblAnim = false;
 			canvas.style = `width:272px;height:400px;`;
+			saveStatus();
 		break;
 		
 		case ',':
@@ -1256,6 +1267,7 @@ function loadStatus() {
 	showPal = (undefined != s.showPal) ? s.showPal : true;
 	tileMode = (undefined != s.tileMode) ? s.tileMode : 0;
 	showCB = (undefined != s.showCB) ? s.showCB : false;
+	dblAnim = (undefined != s.dblAnim) ? s.dblAnim : true;
 	// load all frames
 	for(let i=0;i<totalframe;i++) {
 		frames[i] = JSON.parse(localStorage.getItem("frame"+i));
@@ -1283,6 +1295,7 @@ function saveStatus() {
 		showPal			: showPal,
 		tileMode		: tileMode,
 		showCB			: showCB,
+		dblAnim			: dblAnim,
 	};
 	localStorage.setItem(statusStorage, JSON.stringify(status));
 }
