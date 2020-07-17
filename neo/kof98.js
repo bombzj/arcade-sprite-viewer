@@ -98,8 +98,9 @@ function loopDrawAnimation(base, addr) {
 			addr = 0;
 			continue;
 		} else if(flag == 1) {
-			addr -= 6;
-			continue;
+			return;	// stop animation
+			// addr -= 6;
+			// continue;
 		} else if(flag == 2) {	// hitbox & effect
 			bf.position(base + addr + 1);
 			let effect = bf.get();
@@ -141,18 +142,20 @@ function loopDrawAnimation(base, addr) {
 
 	let x = bf.getShort();
 	let y = bf.getShort();
-	let af = bf.getShort();		// sprite offset
+	let af = bf.getuShort();		// sprite offset
+	let vflip = af & 0x4000;
+	let hflip = af & 0x8000;
 
 	let addr2 = bf.getInt(animAddress + curAnim * 4);
 
-	let frame = getRomFrame(addr2, af & 0x3FF);		// 613E       andi.w  #$3FF,d6
+	labelInfo.innerText = 'anim:' + (base + addr).toString(16).toUpperCase() + ' f:' + af.toString(16).toUpperCase();
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+	let frame = getRomFrame(addr2, af & 0x3FF, vflip, hflip);		// ROM:0000613E   andi.w  #$3FF,d6
 	if(!frame) {
 		return;
 	}
 	
-	labelInfo.innerText = 'anim:' + (base + addr).toString(16).toUpperCase();
-
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	let offx = animVars.offx;
 	let offy = animVars.offy;
 	drawRomFrameBase(frame, undefined, offx + x, offy + y);
@@ -238,346 +241,8 @@ frameAddress = [
 ];
 
 // get frame from addr. return a frame obj
-function getRomFrame(addr, f) {
-	var bf = getrdbuf();
-	var bf2 = getrdbuf();
-	let frame = {
-		sprites: [],
-	};
-	
-
-	if(addr < 0x100000) {
-		// draw by $8544
-		if(f >= 0) {	// use frameAddress and has multiple frames
-			let offset = bf.getShort(addr + 2);
-	
-			addr += offset + 2;
-		}
-		frame.info = '0x'+addr.toString(16).toUpperCase();
-		bf.position(addr);
-		
-		bf.skip(2);
-		let cnt = bf.get() + 1;
-		let cnt2 = bf.get() + 1;
-		let offset = bf.getShort();
-		if(f) {
-			offset = offset * f;
-		} else {
-			offset = 0;
-		}
-	
-	
-		bf2.position(addr + offset + 0x6);
-	
-		for(let i = 0;i < cnt;i++) {
-			for(let j = 0;j < cnt2;j++) {
-				let tile = bf2.getuShort();
-				let palette = bf2.get();
-				let flag = bf2.get();
-				tile += (flag & 0xF0) << 12;	// more bits for tile number
-				let sprite = {
-					x: i * 0x10,
-					y: j * 0x10,
-					tile: tile,
-					nx: 1,
-					ny: 1,
-					vflip: flag & 0x2,	// this tile need flip
-					hflip: flag & 0x1,	// this tile need flip
-					pal: palette,
-				};
-				frame.sprites.push(sprite);
-			}
-		}
-
-
-	} else {
-
-		// draw by 6022
-		if(f >= 0) {	// use frameAddress and has multiple frames
-			addr = bf.getInt(addr + f * 4);
-		}
-		frame.info = 
-		bf.position(addr);
-		
-		let palette = bf.get();
-		let func = bf.get();
-		frame.info = '0x'+addr.toString(16).toUpperCase() + ',func:' + func.toString(16).toUpperCase() + 
-					',pal:' + palette.toString(16).toUpperCase();
-
-		if(func == 0x1 || func == 0x0) {
-			// only provide first tile, all tiles are in order, 1 2 3 4 5
-			let flag = 0;
-			let nx = bf.get();
-			let ny = bf.get();
-			
-			let tile = bf.getInt();
-	
-		
-			for(let i = 0;i < nx;i++) {
-				let fill;			// in this column, which row need fill (per bit), which means max 8
-				if(func == 0x1) {
-					fill = bf.get();
-				} else {
-					fill = bf.getuShort();
-				}
-
-				for(let j = 0;j < ny;j++) {
-					let mask;
-					if(func == 0x1) {
-						mask = 0x80 >>> j;
-					} else {
-						mask = 0x8000 >>> j;
-					}
-
-					if((fill & mask) == 0)		
-						continue;
-					// let tile = bf2.getuShort();
-					
-					// let flag = bf2.get();
-					// tile += (flag & 0xF0) << 12;	// more bits for tile number
-					let sprite = {
-						x: i << 4,
-						y: j << 4,
-						tile: tile++,
-						nx: 1,
-						ny: 1,
-						vflip: flag & 0x2,	// this tile need flip
-						hflip: flag & 0x1,	// this tile need flip
-						pal: palette,
-					};
-					frame.sprites.push(sprite);
-				}
-			}
-		} else if(func == 0x8 || func == 0x7) {
-			// word per tile, upper bits from header
-			let nx = bf.get();
-			let ny = bf.get();
-			
-			// let tile = bf.getInt();
-			let tmp = bf.get();	// not used?
-			let flag = bf.get();
-			let tileadd = (flag & 0xF0) << 12;
-			if(func == 0x8) {
-				bf2.position(bf.position() + nx);
-				if(bf2.getr(0) == 0) {	// sometimes extra 0 is there, why?
-					bf2.skip();
-				}
-			} else {
-				bf2.position(bf.position() + nx * 2);
-			}
-			
-			for(let i = 0;i < nx;i++) {
-				let fill;			// in this column, which row need fill (per bit), which means max 8
-				if(func == 0x8) {
-					fill = bf.get();
-				} else {
-					fill = bf.getuShort();
-				}
-
-				for(let j = 0;j < ny;j++) {
-					let mask;
-					if(func == 0x8) {
-						mask = 0x80 >>> j;
-					} else {
-						mask = 0x8000 >>> j;
-					}
-
-					if((fill & mask) == 0)		
-						continue;
-
-					let tile = bf2.getuShort() + tileadd;
-					
-					// let flag = bf2.get();
-					// tile += (flag & 0xF0) << 12;	// more bits for tile number
-					let sprite = {
-						x: i << 4,
-						y: j << 4,
-						tile: tile,
-						nx: 1,
-						ny: 1,
-						vflip: flag & 0x2,	// this tile need flip
-						hflip: flag & 0x1,	// this tile need flip
-						pal: palette,
-					};
-					frame.sprites.push(sprite);
-				}
-			}
-		} else if(func == 0xA || func == 0x9) {
-			// byte per tile, more upper bits from header
-			let nx = bf.get();
-			let ny = bf.get();
-			
-			// let tile = bf.getInt();
-			// let palette = bf.get();
-			let flag = bf.getuShort();
-			let tileadd = ((flag & 0xF0) << 12) + (flag & 0xFF00);
-
-			if(func == 0xA) {
-				bf2.position(bf.position() + nx);
-			} else {
-				bf2.position(bf.position() + nx * 2);
-			}
-		
-			for(let i = 0;i < nx;i++) {
-				let fill;			// in this column, which row need fill (per bit), which means max 8
-				if(func == 0xA) {
-					fill = bf.get();
-				} else {
-					fill = bf.getuShort();
-				}
-
-				for(let j = 0;j < ny;j++) {
-					let mask;
-					if(func == 0xA) {
-						mask = 0x80 >>> j;
-					} else {
-						mask = 0x8000 >>> j;
-					}
-
-					if((fill & mask) == 0)		
-						continue;
-						
-					let tile = bf2.get() + tileadd;
-					
-					// let flag = bf2.get();
-					// tile += (flag & 0xF0) << 12;	// more bits for tile number
-					let sprite = {
-						x: i << 4,
-						y: j << 4,
-						tile: tile,
-						nx: 1,
-						ny: 1,
-						vflip: flag & 0x2,	// this tile need flip
-						hflip: flag & 0x1,	// this tile need flip
-						pal: palette,
-					};
-					frame.sprites.push(sprite);
-				}
-			}
-		} else if(func == 0x6 || func == 0x5) {
-	// word per tile, upper bits from header, with different flags
-			let nx = bf.get();
-			let ny = bf.get();
-			
-			// let tile = bf.getInt();
-			// let palette = bf.get();
-			// let flag = bf.get();
-			// let tileadd = (flag & 0xF0) << 12;
-
-			if(func == 0x6) {
-				bf2.position(bf.position() + nx);
-				if(bf2.getr(0) == 0) {	// sometimes extra 0 is there, why?
-					bf2.skip();
-				}
-			} else {
-				bf2.position(bf.position() + nx * 2);
-			}
-		
-			let cnt = 0;
-			for(let i = 0;i < nx;i++) {
-				let fill;			// in this column, which row need fill (per bit), which means max 8
-				if(func == 0x6) {
-					fill = bf.get();
-				} else {debugger
-					fill = bf.getuShort();
-				}
-
-				for(let j = 0;j < ny;j++) {
-					let mask;
-					if(func == 0x6) {
-						mask = 0x80 >>> j;
-					} else {
-						mask = 0x8000 >>> j;
-					}
-
-					if((fill & mask) == 0)		
-						continue;
-
-					let flag, tile;
-					if(cnt++ & 0x1) {
-						flag = bf2.get();
-						tile = bf2.getuShort();
-					} else {
-						tile = bf2.getuShort();
-						flag = bf2.get();
-					}
-
-
-					let tileadd = (flag & 0xF0) << 12;
-					tile += tileadd;
-					
-					// let flag = bf2.get();
-					// tile += (flag & 0xF0) << 12;	// more bits for tile number
-					let sprite = {
-						x: i << 4,
-						y: j << 4,
-						tile: tile,
-						nx: 1,
-						ny: 1,
-						vflip: flag & 0x2,	// this tile need flip
-						hflip: flag & 0x1,	// this tile need flip
-						pal: palette,
-					};
-					frame.sprites.push(sprite);
-				}
-			}
-		} else if(func == 0x2 || func == 0x3) {
-			// word per tile without fill mask
-			let nx = bf.get();
-			let ny = bf.get();
-			
-			let flag;
-			let tileadd;
-				
-			if(func == 0x3) {
-				let tmp  = bf.get();		// unused?
-				flag = bf.get();
-				tileadd = (flag & 0xF0) << 12;
-			}
-
-			let cnt = 0;
-			for(let i = 0;i < nx;i++) {
-
-				for(let j = 0;j < ny;j++) {
-					let tile;
-					if(func == 0x2) {
-						if(cnt++ & 0x1) {
-							flag = bf.get();
-							tile = bf.getuShort();
-						} else {
-							tile = bf.getuShort();
-							flag = bf.get();
-						}
-
-						tileadd = (flag & 0xF0) << 12;
-					} else {
-						tile = bf.getuShort();
-					}
-
-					
-					tile += tileadd;
-					
-					// let flag = bf2.get();
-					// tile += (flag & 0xF0) << 12;	// more bits for tile number
-					let sprite = {
-						x: i << 4,
-						y: j << 4,
-						tile: tile,
-						nx: 1,
-						ny: 1,
-						vflip: flag & 0x2,	// this tile need flip
-						hflip: flag & 0x1,	// this tile need flip
-						pal: palette,
-					};
-					frame.sprites.push(sprite);
-				}
-			}
-
-		}		
-
-	}
-
-	return frame;
+function getRomFrame(addr, f, vflip = false, hflip = false) {
+	return kofgetRomFrame(addr, f, vflip, hflip);
 }
 
 var animPlayerAddr = [];
