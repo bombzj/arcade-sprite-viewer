@@ -53,7 +53,10 @@ ROM:0000A2DA                 move.l  (a0)+,(a1)+
 ROM:0000A2DC                 move.l  (a0)+,(a1)+
 ROM:0000A2DE                 move.l  (a0)+,(a1)+
 
-
+[object]
+$18(a4) = x pos
+$20(a4) = y pos
+$72(a4) = animation
 
 
 000BBE50  13 88 70 85 0F 54 48 52  4F 57 20 4F 46 46 53 45  ..p..THROW OFFSE

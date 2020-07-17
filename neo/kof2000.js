@@ -99,8 +99,7 @@ function loopDrawAnimation(base, addr) {
 			addr = 0;
 			continue;
 		} else if(flag == 1) {
-			addr -= 6;
-			continue;
+			return;	// stop animation
 		} else if(flag == 2) {	// hitbox & effect
 			bf.position(base + addr + 1);
 			let effect = bf.get();
@@ -144,6 +143,7 @@ function loopDrawAnimation(base, addr) {
 	let af = bf.getuShort();		// sprite offset
 	let vflip = af & 0x4000;
 	let hflip = af & 0x8000;
+	let two = af & 0x2000;	// this frame has more than one sprite.
 
 	let addr2 = bf.getInt(animAddress + curAnim * 4) + 0x100000;
 
@@ -158,6 +158,22 @@ function loopDrawAnimation(base, addr) {
 	let offx = animVars.offx;
 	let offy = animVars.offy;
 	drawRomFrameBase(frame, undefined, offx + x, offy + y);
+
+	while(two) {
+		let x = bf.getShort();
+		let y = bf.getShort();
+		let af = bf.getuShort();		// sprite offset
+		let vflip = af & 0x4000;
+		let hflip = af & 0x8000;
+		two = af & 0x2000;
+	
+		let addr2 = bf.getInt(animAddress + curAnim * 4);
+	
+		let frame = getRomFrame(addr2, af & 0x3FF, vflip, hflip);		// ROM:0000613E   andi.w  #$3FF,d6
+		if(frame) {
+			drawRomFrameBase(frame, undefined, offx + x, offy + y);
+		}
+	}
 
 	if(showCB) {
 		// draw collision box

@@ -99,8 +99,6 @@ function loopDrawAnimation(base, addr) {
 			continue;
 		} else if(flag == 1) {
 			return;	// stop animation
-			// addr -= 6;
-			// continue;
 		} else if(flag == 2) {	// hitbox & effect
 			bf.position(base + addr + 1);
 			let effect = bf.get();
