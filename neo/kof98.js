@@ -84,9 +84,10 @@ var typecolor = ['red',	// attack
 
 function loopDrawAnimation(base, addr) {
 	animTimer = null;
-
+	
 	var bf = getrdbuf(addr);
 	let cbs = animVars.cbs;
+	let newx, newy;
 	for(let i = 0;i < 10;i++) {
 		let flag = bf.gets(base + addr);
 		if(flag >= 0) {
@@ -119,8 +120,14 @@ function loopDrawAnimation(base, addr) {
 		} else if(flag == 3) {
 
 		} else if(flag == 4) {	// move delta x y
-			animVars.offx += bf.getShort(base + addr + 2);debugger
-			animVars.offy += bf.getShort(base + addr + 4);
+			animVars.offx += bf.getShort(base + addr + 2);
+			// animVars.offy += bf.getShort(base + addr + 4);		
+		} else if(flag == 5) {	// new object
+			bf.position(base + addr + 1);
+			let obj = bf.get();
+			newx = bf.getShort() + animVars.offx;
+			newy = bf.getShort() + animVars.offx;
+
 		} else {
 
 		}
@@ -128,9 +135,9 @@ function loopDrawAnimation(base, addr) {
 	}
 	let lapse = bf.gets(base + addr) + 1;
 	let stepframe = bf.getuShort(base + addr + 2);
-debugger
+
 	let paddr = bf.getInt(0x200002 + curAnim * 4);	// position info & pointer to image
-	bf.position(paddr + stepframe * 6);debugger
+	bf.position(paddr + stepframe * 6);
 
 	let x = bf.getShort();
 	let y = bf.getShort();
@@ -158,12 +165,21 @@ debugger
 				ctx.strokeRect(c.x + offx - c.x2, c.y + offy - c.y2, c.x2 * 2, c.y2 * 2);
 			}
 		}
+		if(newx) {
+			ctx.strokeStyle = 'red';
+			ctx.beginPath();
+			ctx.moveTo(newx - 30, newy);
+			ctx.lineTo(newx + 30, newy);
+			ctx.moveTo(newx, newy - 30);
+			ctx.lineTo(newx, newy + 30);
+			ctx.stroke();
+		}
 	}
 
 
 	addr += 6;
 
-	animTimer = setTimeout("loopDrawAnimation("+ base +"," + addr +")", 200 * lapse);
+	animTimer = setTimeout("loopDrawAnimation("+ base +"," + addr +")", 20 * lapse);
 }
 
 

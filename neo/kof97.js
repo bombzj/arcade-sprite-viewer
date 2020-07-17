@@ -89,7 +89,7 @@ function loopDrawAnimation(base, addr) {
 
 	var bf = new getrdbuf(addr);
 	let cbs = animVars.cbs;
-	for(let i = 0;i < 5;i++) {
+	for(let i = 0;i < 10;i++) {
 		let flag = bf.gets(base + addr);
 		if(flag >= 0) {
 			break;
@@ -123,7 +123,7 @@ function loopDrawAnimation(base, addr) {
 
 		} else if(flag == 4) {	// move delta x y
 			animVars.offx += bf.getShort(base + addr + 2);
-			animVars.offy += bf.getShort(base + addr + 4);		
+			// animVars.offy += bf.getShort(base + addr + 4);		
 		} else if(flag == 5) {	// new object
 			bf.position(base + addr + 1);
 			let obj = bf.get();

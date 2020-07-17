@@ -71,15 +71,25 @@ function drawAnimation() {
 		loadRomPalNeo(bf, (i + 0x10 << 4));
 	}
 	
-	loopDrawAnimation(aaddr, 0, 0x6);
+	animVars.offx = 128;
+	animVars.offy = 160;
+	animVars.cbs = [];
+	loopDrawAnimation(aaddr, 0);
 }
 
-function loopDrawAnimation(base, addr, offset) {
+var animVars = {};
+var typecolor = ['red',	// attack
+		 'green',	// head
+		 'orange',	// body	
+		  'blue'
+		];
+
+function loopDrawAnimation(base, addr) {
 	animTimer = null;
 
 	var bf = new bytebuffer(romFrameData, addr);
-
-	for(let i = 0;i < 5;i++) {
+	let cbs = animVars.cbs;
+	for(let i = 0;i < 10;i++) {
 		let flag = bf.gets(base + addr);
 		if(flag >= 0) {
 			break;
@@ -91,15 +101,39 @@ function loopDrawAnimation(base, addr, offset) {
 		} else if(flag == 1) {
 			addr -= 6;
 			continue;
-		} else if(flag == 2) {
-
+		} else if(flag == 2) {	// hitbox & effect
+			bf.position(base + addr + 1);
+			let effect = bf.get();
+			let type = effect & 0x3;
+			effect >>= 2;
+			let x = bf.gets();
+			let y = bf.gets();
+			let x2 = bf.gets();
+			let y2 = bf.gets();
+			cbs[type] = {
+				x	:	x,
+				y	:	y,
+				x2	:	x2,
+				y2	:	y2,
+				type : type,
+				effect : effect
+			};
 		} else if(flag == 3) {
-	
+
+		} else if(flag == 4) {	// move delta x y
+			animVars.offx += bf.getShort(base + addr + 2);
+			// animVars.offy += bf.getShort(base + addr + 4);		
+		} else if(flag == 5) {	// new object
+			bf.position(base + addr + 1);
+			let obj = bf.get();
+			let newx = bf.getShort();
+			let newy = bf.getShort();
 		} else {
 
 		}
 		addr += 6;
 	}
+	let lapse = bf.gets(base + addr) + 1;
 	let stepframe = bf.getuShort(base + addr + 2);
 
 	let paddr = bf.getInt(0x200002 + curAnim * 4 + 0x100000) + 0x100000;	// position info & pointer to image
@@ -119,12 +153,23 @@ function loopDrawAnimation(base, addr, offset) {
 	labelInfo.innerText = 'anim:' + (base + addr).toString(16).toUpperCase();
 
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	drawRomFrameBase(frame, undefined, 128 + x, 160 + y);
+	let offx = animVars.offx;
+	let offy = animVars.offy;
+	drawRomFrameBase(frame, undefined, offx + x, offy + y);
 
+	if(showCB) {
+		// draw collision box
+		for(let c of cbs) {
+			if(c) {
+				ctx.strokeStyle = typecolor[c.type];
+				ctx.strokeRect(c.x + offx - c.x2, c.y + offy - c.y2, c.x2 * 2, c.y2 * 2);
+			}
+		}
+	}
 
-	addr += offset;
+	addr += 6;
 
-	animTimer = setTimeout("loopDrawAnimation("+ base +"," + addr +"," + offset+")", 200);
+	animTimer = setTimeout("loopDrawAnimation("+ base +"," + addr +")", 20 * lapse);
 }
 
 
@@ -234,7 +279,7 @@ function getRomFrame(addr, f) {
 
 
 	} else {
-debugger
+
 		// draw by 6022
 		if(f >= 0) {	// use frameAddress and has multiple frames
 			addr = bf.getInt(addr + f * 4) + 0x100000;
