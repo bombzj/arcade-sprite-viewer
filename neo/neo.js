@@ -82,7 +82,7 @@ function drawbgbasemslug(addr, w, h) {
 
 
 // get frame from addr. return a frame obj
-function kofgetRomFrame(addr, f, vflip = false, hflip = false) {
+function kofgetRomFrame(addr, f, vflip = false, hflip = false, bankoffset = 0) {
 	var bf = getrdbuf();
 	var bf2 = getrdbuf();
 	let frame = {
@@ -138,7 +138,7 @@ function kofgetRomFrame(addr, f, vflip = false, hflip = false) {
 
 		// draw by 6022
 		if(f >= 0) {	// use frameAddress and has multiple frames
-			addr = bf.getInt(addr + f * 4);
+			addr = bf.getInt(addr + f * 4) + bankoffset;
 		}
 		frame.info = 
 		bf.position(addr);
