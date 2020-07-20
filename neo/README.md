@@ -2,15 +2,15 @@
 * Click [here](https://github.com/bombzj/arcade-sprite-viewer/tree/master/neo) to view source code.
 
 ## King of Fighters 97
-![image kof97](https://asv.bombzj.com/res/imgkof97.png)<br/>
-![image kof97](https://asv.bombzj.com/res/img2kof97.png)<br/>
+![kof97 image](https://asv.bombzj.com/res/imgkof97.png)
+![kof97 animation](https://asv.bombzj.com/res/anim2kof97.gif)<br/>
 ![kof97 background](https://asv.bombzj.com/res/bgkof97.gif)<br/>
 
 * Click [here](https://asv.bombzj.com/viewer.html?kof97) to view `King of Fighters 97`.
 
 ## King of Fighters 98
-![image kof98](https://asv.bombzj.com/res/imgkof98.png)<br/>
-![image kof98](https://asv.bombzj.com/res/img2kof98.png)<br/>
+![kof98 image](https://asv.bombzj.com/res/imgkof98.png)
+![kof98 animation](https://asv.bombzj.com/res/anim2kof98.gif)<br/>
 ![kof98 background](https://asv.bombzj.com/res/bgkof98.gif)<br/>
 
 * Click [here](https://asv.bombzj.com/viewer.html?kof98) to view `King of Fighters 98`.
@@ -38,12 +38,13 @@
 * Click [here](https://asv.bombzj.com/viewer.html?mslug5) to view `Metal Slug 5`.
 
 ## King of Fighters 2000
-![kof2000 animation](https://asv.bombzj.com/res/animkof2000.gif)<br/>
+![kof2000 animation](https://asv.bombzj.com/res/animkof2000.gif)
 ![kof2000 animation](https://asv.bombzj.com/res/anim2kof2000.gif)<br/>
 ![kof2000 background](https://asv.bombzj.com/res/bgkof2000.gif)<br/>
 
 ## King of Fighters 2002
-![kof2002 animation](https://asv.bombzj.com/res/animkof2002.gif)<br/>
+![kof2002 animation](https://asv.bombzj.com/res/animkof2002.gif)
+![kof2002 animation](https://asv.bombzj.com/res/anim2kof2002.gif)<br/>
 ![kof2002 background](https://asv.bombzj.com/res/bgkof2002.gif)<br/>
 
 # TODO
