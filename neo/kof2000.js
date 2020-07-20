@@ -89,6 +89,7 @@ function loopDrawAnimation(base, addr) {
 
 	var bf = new bytebuffer(romFrameData, addr);
 	let cbs = animVars.cbs;
+	delete cbs[0];
 	for(let i = 0;i < 10;i++) {
 		let flag = bf.gets(base + addr);
 		if(flag >= 0) {

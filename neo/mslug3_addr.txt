@@ -1,3 +1,6 @@
+[terrain]
+temp0 = 0;bp 1DFF0,a6==1004fc&&d7!=temp0,{temp0=d7;printf "d7=%08X",d7;g}
+
 [colllision box]
 player:
 stand: 36D7C, squat: 36D9A
