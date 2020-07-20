@@ -140,7 +140,7 @@ function kofgetRomFrame(addr, f, vflip = false, hflip = false, bankoffset = 0) {
 		if(f >= 0) {	// use frameAddress and has multiple frames
 			addr = bf.getInt(addr + f * 4) + bankoffset;
 		}
-		frame.info = 
+		// frame.info = 
 		bf.position(addr);
 		
 		let palette = bf.get();
@@ -207,7 +207,7 @@ function kofgetRomFrame(addr, f, vflip = false, hflip = false, bankoffset = 0) {
 			let tileadd = (flag & 0xF0) << 12;
 			if(func == 0x8) {
 				bf2.position(bf.position() + nx);
-				if(bf2.getr(0) == 0) {	// sometimes extra 0 is there, why?
+				if(bf2.position() & 1) {	// sometimes extra 0 is there, why? even alignment!
 					bf2.skip();
 				}
 			} else {
@@ -314,7 +314,7 @@ function kofgetRomFrame(addr, f, vflip = false, hflip = false, bankoffset = 0) {
 
 			if(func == 0x6) {
 				bf2.position(bf.position() + nx);
-				if(bf2.getr(0) == 0) {	// sometimes extra 0 is there, why?
+				if(bf2.position() & 1) {	// sometimes extra 0 is there, why? even alignment!
 					bf2.skip();
 				}
 			} else {
