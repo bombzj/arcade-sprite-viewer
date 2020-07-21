@@ -53,7 +53,6 @@ var animAddress = 0x338000;
 var curAnim;	// current animation index
 var curAnimAct;	// current animation index
 // show object animation from rom address
-var animTimer;
 function drawAnimation() {
 //	let addr = animAddress[curAnim];
 	var bf = new bytebuffer(romFrameData);
@@ -70,11 +69,8 @@ function drawAnimation() {
 	for(let i = 0;i < 0x20;i++) {
 		loadRomPalNeo(bf, (i + 0x10 << 4));
 	}
-	
-	animVars.offx = 128;
-	animVars.offy = 160;
-	animVars.cbs = [];
-	kofloopDrawAnimation(aaddr, 0, 0x100000, 0x100000);
+
+	kofdrawAnimation(aaddr, 0x100000, 0x100000);
 }
 
 

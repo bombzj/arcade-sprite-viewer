@@ -428,6 +428,14 @@ function kofgetRomFrame(addr, f, vflip = false, hflip = false, bankoffset = 0) {
 	return frame;
 }
 
+
+function kofdrawAnimation(aaddr, listbank, sprbank) {
+	animVars.offx = 128;
+	animVars.offy = 160;
+	animVars.cbs = [];
+	kofloopDrawAnimation(aaddr, 0, listbank, sprbank);
+}
+
 var animVars = {};
 var typecolor = ['red',	// attack
 		 'green',	// head
@@ -520,10 +528,13 @@ function kofloopDrawAnimation(base, addr, listbank = 0, sprbank = 0) {
 		two = af & 0x2000;
 	
 		let addr2 = bf.getInt(animAddress + curAnim * 4) + sprbank;
+		labelInfo.innerText += ' f:' + af.toString(16).toUpperCase();
 	
 		let frame = getRomFrame(addr2, af & 0x3FF, vflip, hflip);		// ROM:0000613E   andi.w  #$3FF,d6
 		if(frame) {
-			drawRomFrameBase(frame, undefined, offx, offy, x, y);
+			ctxoff.clearRect(0, 0, canvasoff.width, canvasoff.height);
+			drawRomFrameBase(frame, ctxoff, offx, offy, x, y);
+			ctx.drawImage(canvasoff, 0, 0);
 		}
 	}
 

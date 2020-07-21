@@ -88,11 +88,8 @@ function drawAnimation() {
 	for(let i = 0;i < 0x20;i++) {
 		loadRomPalNeo(bf, (i + 0x10 << 4));
 	}
-	
-	animVars.offx = 128;
-	animVars.offy = 160;
-	animVars.cbs = [];
-	kofloopDrawAnimation(aaddr, 0, 0x200000);
+
+	kofdrawAnimation(aaddr, 0x200000);
 }
 
 

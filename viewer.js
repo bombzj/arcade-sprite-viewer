@@ -2,6 +2,10 @@
 var ctx = canvas.getContext("2d");
 var ctx2 = canvas2.getContext("2d");
 var ctxBack = canvasBack.getContext("2d");
+var canvasoff = document.createElement("canvas");	// offscreen canvas
+canvasoff.width = 300;
+canvasoff.height = 300;
+var ctxoff = canvasoff.getContext("2d");
 
 var scale = 2;
 var scale2 = 4;	// for canvas2
