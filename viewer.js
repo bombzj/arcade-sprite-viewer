@@ -327,7 +327,7 @@ function drawRomFrame(addr, offx = 128, offy = 160) {
 	labelInfo.innerHTML = frame.info;
 }
 
-function drawRomFrameBase(frame, c = ctx, offx = 128, offy = 160) {
+function drawRomFrameBase(frame, c = ctx, centerx = 128, centery = 160, offx = 0, offy = 0) {
 	if(!frame) {
 		debugger;
 		return;
@@ -337,7 +337,7 @@ function drawRomFrameBase(frame, c = ctx, offx = 128, offy = 160) {
 		
 		drawSpriteTile(imageData, spr);
 		
-		c.putImageData(imageData, spr.x + offx, spr.y + offy);
+		c.putImageData(imageData, spr.x + offx + centerx, spr.y + offy + centery);
 	}
 	
 	if(showCB) {
@@ -345,20 +345,20 @@ function drawRomFrameBase(frame, c = ctx, offx = 128, offy = 160) {
 		// draw axis
 		c.strokeStyle = 'purple';
 		c.beginPath();
-		c.moveTo(offx - 30, offy);
-		c.lineTo(offx + 30, offy);
-		c.moveTo(offx, offy - 30);
-		c.lineTo(offx, offy + 30);
+		c.moveTo(centerx - 30, centery);
+		c.lineTo(centerx + 30, centery);
+		c.moveTo(centerx, centery - 30);
+		c.lineTo(centerx, centery + 30);
 		c.stroke();
 
 		// draw collision box
 		if(frame.cb1) {
 			c.strokeStyle = 'green';
-			c.strokeRect(frame.cb1.x + offx, -frame.cb1.y + offy, frame.cb1.x2, -frame.cb1.y2);
+			c.strokeRect(frame.cb1.x + offx + centerx, -frame.cb1.y + offy + centery, frame.cb1.x2, -frame.cb1.y2);
 		}
 		if(frame.cb2) {
 			c.strokeStyle = 'red';
-			c.strokeRect(frame.cb2.x + offx, -frame.cb2.y + offy, frame.cb2.x2, -frame.cb2.y2);
+			c.strokeRect(frame.cb2.x + offx + centerx, -frame.cb2.y + offy + centery, frame.cb2.x2, -frame.cb2.y2);
 		}
 	}
 }
