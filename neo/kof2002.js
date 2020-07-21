@@ -28,7 +28,7 @@ function loadRomPal() {
 
 	// // load character palette
 	bf.position(paletteAddress + palset2 * 0x200);
-	for(let i = 0;i < 0x20;i++) {
+	for(let i = 0;i < 0x10;i++) {
 		loadRomPalNeo(bf, (i + 0x10 << 4));
 	}
 
@@ -80,14 +80,21 @@ function drawAnimation() {
 	aaddr = bf.getInt(aaddr + curAnimAct * 4) + 0x100000;
 
 	if(!palsetSpr) {
-		palsetSpr = palmap[curAnim] * 2;
+		palsetSpr = bfr.getShort(0xB18AA + curAnim * 8) >> 4;	// ROM:000033EA    lea     (unk_B18AA).l,a0
 		palset2 = palsetSpr;
 	}
 	// load character palette
 	bf.position(paletteAddress + palsetSpr * 0x200);
-	for(let i = 0;i < 0x20;i++) {
+	for(let i = 0;i < 0x10;i++) {
 		loadRomPalNeo(bf, (i + 0x10 << 4));
 	}
+	// load character extra palette
+	bf.position(paletteAddress + bfr.getShort(0xB1A12 + curAnim * 2) * 0x20);
+	for(let i = 0;i < 0x8;i++) {		// ROM:00003376     moveq   #7,d3
+		loadRomPalNeo(bf, (i + 0x18 << 4));
+	}
+	if(showPal)
+		drawPal();
 
 	kofdrawAnimation(aaddr, 0x200000);
 }

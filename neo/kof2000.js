@@ -74,6 +74,8 @@ function drawAnimation() {
 	for(let i = 0;i < 0xA;i++) {		// ROM:000035F4     moveq   #9,d3
 		loadRomPalNeo(bf, (i + 0x20 << 4));
 	}
+	if(showPal)
+		drawPal();
 
 	kofdrawAnimation(aaddr, 0x100000, 0x100000);
 }
