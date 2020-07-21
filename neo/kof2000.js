@@ -36,7 +36,7 @@ function loadRomPal() {
 
 	// load character palette
 	bf.position(paletteAddress + palset2 * 0x200);
-	for(let i = 0;i < 0x20;i++) {
+	for(let i = 0;i < 0x10;i++) {
 		loadRomPalNeo(bf, (i + 0x10 << 4));
 	}
 
@@ -61,13 +61,18 @@ function drawAnimation() {
 	aaddr = bf.getInt(aaddr + curAnimAct * 4);
 
 	if(!palsetSpr) {
-		palsetSpr = palmap[curAnim] * 2;
+		palsetSpr = bfr.getShort(0x3AFA + curAnim * 4) >> 4;			// ROM:00003658   lea     unk_3AFA,a0
 		palset2 = palsetSpr;
 	}
 	// load character palette
 	bf.position(paletteAddress + palsetSpr * 0x200);
-	for(let i = 0;i < 0x20;i++) {
+	for(let i = 0;i < 0x10;i++) {
 		loadRomPalNeo(bf, (i + 0x10 << 4));
+	}
+	// load character extra palette
+	bf.position(paletteAddress + bfr.getShort(0x3C62 + curAnim * 2) * 0x20);
+	for(let i = 0;i < 0xA;i++) {		// ROM:000035F4     moveq   #9,d3
+		loadRomPalNeo(bf, (i + 0x20 << 4));
 	}
 
 	kofdrawAnimation(aaddr, 0x100000, 0x100000);
@@ -88,7 +93,7 @@ function drawbg() {
 	var bf = getrdbuf();
 	var bf2 = getrdbuf();
 	// let addr = bgAddress[curbg];
-	let addr = 0xD87E8 + curbg * 0x10;debugger
+	let addr = 0xD87E8 + curbg * 0x10;
 	labelInfo.innerText += ' addr:'+addr.toString(16).toUpperCase();
 	let bank = unscramble(bfr.getuShort(addr)) - 0x100000;
 	addr = bfr.getInt(addr + 2) + bank;

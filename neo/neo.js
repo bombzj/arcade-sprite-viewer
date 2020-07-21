@@ -326,7 +326,7 @@ function kofgetRomFrame(addr, f, vflip = false, hflip = false, bankoffset = 0) {
 				let fill;			// in this column, which row need fill (per bit), which means max 8
 				if(func == 0x6) {
 					fill = bf.get();
-				} else {debugger
+				} else {
 					fill = bf.getuShort();
 				}
 
