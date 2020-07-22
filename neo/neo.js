@@ -82,7 +82,7 @@ function drawbgbasemslug(addr, w, h) {
 
 
 // get frame from addr. return a frame obj
-function kofgetRomFrame(addr, f, vflip = false, hflip = false, bankoffset = 0) {
+function kofgetRomFrame(addr, f, vflip = false, hflip = false) {
 	var bf = getrdbuf();
 	var bf2 = getrdbuf();
 	let frame = {
@@ -138,7 +138,7 @@ function kofgetRomFrame(addr, f, vflip = false, hflip = false, bankoffset = 0) {
 
 		// draw by 6022
 		if(f >= 0) {	// use frameAddress and has multiple frames
-			addr = bf.getInt(addr + f * 4) + bankoffset;
+			addr = bf.getInt(addr + f * 4) + sprbank;
 		}
 		// frame.info = 
 		bf.position(addr);
@@ -428,12 +428,18 @@ function kofgetRomFrame(addr, f, vflip = false, hflip = false, bankoffset = 0) {
 	return frame;
 }
 
+var listbank = 0, sprbank = 0;
 
-function kofdrawAnimation(aaddr, listbank, sprbank) {
-	animVars.offx = 128;
-	animVars.offy = 160;
-	animVars.cbs = [];
-	kofloopDrawAnimation(aaddr, 0, listbank, sprbank);
+function kofdrawAnimation(addr) {
+	animVars = {
+		offx	:	200,
+		offy	:	160,
+		cbs		:	[],
+		exobjs	:	[],
+		base	:	addr,
+		addr	:	0,
+	};
+	kofloopDrawAnimation();
 }
 
 var animVars = {};
@@ -443,25 +449,39 @@ var typecolor = ['red',	// attack
 		  'blue'
 		];
 
-function kofloopDrawAnimation(base, addr, listbank = 0, sprbank = 0) {
+function kofloopDrawAnimation() {
 	animTimer = null;
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	let lapse = kofDrawAnimationBase(animVars);
+	for(let obj of animVars.exobjs) {debugger
+		kofDrawAnimationBase(obj);
+	}
+	if(lapse == -1) {
+		return;
+	}
+	animTimer = setTimeout("kofloopDrawAnimation()", 20 * lapse);
+}
 
-	var bf = new bytebuffer(romFrameData, addr);
-	let cbs = animVars.cbs;
-	delete cbs[0];
+function kofDrawAnimationBase(param) {
+	var bf = getrdbuf();
+	let cbs = param.cbs;
+	if(cbs) {
+		delete cbs[0];
+	}
+	labelInfo.innerText = 'anim:' + (param.base + param.addr).toString(16).toUpperCase();
 	for(let i = 0;i < 10;i++) {
-		let flag = bf.gets(base + addr);
+		let flag = bfr.gets(param.base + param.addr);
 		if(flag >= 0) {
 			break;
 		}
 		flag = -flag - 1;
 		if(flag == 0) {
-			addr = 0;
+			param.addr = 0;
 			continue;
 		} else if(flag == 1) {
-			return;	// stop animation
+			return -1;	// stop animation
 		} else if(flag == 2) {	// hitbox & effect
-			bf.position(base + addr + 1);
+			bf.position(param.base + param.addr + 1);
 			let effect = bf.get();
 			let type = effect & 0x3;
 			effect >>= 2;
@@ -469,31 +489,36 @@ function kofloopDrawAnimation(base, addr, listbank = 0, sprbank = 0) {
 			let y = bf.gets();
 			let x2 = bf.gets();
 			let y2 = bf.gets();
-			cbs[type] = {
-				x	:	x,
-				y	:	y,
-				x2	:	x2,
-				y2	:	y2,
-				type : type,
-				effect : effect
-			};
+			if(cbs) {
+				cbs[type] = {
+					x	:	x,
+					y	:	y,
+					x2	:	x2,
+					y2	:	y2,
+					type : type,
+					effect : effect
+				};
+			}
 		} else if(flag == 3) {
 
 		} else if(flag == 4) {	// move delta x y
-			animVars.offx += bf.getShort(base + addr + 2);
+			param.offx += bf.getShort(param.base + param.addr + 2);
 			// animVars.offy += bf.getShort(base + addr + 4);		
 		} else if(flag == 5) {	// new object
-			bf.position(base + addr + 1);
-			let obj = bf.get();
-			let newx = bf.getShort();
-			let newy = bf.getShort();
+			if(param === animVars) {
+				newobject(param.base + param.addr);
+			}
 		} else {
 
 		}
-		addr += 6;
+		param.addr += 6;
 	}
-	let lapse = bf.gets(base + addr) + 1;
-	let stepframe = bf.getuShort(base + addr + 2);
+	
+	let lapse = bf.gets(param.base + param.addr) + 1;
+	if(bfr.get(param.base + param.addr + 6) == 0xFE) {
+		lapse = -1;
+	}
+	let stepframe = bf.getuShort(param.base + param.addr + 2);
 
 	let paddr = bf.getInt(0x200002 + curAnim * 4 + listbank) + listbank;	// position info & pointer to image
 	bf.position(paddr + stepframe * 6);
@@ -507,17 +532,18 @@ function kofloopDrawAnimation(base, addr, listbank = 0, sprbank = 0) {
 
 	let addr2 = bf.getInt(animAddress + curAnim * 4) + sprbank;
 
-	labelInfo.innerText = 'anim:' + (base + addr).toString(16).toUpperCase() + ' f:' + af.toString(16).toUpperCase();
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	labelInfo.innerText += ' spr:' + (param.base + param.addr).toString(16).toUpperCase() + ' f:' + af.toString(16).toUpperCase();
 
-	let frame = getRomFrame(addr2, af & 0x3FF, vflip, hflip);
+	let frame = kofgetRomFrame(addr2, af & 0x3FF, vflip, hflip);
 	if(!frame) {
 		return;
 	}
 	
-	let offx = animVars.offx;
-	let offy = animVars.offy;
-	drawRomFrameBase(frame, undefined, offx, offy, x, y);
+	let offx = param.offx;
+	let offy = param.offy;
+	ctxoff.clearRect(0, 0, canvasoff.width, canvasoff.height);
+	drawRomFrameBase(frame, ctxoff, offx, offy, x, y);
+	ctx.drawImage(canvasoff, 0, 0);
 
 	while(two) {
 		let x = bf.getShort();
@@ -530,7 +556,7 @@ function kofloopDrawAnimation(base, addr, listbank = 0, sprbank = 0) {
 		let addr2 = bf.getInt(animAddress + curAnim * 4) + sprbank;
 		labelInfo.innerText += ' f:' + af.toString(16).toUpperCase();
 	
-		let frame = getRomFrame(addr2, af & 0x3FF, vflip, hflip);		// ROM:0000613E   andi.w  #$3FF,d6
+		let frame = kofgetRomFrame(addr2, af & 0x3FF, vflip, hflip);		// ROM:0000613E   andi.w  #$3FF,d6
 		if(frame) {
 			ctxoff.clearRect(0, 0, canvasoff.width, canvasoff.height);
 			drawRomFrameBase(frame, ctxoff, offx, offy, x, y);
@@ -538,7 +564,7 @@ function kofloopDrawAnimation(base, addr, listbank = 0, sprbank = 0) {
 		}
 	}
 
-	if(showCB) {
+	if(showCB && cbs) {
 		// draw collision box
 		for(let c of cbs) {
 			if(c) {
@@ -548,7 +574,48 @@ function kofloopDrawAnimation(base, addr, listbank = 0, sprbank = 0) {
 		}
 	}
 
-	addr += 6;
+	param.addr += 6;
+	return lapse;
+}
 
-	animTimer = setTimeout("kofloopDrawAnimation("+ base +"," + addr +"," + listbank +"," + sprbank +")", 20 * lapse);
+function newobject(addr) {
+	if(animVars.exobjs.length >= 10) {
+		debugger;		// impossible
+		return;
+	}
+	var bf = getrdbuf(addr);
+
+	let objid = bf.getuShort() & 0xff;
+	let newx = bf.getShort();
+	let newy = bf.getShort();
+	switch(objid) {
+		case 0:;
+		case 0x81:
+			objid = 0xfc;
+			break;
+		case 0x45:
+			objid = 0xf9;
+			break;
+		case 0x46:
+			objid = 0xfa;
+			break;
+		case 0x47:
+			objid = 0xfb;
+			break;
+		case 0x48:
+			objid = 0xfc;
+			break;
+		default:
+			return;
+	}
+
+	let aaddr = bfr.getInt(0x300002 + curAnim * 4) + 0x100000;	// animation address
+	aaddr = bfr.getInt(aaddr + objid * 4);
+
+	animVars.exobjs.push({
+		offx:	newx + animVars.offx,
+		offy:	newy + animVars.offy,
+		base:	aaddr + 0x100000,
+		addr:	0
+	});		// extra object created by animation
 }

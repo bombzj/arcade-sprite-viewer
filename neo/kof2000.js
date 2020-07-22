@@ -52,6 +52,8 @@ function movetoTile(tile) {
 var animAddress = 0x338000;
 var curAnim;	// current animation index
 var curAnimAct;	// current animation index
+listbank = 0x100000;
+sprbank = 0x100000;
 // show object animation from rom address
 function drawAnimation() {
 //	let addr = animAddress[curAnim];
@@ -77,7 +79,7 @@ function drawAnimation() {
 	if(showPal)
 		drawPal();
 
-	kofdrawAnimation(aaddr, 0x100000, 0x100000);
+	kofdrawAnimation(aaddr);
 }
 
 
@@ -135,7 +137,7 @@ frameAddress = [
 
 // get frame from addr. return a frame obj
 function getRomFrame(addr, f, vflip = false, hflip = false) {
-	return kofgetRomFrame(addr, f, vflip, hflip, 0x100000);
+	return kofgetRomFrame(addr, f, vflip, hflip);
 }
 
 var animPlayerAddr = [];

@@ -70,8 +70,8 @@ function movetoTile(tile) {
 var animAddress = 0x200002;
 var curAnim;	// current animation index
 var curAnimAct;	// current animation index
+listbank = 0x200000;
 // show object animation from rom address
-var animTimer;
 function drawAnimation() {
 //	let addr = animAddress[curAnim];
 	var bf = new bytebuffer(romFrameData);
@@ -96,7 +96,7 @@ function drawAnimation() {
 	if(showPal)
 		drawPal();
 
-	kofdrawAnimation(aaddr, 0x200000);
+	kofdrawAnimation(aaddr);
 }
 
 
