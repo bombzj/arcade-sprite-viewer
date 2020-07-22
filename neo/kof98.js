@@ -61,14 +61,21 @@ function drawAnimation() {
 	aaddr = bf.getInt(aaddr + curAnimAct * 4);
 
 	if(!palsetSpr) {
-		palsetSpr = palmap[curAnim] * 2;
+		palsetSpr = bfr.getShort(0x4A1A + curAnim * 8) >> 4;		// ROM:0000496A   lea     unk_4A1A,a0
 		palset2 = palsetSpr;
 	}
 	// load character palette
 	bf.position(paletteAddress + palsetSpr * 0x200);
-	for(let i = 0;i < 0x20;i++) {
+	for(let i = 0;i < 0x10;i++) {
 		loadRomPalNeo(bf, (i + 0x10 << 4));
 	}
+	// load character extra palette
+	bf.position(paletteAddress + bfr.getShort(0x4B6A + curAnim * 2) * 0x20);
+	for(let i = 0;i < 0x10;i++) {		// ROM:000035F4     moveq   #9,d3
+		loadRomPalNeo(bf, (i + 0x20 << 4));
+	}
+	if(showPal)
+		drawPal();
 
 	kofdrawAnimation(aaddr + 0x100000);
 }
