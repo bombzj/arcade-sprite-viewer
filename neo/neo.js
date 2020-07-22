@@ -433,7 +433,7 @@ var listbank = 0, sprbank = 0;
 function kofdrawAnimation(addr) {
 	animVars = {
 		offx	:	200,
-		offy	:	160,
+		offy	:	200,
 		cbs		:	[],
 		exobjs	:	[],
 		base	:	addr,
@@ -583,7 +583,7 @@ function newobject(addr) {
 		debugger;		// impossible
 		return;
 	}
-	var bf = getrdbuf(addr);
+	var bf = getrdbuf(addr);debugger
 
 	let objid = bf.getuShort() & 0xff;
 	let newx = bf.getShort();
