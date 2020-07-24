@@ -12,6 +12,9 @@ $40 = $48 = y
 $50 = collision box
 $20 = animation  (leg)
 $8c = animation2 (body)
+$70 71 = direction of vehicle
+ROM:0000DBD6                 move.b  $1D(a6),d2   // how many palette this object has
+ROM:0000DBDA                 move.b  d0,$19(a6,d2.w)  // palettes, max 4 palettes for one object
 
 stop at 1B7CC/1B7D6 and a1 is the (animation address), initial code from PREF_ADDR 
 stop at DCB0 and d7 is the (sprite address)

@@ -108,11 +108,14 @@ function movetoTile(tile) {
 
 var animAddress = [
 	[0x3D69A6,0x9D0], [0x37B9C6,0x9D0], 0x3968C0, [0x396D10,0x38D], [0x396DE0,0x38D], 0x396E64, 0x396ECA, 0x3c6164,
-	[0x3B3A5C,0x8A9,0xB2F52] , [0x3B3682,0x8A9,0xB2F52], [0x3b4218,0x8A8],
+	[0x3B3A5C,0x8A9,0xB2F52] , [0x3B3682,0x8A9,0xB2F52], [0x3b4218,0x8A8],	// crab
 	0x3d7786, 0x3dab1e, 0x3c6618,
 	0x37ae5e, 0x37c696, 0x3b66f8, 0x37c418, 0x38d8ca,
 	[0x321868,0x855], [0x32001a,0x855], [0x328788,0x855],
-	0x3db0ee
+	0x3db0ee,
+	[0x37B63A, 0x9EE], [0x37B70E, 0x9EE], [0x37B778, 0x9EE],		// debris
+	[0x3B5D96, 0x8E3, 0xA64A4],	// boss 1
+	[0x370414, 0x3D3, 0x85CB2], [0x371C60, 0x3D3, 0x85CB2], [0x37A10C, 0x3D3, 0x85CB2], [0x37A99E, 0x363]		// tank
 ];
 var curAnim;	// cur	rent animation index
 var curAnimAct;	// current animation index
@@ -140,16 +143,8 @@ function drawAnimation(addr) {
 		animTimer = null;
 	}
 
-	let addr2 = (addr & 0x7FFFFF) >> 16;
-	let offset = addr & 0xFFFF;
-
-
-	addr2 = (addr2 << 3) + 0x1002;
-	let page = bf.getuShort(addr2);
-	let poffset = unscramble(page);
-	addr = bf.getInt(addr2 + 2) + poffset + offset;
+	addr = translate(addr);
 	
-
 	loopDrawAnimation(addr);
 }
 var animCB;	// for cb saving in animation
@@ -159,11 +154,27 @@ function loopDrawAnimation(addr, offset = 0xA) {
 	var bf = new bytebuffer(romFrameData, addr);
 
 	for(let i = 0;i < 10;i++) {
-		let animfunc = bf.get();
+		let animfunc = bf.get();		// ROM:0001B85C anim_func:
 		if(animfunc == 4) {
 			break;
-		} else if(animfunc == 0x10) {	// has more to do but...
-			bf.skip(3);
+		} else if(animfunc == 0x8) {	// jump to another animation
+			let d1 = bf.get();
+			let link = bf.getInt();
+			addr = translate(link);
+			bf.position(addr);
+		} else if(animfunc == 0xC) {	// jump to another animation
+			let d1 = bf.get();
+			let d0 = bf.getShort();
+			let link = bf.getInt();
+			// addr = translate(link);
+			// bf.position(addr);
+		} else if(animfunc == 0x10) {	// skip some bytes based on a6(d0), like 0x10
+			let d0 = bf.get();
+			let d1 = bf.getShort();
+			addr = bf.position() + (curAnimAct << 3);		// sprite for different directions (like tank)
+			bf.position(addr);
+		} else if(animfunc == 0x14) {	// invoke code
+			bf.skip(9);
 		} else if(animfunc == 0x20) {	// has more to do but...
 			let prop = bf.get();
 			let data = bf.getInt();
@@ -171,10 +182,12 @@ function loopDrawAnimation(addr, offset = 0xA) {
 				// change collision box
 				animCB = data;
 			}
-		} else if(animfunc == 0x0) {
-			bf.skip(7);
-		} else if(animfunc == 0x18 || animfunc == 0x1C) {
+		// } else if(animfunc == 0x0) {
+		// 	bf.skip(7);
+		} else if(animfunc == 0x18 || animfunc == 0x1C || animfunc == 0x0) {
 			bf.skip(3);
+		} else if(animfunc == 0x24) {
+			bf.skip(1);
 		} else {
 			labelInfo.innerText = 'unsupport: anim:' + (addr).toString(16).toUpperCase() + ' func:' + animfunc.toString(16).toUpperCase();
 			return;
@@ -482,4 +495,14 @@ function unscramble(sel) {
 
 function BIT(sel, n) {
 	return (sel >> n) & 1;
+}
+
+function translate(addr) {
+	let addr2 = (addr & 0x7FFFFF) >> 16;
+	let offset = addr & 0xFFFF;
+
+	addr2 = (addr2 << 3) + 0x1002;
+	let page = bfr.getuShort(addr2);
+	let poffset = unscramble(page);
+	return bfr.getInt(addr2 + 2) + poffset + offset;
 }
