@@ -115,7 +115,7 @@ var animAddress = [
 	0x3db0ee,
 	[0x37B63A, 0x9EE], [0x37B70E, 0x9EE], [0x37B778, 0x9EE],		// debris
 	[0x3B5D96, 0x8E3, 0xA64A4],	// boss 1
-	[0x370414, 0x3D3, 0x85CB2], [0x371C60, 0x3D3, 0x85CB2], [0x37A10C, 0x3D3, 0x85CB2], [0x37A99E, 0x363]		// tank
+	[0x370414, 0x375, 0x85CB2], [0x371C60, 0x375, 0x85CB2], [0x36A7EA, 0x375, 0x85CB2], [0x37A99E, 0x363]		// tank
 ];
 var curAnim;	// cur	rent animation index
 var curAnimAct;	// current animation index
@@ -148,10 +148,10 @@ function drawAnimation(addr) {
 	loopDrawAnimation(addr);
 }
 var animCB;	// for cb saving in animation
-function loopDrawAnimation(addr, offset = 0xA) {
+function loopDrawAnimation(addr, base = addr) {
 	animTimer = null;
 
-	var bf = new bytebuffer(romFrameData, addr);
+	var bf = getrdbuf(addr);
 
 	for(let i = 0;i < 10;i++) {
 		let animfunc = bf.get();		// ROM:0001B85C anim_func:
@@ -182,12 +182,16 @@ function loopDrawAnimation(addr, offset = 0xA) {
 				// change collision box
 				animCB = data;
 			}
-		// } else if(animfunc == 0x0) {
-		// 	bf.skip(7);
-		} else if(animfunc == 0x18 || animfunc == 0x1C || animfunc == 0x0) {
+		} else if(animfunc == 0x0) {	// restart
+			addr = base;
+			bf.position(addr);
+		} else if(animfunc == 0x28) {	// restart
+			addr = base;
+			bf.position(addr);
+		} else if(animfunc == 0x18 || animfunc == 0x1C || animfunc == 0x30 || animfunc == 0x2C) {
 			bf.skip(3);
-		} else if(animfunc == 0x24) {
-			bf.skip(1);
+		} else if(animfunc == 0x24) {		// ROM:0001BB5A    subq.b  #1,(a6,d0.w)
+			bf.skip(1);	
 		} else {
 			labelInfo.innerText = 'unsupport: anim:' + (addr).toString(16).toUpperCase() + ' func:' + animfunc.toString(16).toUpperCase();
 			return;
@@ -208,9 +212,9 @@ function loopDrawAnimation(addr, offset = 0xA) {
 
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	drawRomFrameBase(frame);
-	addr += offset;
+	addr +=  0xA;
 
-	animTimer = setTimeout("loopDrawAnimation("+ addr +"," + offset+")", 200);
+	animTimer = setTimeout("loopDrawAnimation("+ addr +"," + base + ")", 200);
 }
 function getCB(addr) {
 	if(!addr) {
