@@ -111,11 +111,12 @@ var animAddress = [
 	[0x3B3A5C,0x8A9,0xB2F52] , [0x3B3682,0x8A9,0xB2F52], [0x3b4218,0x8A8],	// crab
 	0x3d7786, 0x3dab1e, 0x3c6618,
 	0x37ae5e, 0x37c696, 0x3b66f8, 0x37c418, 0x38d8ca,
-	[0x321868,0x855], [0x32001a,0x855], [0x328788,0x855],
+	[0x321868,0x855], [0x32001a], [0x328788],
 	0x3db0ee,
 	[0x37B63A, 0x9EE], [0x37B70E, 0x9EE], [0x37B778, 0x9EE],		// debris
-	[0x3B5D96, 0x8E3, 0xA64A4],	// boss 1
-	[0x370414, 0x375, 0x85CB2], [0x371C60, 0x375, 0x85CB2], [0x36A7EA, 0x375, 0x85CB2], [0x37A99E, 0x363]		// tank
+	[0x3B5D96, 0x8E3, 0xA64A4],	0x3B5E4A, 0x3B63A2, 0x3B621E, 0x3B5FC4, [0x3B5F02], // boss 1	   
+	[0x370414, 0x375, 0x85CB2], 0x36A7EA, 0x36BC1C, 0x36D04E, 0x36B168, 0x37841C, 0x3784BA, 0x36C59A, 0x36ACFA,		// tank
+	0x36C12C, 0x36B678, 0x36CAAA, 0x378CA2, 0x370000, 0x3725D6, 0x372C6E, 0x372E34, 0x371BFE, 0x371C60, 0x371CA2, 0x372104, [0x37A99E, 0x363]		// tank
 ];
 var curAnim;	// cur	rent animation index
 var curAnimAct;	// current animation index
@@ -155,7 +156,8 @@ function loopDrawAnimation(addr, base = addr) {
 
 	for(let i = 0;i < 10;i++) {
 		let animfunc = bf.get();		// ROM:0001B85C anim_func:
-		if(animfunc == 4) {
+		if(animfunc == 4) {			// render a sprite
+			addr = bf.position() + 7;	// addr = next time from this address
 			break;
 		} else if(animfunc == 0x8) {	// jump to another animation
 			let d1 = bf.get();
@@ -166,13 +168,17 @@ function loopDrawAnimation(addr, base = addr) {
 			let d1 = bf.get();
 			let d0 = bf.getShort();
 			let link = bf.getInt();
-			// addr = translate(link);
-			// bf.position(addr);
-		} else if(animfunc == 0x10) {	// skip some bytes based on a6(d0), like 0x10
+			if(curAnimAct > 0) {
+				addr = translate(link);
+				bf.position(addr);
+			}
+		} else if(animfunc == 0x10) {	// render a sprite based on direction then go on
 			let d0 = bf.get();
 			let d1 = bf.getShort();
-			addr = bf.position() + (curAnimAct << 3);		// sprite for different directions (like tank)
-			bf.position(addr);
+			addr = bf.position() + d1;
+			bf.move(curAnimAct << 3);		// sprite for different directions (like tank)
+			bf.skip();
+			break;
 		} else if(animfunc == 0x14) {	// invoke code
 			bf.skip(9);
 		} else if(animfunc == 0x20) {	// has more to do but...
@@ -182,13 +188,19 @@ function loopDrawAnimation(addr, base = addr) {
 				// change collision box
 				animCB = data;
 			}
-		} else if(animfunc == 0x0) {	// restart
-			addr = base;
-			bf.position(addr);
+		} else if(animfunc == 0x0) {
+			// addr = base;
+			// bf.position(addr);
+			bf.skip(1);	
 		} else if(animfunc == 0x28) {	// restart
 			addr = base;
 			bf.position(addr);
-		} else if(animfunc == 0x18 || animfunc == 0x1C || animfunc == 0x30 || animfunc == 0x2C) {
+		} else if(animfunc == 0x2C) {	// jump
+			let d0 = bf.get();
+			let d2 = bf.getShort();
+			let d3 = bf.getrShort(curAnimAct << 1);
+			bf.move(d3 + d2);
+		} else if(animfunc == 0x18 || animfunc == 0x1C || animfunc == 0x30) {
 			bf.skip(3);
 		} else if(animfunc == 0x24) {		// ROM:0001BB5A    subq.b  #1,(a6,d0.w)
 			bf.skip(1);	
@@ -212,7 +224,7 @@ function loopDrawAnimation(addr, base = addr) {
 
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	drawRomFrameBase(frame);
-	addr +=  0xA;
+	// addr +=  0xA;
 
 	animTimer = setTimeout("loopDrawAnimation("+ addr +"," + base + ")", 200);
 }
@@ -464,6 +476,24 @@ function loadRomFrame() {
 		}
 	}
 	maxbg = bgAddress.length;
+
+	var lastpal, lastcb;
+	for(let [i, c] of animAddress.entries()) {
+		if(typeof c !== 'number') {
+			if(c.length > 1) {
+				lastpal = c[1];
+			} else {
+				c[1] = lastpal;
+			}
+			if(c.length > 2) {
+				lastcb = c[2];
+			} else {
+				c[2] = lastcb;
+			}
+		} else {
+			animAddress[i] = [c, lastpal, lastcb];
+		}
+	}
 }
 
 
