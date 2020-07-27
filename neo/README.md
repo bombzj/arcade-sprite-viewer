@@ -29,6 +29,7 @@
 ![mslug3 background](https://asv.bombzj.com/res/map2mslug3.gif)<br/>
 ![mslug3 animation](https://asv.bombzj.com/res/animmslug3.gif)
 ![mslug3 animation](https://asv.bombzj.com/res/anim2mslug3.gif)
+![mslug3 animation](https://asv.bombzj.com/res/anim3mslug3.gif)
 
 ## Metal Slug 4
 ![mslug4 background](https://asv.bombzj.com/res/mapmslug4.gif)
